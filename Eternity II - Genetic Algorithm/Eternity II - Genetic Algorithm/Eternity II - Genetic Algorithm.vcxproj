@@ -18,6 +18,26 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="GeneticAlgorithm.cpp" />
+    <ClCompile Include="PuzzlePiece.cpp" />
+    <ClCompile Include="Puzzles\100.c" />
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="FileReader.h" />
+    <ClInclude Include="GeneticAlgorithm.h" />
+    <ClInclude Include="PuzzlePiece.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Puzzles\100.b" />
+    <None Include="Puzzles\100.d" />
+    <None Include="Puzzles\16.b" />
+    <None Include="Puzzles\256.e2" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BEDC2A5B-A558-42C8-BFFF-7227ECC58B1F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -141,19 +161,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Board.cpp" />
-    <ClCompile Include="..\FileReader.cpp" />
-    <ClCompile Include="..\GeneticAlgorithm.cpp" />
-    <ClCompile Include="..\PuzzlePiece.cpp" />
-    <ClCompile Include="..\Source.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Board.h" />
-    <ClInclude Include="..\FileReader.h" />
-    <ClInclude Include="..\GeneticAlgorithm.h" />
-    <ClInclude Include="..\PuzzlePiece.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
