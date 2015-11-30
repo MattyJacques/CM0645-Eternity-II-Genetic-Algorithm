@@ -23,7 +23,6 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="PuzzlePiece.cpp" />
-    <ClCompile Include="Puzzles\100.c" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
