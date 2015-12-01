@@ -46,6 +46,10 @@ void Initialise()
   Board::CreateInstance(16, patternNum);
   FileReader* pInst = FileReader::CreateInstance("Puzzles/256.e2");
   pInst->ReadPieceFile();
+  for (PuzzlePiece i : Board::GetInstance()->pieceVec)
+  {
+    cout << i.GetPieceID() << " " << i.GetTop() << " " << i.GetLeft() << " " << i.GetBottom() << " " << i.GetRight() << endl;
+  }
   GeneticAlgorithm::CreateInstance(eliteRate, crossRate, 
                                    mutationRate, popSize);
 

@@ -9,19 +9,13 @@
 // Initialise the pointer to the instance
 Board* Board::pInstance = nullptr;
 
-// Initialise the pointer to the puzzle board
-PuzzlePiece* Board::pBoardArray = nullptr;
-
-// Initialise the pointer to the piece collection
-PuzzlePiece* Board::pPieceArray = nullptr;
-
 
 Board::Board(int puzzleSize, int pattern)
 { // Constructor that sets puzzle size, number of colours and number of shapes
   
-  boardSize = puzzleSize; // Sets the puzzle size for the puzzle
-  patternNum = pattern;  // Sets the number of shapes for the puzzle
-  CreateInitialBoard();
+  boardSize = puzzleSize - 1; // Sets the puzzle size for the puzzle
+  patternNum = pattern;   // Sets the number of shapes for the puzzle
+
 } // Board()
 
 
@@ -39,6 +33,7 @@ void Board::CreateInstance(int puzzleSize, int pattern)
 
   if (!pInstance)
   { // If the pointer to the instance is null, create a new instance
+
     pInstance = new Board(puzzleSize, pattern);
   }
 
@@ -48,33 +43,24 @@ void Board::CreateInstance(int puzzleSize, int pattern)
 void Board::CreateInitialBoard()
 { // Creates the board and sets inital tile placement
 
-  // Work out how many tiles will be on board
-  int pieceNum = boardSize * boardSize;
+  for (PuzzlePiece piece : pieceVec)
+  { // Loop through the collection of pieces
 
-  // Create an array with elements for each piece
-  pPieceArray = new PuzzlePiece[pieceNum];
-
-  // Create array to hold piece placements on board
-  pBoardArray = new PuzzlePiece[boardSize, boardSize];
+    for (int i = 0; i <= boardSize; i++)
+    {
+      boardVec[i].push_back(piece);
+    }
+  }
 
 } //CreateInitialBoard()
-
-
-void Board::ReadPieceFile(const char* fileName)
-{ 
-} // ReadTileFile()
 
 
 Board::~Board()
 { // Destructor that deletes the instance of the class
 
-  delete pInstance;       // Delete the instance
-  delete pPieceArray;     // Delete pointer to piece collection
-  delete pBoardArray;     // Delete pointer to board information
+  delete pInstance;       // Delete the instancen
 
-  // Change the pointers to null
+  // Change the pointer to null
   pInstance = nullptr;
-  pPieceArray = nullptr;  
-  pBoardArray = nullptr;
 
 } // ~Board()
