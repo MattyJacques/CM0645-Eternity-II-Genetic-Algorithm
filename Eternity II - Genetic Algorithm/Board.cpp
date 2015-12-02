@@ -43,13 +43,22 @@ void Board::CreateInstance(int puzzleSize, int pattern)
 void Board::CreateInitialBoard()
 { // Creates the board and sets inital tile placement
 
+  int index = 0;
+
+  for (int i = 0; i <= boardSize; i++)
+  {
+    std::vector<PuzzlePiece> newVec;
+    boardVec.push_back(newVec);
+  }
+
   for (PuzzlePiece piece : pieceVec)
   { // Loop through the collection of pieces
 
-    for (int i = 0; i <= boardSize; i++)
-    {
-      boardVec[i].push_back(piece);
-    }
+    boardVec[index].push_back(piece);
+    index++;
+
+    if (index > boardSize)
+      index = 0;
   }
 
 } //CreateInitialBoard()

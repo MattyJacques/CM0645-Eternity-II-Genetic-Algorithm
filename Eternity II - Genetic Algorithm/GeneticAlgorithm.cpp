@@ -30,6 +30,8 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double crossRate,
   crossover = (int)(crossover * popSize / total);
   mutation = (int)(mutation * popSize / total);
 
+  pBoard = Board::GetInstance();
+
 } // GeneticAlgorithm()
 
 
@@ -77,7 +79,7 @@ void GeneticAlgorithm::RunGA()
 
 
   // Needs rewritten, checks for corner slot twice @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-void GeneticAlgorithm::CheckFitness() 
+int GeneticAlgorithm::CheckFitness() 
 { // Check the fitness of a candidate from the GA
 
   int score = 0;
@@ -235,6 +237,8 @@ void GeneticAlgorithm::CheckFitness()
     } // for X increment
 
   } // for Y increment
+
+  return score;
 } // CheckFitness()
 
 

@@ -41,7 +41,7 @@ public:
   void RunGA();
 
   // Check the fitness of a candidate from the GA
-  void CheckFitness();
+  int CheckFitness();
 
   // Destructor that deletes the instance of the class
   ~GeneticAlgorithm();

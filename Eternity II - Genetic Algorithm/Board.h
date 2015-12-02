@@ -17,7 +17,6 @@ public:
   int boardSize;                   // Holds the grid size for the puzzle
   int patternNum;                  // Number of patterns for the puzzle
   static Board* pInstance;         // Holds the current instance of the class
-  //static PuzzlePiece* pPieceArray; // Pointer to collection of all pieces
 
   std::vector<PuzzlePiece> pieceVec;
 

@@ -50,8 +50,11 @@ void Initialise()
   {
     cout << i.GetPieceID() << " " << i.GetTop() << " " << i.GetLeft() << " " << i.GetBottom() << " " << i.GetRight() << endl;
   }
+  Board::GetInstance()->CreateInitialBoard();
   GeneticAlgorithm::CreateInstance(eliteRate, crossRate, 
                                    mutationRate, popSize);
+  cout << GeneticAlgorithm::GetInstance()->CheckFitness();
+  GeneticAlgorithm::GetInstance();
 
 } // Initialise()
 
