@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BoardManager.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FitnessFunction.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
@@ -28,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="BoardManager.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FitnessFunction.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
@@ -38,6 +40,8 @@
     <None Include="Puzzles\100.d" />
     <None Include="Puzzles\16.b" />
     <None Include="Puzzles\256.e2" />
+    <None Include="Puzzles\FitTest.e2" />
+    <None Include="Puzzles\Template.e2" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BEDC2A5B-A558-42C8-BFFF-7227ECC58B1F}</ProjectGuid>

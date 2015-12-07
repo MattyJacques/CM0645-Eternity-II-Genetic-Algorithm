@@ -5,7 +5,7 @@
 
 
 #include "FileReader.h"     // Include the header for the class
-#include "Board.h"          // Include Board for piece array access
+#include "BoardManager.h"   // Include BoardManager for piece array access
 #include <iostream>         // Include input and output library
 
 
@@ -13,36 +13,32 @@
 FileReader* FileReader::pInstance = nullptr;
 
 
-FileReader::FileReader(const char* fileName)
-{ // Opens the file using the filename provided
-
-  // Open the file
-  theFile.open(fileName);
+FileReader::FileReader()
+{ 
 
 } // FileReader()
 
 
-FileReader* FileReader::CreateInstance(const char* fileName)
+FileReader* FileReader::GetInstance()
 { // If the instance is not already created, create the instaqnce of the class
   // then return the pointer to the instance
 
   // Check to see if instance already exists, if not, create the new instance
   if (!pInstance)
-    pInstance = new FileReader(fileName);
+    pInstance = new FileReader();
 
   // Return pointer to the instance of the class
   return pInstance;
 
-} // CreateInstance()
-
-
-FileReader* FileReader::GetInstance()
-{ // Returns the pointer to the instance of the class
-
-  // Return instance
-  return pInstance;
-
 } // GetInstance()
+
+void FileReader::OpenFile(const char * fileName)
+{ // Opens the file using the filename provided
+
+  // Open the file
+  theFile.open(fileName);
+
+} // OpenFile()
 
 
 void FileReader::ScanFileDirectory()
@@ -57,7 +53,9 @@ void FileReader::ReadPieceFile()
 
   std::string line;                     // Stores current like to be parsed
   int* pData = new int[5];              // Holds parsed data from the line
-  Board* pBoard = Board::GetInstance(); // So the piece array can be accessed
+
+  // So the piece array can be accessed
+  BoardManager* pBoardMan = BoardManager::GetInstance();
 
   if (theFile.is_open())
   { // Checks to see if the file is open before proceeding with reading of the
@@ -95,12 +93,13 @@ void FileReader::ReadPieceFile()
       PuzzlePiece newPiece;
 
       newPiece.SetPieceID(pData[0]);
+      newPiece.SetType(CheckType(pData));
       newPiece.SetTop(pData[1]);
       newPiece.SetLeft(pData[2]);
       newPiece.SetBottom(pData[3]);
       newPiece.SetRight(pData[4]);
 
-      pBoard->pieceVec.push_back(newPiece);
+      pBoardMan->pieceVec.push_back(newPiece);
   
     } 
 
@@ -113,6 +112,45 @@ void FileReader::ReadPieceFile()
 
 } // ReadPieceFile()
 
+
+PieceType FileReader::CheckType(int* pData)
+{ // Checks to see what type of piece is currently being read, returning the
+  // answer
+
+  PieceType type;
+  int count = 0;
+
+  for (int i = 0; i <= 4; i++)
+  {
+    if (pData[i] == 0)
+    {
+      count++;
+    }
+  }
+
+  switch (count)
+  {
+
+  case 0:
+    type = INNER;
+    break;
+
+  case 1:
+    type = EDGE;
+    break;
+
+  case 2:
+    type = CORNER;
+    break;
+
+  default:
+    std::cout << "Piece type check error" << std::endl;
+
+  }
+
+  return type;
+
+} // CheckType()
 
 FileReader::~FileReader()
 { // Deletes the instance of the class, then sets pointer to nullptr

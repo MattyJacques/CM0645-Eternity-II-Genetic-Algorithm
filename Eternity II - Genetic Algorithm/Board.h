@@ -23,15 +23,14 @@ public:
   // Pointer to pieces within board
   std::vector<std::vector<PuzzlePiece>> boardVec; 
 
-  // Constructor that sets puzzle size, number of colours and number of shapes
-  Board(int puzzleSize, int pattern);
+  Board();
 
   // Returns the current instance of the class
-  static Board* GetInstance();
+  //static Board* GetInstance();
 
   // Creates the static instance for the class, calling the constructor with
   // the puzzle size along with the number of colours and shapes
-  static void CreateInstance(int puzzleSize, int pattern);
+  //static void CreateInstance(int puzzleSize, int pattern);
 
   // Creates the board and sets inital tile placement
   void CreateInitialBoard();

@@ -2,6 +2,8 @@
 #include "Board.h"                // To create board instance
 #include "GeneticAlgorithm.h"     // To create and call the GA
 #include "FileReader.h"
+#include "BoardManager.h"
+#include "FitnessFunction.h"
 
 
 using namespace std;
@@ -42,18 +44,17 @@ void Initialise()
   //cout << "Population Size: ";
   //cin >> popSize;
 
-  // Creates an instance for the board and GA, giving respective user input
-  Board::CreateInstance(16, patternNum);
-  FileReader* pInst = FileReader::CreateInstance("Puzzles/256.e2");
+  GeneticAlgorithm::CreateInstance(1, 1, 1, 1, 16);
+  FileReader* pInst = FileReader::GetInstance();
+  pInst->OpenFile("Puzzles/FitTest.e2");
   pInst->ReadPieceFile();
-  for (PuzzlePiece i : Board::GetInstance()->pieceVec)
+
+  for (PuzzlePiece i : BoardManager::GetInstance()->pieceVec)
   {
     cout << i.GetPieceID() << " " << i.GetTop() << " " << i.GetLeft() << " " << i.GetBottom() << " " << i.GetRight() << endl;
   }
-  Board::GetInstance()->CreateInitialBoard();
-  GeneticAlgorithm::CreateInstance(eliteRate, crossRate, 
-                                   mutationRate, popSize);
-  cout << GeneticAlgorithm::GetInstance()->CheckFitness();
+  GeneticAlgorithm::GetInstance()->RunGA();
+
   GeneticAlgorithm::GetInstance();
 
 } // Initialise()

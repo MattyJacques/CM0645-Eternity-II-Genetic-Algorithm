@@ -6,12 +6,18 @@
 
 #include "FitnessFunction.h"    // Include the header file
 
+
 // Initialise the pointer to the instance
 FitnessFunction* FitnessFunction::pInstance = nullptr;
 
 
 FitnessFunction::FitnessFunction()
 {
+
+  int boardSize = 0;
+  int score = 0;
+  pBoard = nullptr;
+  pBoardMan = BoardManager::GetInstance();
 
 } // FitnessFunction()
 
@@ -26,23 +32,360 @@ FitnessFunction* FitnessFunction::GetInstance()
 } // GetInstance()
 
 
-int FitnessFunction::CheckFitness()
+int FitnessFunction::CheckFitness(Board* theBoard)
 { // Checks the fitness of the candidate provided by the GA
 
-  int score = 0;
+  score = 0;            // Resets the current score to 0
+  pBoard = theBoard;    // Defines the board pointer to the current board
+
+  // Runs through and checks all the connections and piece locations of the
+  // candidate solutions adding up the score for each correct placement & match
+  CheckTopLeft();
+  //CheckTopEdge();
+  //CheckTopRight();
+  //CheckLeftEdge();
+  //CheckInnerPieces();
+  //CheckRightEdge();
+  //CheckBottomLeft();
+  //CheckBottomEdge();
+  //CheckBottomRight();
+
+  return score;
 
 } // CheckFitness()
 
-bool FitnessFunction::IsCornerSlot(int x, int y)
-{ // Checks if the given slot is on a corner of the board using the indexes
+//bool FitnessFunction::IsCornerSlot(int x, int y)
+//{ // Checks if the given slot is on a corner of the board using the indexes
+//
+//  bool result = false;
+//
+//
+//  if (x == y == 0 || x == 0 && y == boardSize ||
+//    x == boardSize && y == 0 ||
+//    x == boardSize && y == boardSize)
+//  {
+//    result = true;
+//  }
+//
+//  return result;
+//
+//} // IsCornerSlot()
 
-  return false;
+//bool FitnessFunction::IsEdgeSlot(int x, int y)
+//{ // Checks if the given slot is on a edge of the board using the indexes
+//
+//  bool result = false;
+//
+//  if (x == boardSize || y == boardSize
+//    || x == 0 || y == 0)
+//  {
+//    result = true;
+//  }
+//
+//  return result;
+//
+//} // IsEdgeSlot()
 
-} // IsCornerSlot()
+//bool FitnessFunction::CheckRight(int x, int y, Board* pBoard)
+//{ // Checks the right side of the piece to see if it matches the left side of
+//  // the piece to the right
+//
+//  bool result = false;
+//
+//  if (pBoard->boardVec[x][y].GetRight() ==
+//      pBoard->boardVec[x][y + 1].GetLeft())
+//  {
+//    result = true;
+//  }
+//
+//  return result;
+//
+//} // CheckRight()
 
-bool FitnessFunction::IsEdgeSlot(int x, int y)
-{ // Checks if the given slot is on a edge of the board using the indexes
+//bool FitnessFunction::CheckBottom(int x, int y, Board* pBoard)
+//{ // Checks the bottom side of the piece to see if it matches the top side of
+//  // the piece underneath
+//
+//  bool result = false;
+//
+//  if (pBoard->boardVec[x][y].GetBottom() ==
+//      pBoard->boardVec[x + 1][y].GetTop())
+//  {
+//    result = true;
+//  }
+//
+//  return result;
+//
+//} // CheckBottom()
 
-  return false;
+bool FitnessFunction::IsMatchSide(PuzzlePiece piece1, PuzzlePiece piece2)
+{ // Checks to see if the pattern located on right side of piece1 matches the
+  // pattern located on the left of piece2
 
-} // IsEdgeSlot()
+  bool result = false;
+
+  if (piece1.GetRight() == piece2.GetLeft())
+  {
+    result = true;
+  }
+
+  return result;
+
+} // IsMatchSide()
+
+bool FitnessFunction::IsMatchBottom(PuzzlePiece piece1, PuzzlePiece piece2)
+{ // Checks to see if the pattern located on bottom side of piece1 matches the
+  // pattern located on the top of piece2
+
+  bool result = false;
+
+  if (piece1.GetBottom() == piece2.GetTop())
+  {
+    result = true;
+  }
+
+  return result;
+
+} // IsMatchBottom()
+
+void FitnessFunction::CheckTopLeft()
+{ // Checks the top left corner to see if the piece is the correct type and if
+  // the edges of that piece match adjacent pieces
+
+  if (pBoard->boardVec[0][0].GetType() == CORNER)
+  { // Check to see if the piece in the slot is a corner, if so add 25 to score
+
+    score += 25;
+
+    if (IsMatchSide(pBoard->boardVec[0][0], pBoard->boardVec[0][1]))
+    { // Check to see if the pattern on the right of the corner piece matches
+      // the pattern on the left of the piece to the right
+
+      score += 10;
+
+    }
+
+    if (IsMatchBottom(pBoard->boardVec[0][0], pBoard->boardVec[1][0]))
+    { // Check to see if the pattern on the bottom of the corner piece matches
+      // the pattern on the top of the piece below
+
+      score += 10;
+
+    }
+
+  } // if corner type
+
+} // CheckTopLeft()
+
+void FitnessFunction::CheckTopRight()
+{ // Checks the top right corner to see if the piece is the correct type and if
+  // the edges of that piece match adjacent pieces
+
+  if (pBoard->boardVec[0][pBoardMan->boardSize].GetType() == CORNER)
+  { // Check to see if the piece in the slot is a corner, if so add 25 to score
+
+    score += 25;
+
+    if (IsMatchSide(pBoard->boardVec[0][pBoardMan->boardSize - 1],
+      pBoard->boardVec[0][pBoardMan->boardSize]))
+    { // Check to see if the pattern on the right side of the piece to left of
+      // the corner, matches the pattern on the left of the corner piece
+
+      score += 10;
+
+    }
+
+    if (IsMatchBottom(pBoard->boardVec[0][pBoardMan->boardSize],
+      pBoard->boardVec[1][pBoardMan->boardSize]))
+    { // Check to see if the pattern on the bottom of the corner piece matches
+      // the pattern on the top of the piece below
+
+      score += 10;
+
+    }
+
+  } // if corner type
+
+} // CheckTopRight()
+
+void FitnessFunction::CheckBottomLeft()
+{ // Checks the bottom left corner to see if the piece is the correct type and
+  // if the edges of that piece match adjacent pieces
+
+  if (pBoard->boardVec[pBoardMan->boardSize][0].GetType() == CORNER)
+  { // Check to see if the piece in the slot is a corner, if so add 25 to score
+
+    score += 25;
+
+    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize][0],
+      pBoard->boardVec[pBoardMan->boardSize][1]))
+    { // Check to see if the pattern on the right side of the corner piece 
+      // matches the pattern located on the left side of the piece to the right
+
+      score += 10;
+
+    }
+
+    if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1][0],
+      pBoard->boardVec[pBoardMan->boardSize][0]))
+    { // Check to see if the pattern on the bottom of the piece above the 
+      // corner matches the pattern located on the top of the corner
+
+      score += 10;
+
+    }
+
+  } // if corner type
+
+} //CheckBottomLeft()
+
+void FitnessFunction::CheckBottomRight()
+{ // Checks the bottom right corner to see if the piece is the correct type and
+  // if the edges of that piece match adjacent pieces
+
+  if (pBoard->boardVec[pBoardMan->boardSize][pBoardMan->boardSize].GetType() 
+    == CORNER)
+  { // Check to see if the piece in the slot is a corner, if so add 25 to score
+
+    score += 25;
+
+    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize]
+      [pBoardMan->boardSize - 1], pBoard->boardVec[pBoardMan->boardSize]
+      [pBoardMan->boardSize]))
+    { // Check to see if the pattern on the right side of the piece to the left
+      // of the corner matches the pattern located on the left of the corner
+
+      score += 10;
+
+    }
+
+    if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1]
+      [pBoardMan->boardSize], pBoard->boardVec[pBoardMan->boardSize]
+      [pBoardMan->boardSize]))
+    { // Check to see if the pattern located on the bottom of the piece located
+      // above the corner matches the pattern located on the top of the corner
+
+      score += 10;
+
+    }
+
+  } // if corner type
+
+} // CheckBottomRight()
+
+void FitnessFunction::CheckTopEdge()
+{ // Checks the slots along the top edge to see if the piece placed within that
+  // slot is of the right piece type and checks if any edges of those pieces
+  // match with adjacent pieces
+
+  for (int i = 1; i < pBoardMan->boardSize - 1; i++)
+  {
+    if (pBoard->boardVec[0][i].GetType() == EDGE)
+    {
+      if (IsMatchSide(pBoard->boardVec[0][i], pBoard->boardVec[0][i + 1]))
+      {
+        score += 5;
+      }
+
+      if (IsMatchBottom(pBoard->boardVec[0][i], pBoard->boardVec[1][i]))
+      {
+        score += 5;
+      }
+    }
+  }
+
+} // CheckTopEdge()
+
+void FitnessFunction::CheckLeftEdge()
+{ // Checks the slots along the left edge to see if the piece placed within
+  // that slot is of the right piece type and checks if any edges of those
+  // pieces match with adjacent pieces
+
+  for (int i = 1; i < pBoardMan->boardSize - 1; i++)
+  {
+    if (pBoard->boardVec[i][0].GetType() == EDGE)
+    {
+      if (IsMatchSide(pBoard->boardVec[i][0], pBoard->boardVec[i][1]))
+      {
+        score += 5;
+      }
+
+      if (IsMatchBottom(pBoard->boardVec[i][0], pBoard->boardVec[i+1][0]))
+      {
+        score += 5;
+      }
+    }
+  }
+
+} // CheckLeftEdge()
+
+void FitnessFunction::CheckRightEdge()
+{ // Checks the slots along the right edge to see if the piece placed within
+  // that slot is of the right piece type and checks if any edges of those
+  // pieces match with adjacent pieces
+
+  for (int i = 1; i < pBoardMan->boardSize - 1; i++)
+  {
+    if (pBoard->boardVec[i][pBoardMan->boardSize].GetType() == EDGE)
+    {
+      if (IsMatchSide(pBoard->boardVec[i][pBoardMan->boardSize - 1],
+        pBoard->boardVec[i][pBoardMan->boardSize]))
+      {
+        score += 5;
+      }
+
+      if (IsMatchBottom(pBoard->boardVec[i][pBoardMan->boardSize],
+        pBoard->boardVec[i + 1][pBoardMan->boardSize]))
+      {
+        score += 5;
+      }
+    }
+  }
+
+} // CheckRightEdge()
+
+void FitnessFunction::CheckBottomEdge()
+{ // Checks the slots along the bottom edge to see if the piece placed within
+  // that slot is of the right piece type and checks if any edges of those
+  // pieces match with adjacent pieces
+
+  for (int i = 1; i < pBoardMan->boardSize - 1; i++)
+  {
+    if (pBoard->boardVec[pBoardMan->boardSize][i].GetType() == EDGE)
+    {
+      if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize][i],
+        pBoard->boardVec[pBoardMan->boardSize][i + 1]))
+      {
+        score += 5;
+      }
+
+      if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1][i],
+        pBoard->boardVec[pBoardMan->boardSize][i]))
+      {
+        score += 5;
+      }
+    }
+  }
+
+} // CheckBottomEdge()
+
+void FitnessFunction::CheckInnerPieces()
+{ // Checks the pieces in the inner slots of the board for matching connections
+
+  for (int i = 1; i < pBoardMan->boardSize - 1; i++)
+  {
+    for (int j = 1; j < pBoardMan->boardSize - 1; j++)
+    {
+      if (IsMatchSide(pBoard->boardVec[i][j], pBoard->boardVec[i][j + 1]))
+      {
+        score += 1;
+      }
+
+      if (IsMatchBottom(pBoard->boardVec[i][j], pBoard->boardVec[i + 1][j]))
+      {
+        score += 1;
+      }
+    }
+  }
+
+} // CheckInnerPieces()
