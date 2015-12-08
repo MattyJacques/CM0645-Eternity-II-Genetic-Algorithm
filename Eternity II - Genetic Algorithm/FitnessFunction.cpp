@@ -41,14 +41,14 @@ int FitnessFunction::CheckFitness(Board* theBoard)
   // Runs through and checks all the connections and piece locations of the
   // candidate solutions adding up the score for each correct placement & match
   CheckTopLeft();
-  //CheckTopEdge();
-  //CheckTopRight();
-  //CheckLeftEdge();
-  //CheckInnerPieces();
-  //CheckRightEdge();
-  //CheckBottomLeft();
-  //CheckBottomEdge();
-  //CheckBottomRight();
+  CheckTopEdge();
+  CheckTopRight();
+  CheckLeftEdge();
+  CheckInnerPieces();
+  CheckRightEdge();
+  CheckBottomLeft();
+  CheckBottomEdge();
+  CheckBottomRight();
 
   return score;
 
@@ -282,6 +282,9 @@ void FitnessFunction::CheckTopEdge()
   {
     if (pBoard->boardVec[0][i].GetType() == EDGE)
     {
+
+      score += 15;
+
       if (IsMatchSide(pBoard->boardVec[0][i], pBoard->boardVec[0][i + 1]))
       {
         score += 5;
@@ -291,6 +294,17 @@ void FitnessFunction::CheckTopEdge()
       {
         score += 5;
       }
+    }
+  }
+
+  if (pBoard->boardVec[0][pBoardMan->boardSize - 1].GetType() == EDGE)
+  {
+    score += 15;
+
+    if (IsMatchBottom(pBoard->boardVec[0][pBoardMan->boardSize - 1],
+      pBoard->boardVec[1][pBoardMan->boardSize - 1]))
+    {
+      score += 5;
     }
   }
 
@@ -305,6 +319,9 @@ void FitnessFunction::CheckLeftEdge()
   {
     if (pBoard->boardVec[i][0].GetType() == EDGE)
     {
+
+      score += 15;
+
       if (IsMatchSide(pBoard->boardVec[i][0], pBoard->boardVec[i][1]))
       {
         score += 5;
@@ -314,6 +331,17 @@ void FitnessFunction::CheckLeftEdge()
       {
         score += 5;
       }
+    }
+  }
+
+  if (pBoard->boardVec[pBoardMan->boardSize - 1][0].GetType() == EDGE)
+  {
+    score += 15;
+
+    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize - 1][0],
+      pBoard->boardVec[pBoardMan->boardSize - 1][1]))
+    {
+      score += 5;
     }
   }
 
@@ -328,6 +356,9 @@ void FitnessFunction::CheckRightEdge()
   {
     if (pBoard->boardVec[i][pBoardMan->boardSize].GetType() == EDGE)
     {
+
+      score += 15;
+
       if (IsMatchSide(pBoard->boardVec[i][pBoardMan->boardSize - 1],
         pBoard->boardVec[i][pBoardMan->boardSize]))
       {
@@ -342,6 +373,19 @@ void FitnessFunction::CheckRightEdge()
     }
   }
 
+  if (pBoard->boardVec[pBoardMan->boardSize - 1]
+    [pBoardMan->boardSize].GetType() == EDGE)
+  {
+    score += 15;
+
+    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize - 1]
+      [pBoardMan->boardSize - 1], pBoard->boardVec[pBoardMan->boardSize - 1]
+      [pBoardMan->boardSize]))
+    {
+      score += 5;
+    }
+  }
+
 } // CheckRightEdge()
 
 void FitnessFunction::CheckBottomEdge()
@@ -353,6 +397,9 @@ void FitnessFunction::CheckBottomEdge()
   {
     if (pBoard->boardVec[pBoardMan->boardSize][i].GetType() == EDGE)
     {
+
+      score += 15;
+
       if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize][i],
         pBoard->boardVec[pBoardMan->boardSize][i + 1]))
       {
@@ -364,6 +411,18 @@ void FitnessFunction::CheckBottomEdge()
       {
         score += 5;
       }
+    }
+  }
+
+  if (pBoard->boardVec[pBoardMan->boardSize]
+    [pBoardMan->boardSize - 1].GetType() == EDGE)
+  {
+    score += 15;
+
+    if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1][pBoardMan->boardSize - 1],
+      pBoard->boardVec[pBoardMan->boardSize][pBoardMan->boardSize - 1]))
+    {
+      score += 5;
     }
   }
 

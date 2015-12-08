@@ -27,6 +27,7 @@ void BoardManager::CreateInitialBoard(Board * theBoard)
 {
 
   int index = 0;
+  int count = 0;
 
   for (int i = 0; i <= boardSize; i++)
   {
@@ -37,11 +38,16 @@ void BoardManager::CreateInitialBoard(Board * theBoard)
   for (PuzzlePiece piece : pieceVec)
   { // Loop through the collection of pieces
 
+    
     theBoard->boardVec[index].push_back(piece);
-    index++;
+    count++;
+    
+    if (count == boardSize + 1)
+    {
+      index++;
+      count = 0;
+    }
 
-    if (index > boardSize)
-      index = 0;
   }
 
 }
