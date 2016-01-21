@@ -15,34 +15,13 @@ class FitnessFunction
 {
 
 private:
-  int score;
+  int score;                            // Holds the current fitness score
   static FitnessFunction* pInstance;    // Holds the current instance of class
-  Board* pBoard;
-  BoardManager* pBoardMan;          // For access to board size
+  Board* pBoard;                        // Holds pointer to current board
+  BoardManager* pBoardMan;              // For access to board size
 
   // Protected to avoid unauth creation of instances
   FitnessFunction();
-
-public:
-  // Returns the current instance of the class, creates if needed
-  static FitnessFunction* GetInstance();
-
-  // Checks the fitness of the candidate provided by the GA
-  int CheckFitness(Board* theBoard);
-
-  // Checks if the given slot is on a corner of the board using the indexes
-  //bool IsCornerSlot(int x, int y);
-
-  // Checks if the given slot is on a edge of the board using the indexes
-  //bool IsEdgeSlot(int x, int y);
-
-  // Checks the right side of the piece to see if it matches the left side of
-  // the piece to the right
-  //bool CheckRight(int x, int y, Board* theBoard);
-
-  // Checks the bottom side of the piece to see if it matches the top side of
-  // the piece underneath
-  //bool CheckBottom(int x, int y, Board* theBoard);
 
   // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
@@ -90,6 +69,13 @@ public:
 
   // Checks the pieces in the inner slots of the board for matching connections
   void CheckInnerPieces();
+
+public:
+  // Returns the current instance of the class, creates if needed
+  static FitnessFunction* GetInstance();
+
+  // Checks the fitness of the candidate provided by the GA
+  int CheckFitness(Board* theBoard);
 
 };
 

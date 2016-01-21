@@ -32,6 +32,7 @@ FileReader* FileReader::GetInstance()
 
 } // GetInstance()
 
+
 void FileReader::OpenFile(const char * fileName)
 { // Opens the file using the filename provided
 
@@ -99,6 +100,7 @@ void FileReader::ReadPieceFile()
       newPiece.SetBottom(pData[3]);
       newPiece.SetRight(pData[4]);
 
+      // Add peice to vector of pieces
       pBoardMan->pieceVec.push_back(newPiece);
   
     } 
@@ -151,6 +153,7 @@ PieceType FileReader::CheckType(int* pData)
   return type;
 
 } // CheckType()
+
 
 FileReader::~FileReader()
 { // Deletes the instance of the class, then sets pointer to nullptr
