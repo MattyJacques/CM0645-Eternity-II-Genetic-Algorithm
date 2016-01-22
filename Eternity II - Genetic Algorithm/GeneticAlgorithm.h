@@ -39,6 +39,9 @@ public:
   // Returns the current instance of the class
   static GeneticAlgorithm* GetInstance();
 
+  // Returns the size of the population
+  int GetPopSize();
+
   // Main function of the GA that continually runs
   void RunGA();
 

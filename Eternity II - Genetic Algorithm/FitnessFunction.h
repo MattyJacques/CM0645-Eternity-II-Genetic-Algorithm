@@ -20,7 +20,7 @@ private:
   Board* pBoard;                        // Holds pointer to current board
   BoardManager* pBoardMan;              // For access to board size
 
-  // Protected to avoid unauth creation of instances
+  // Private to avoid unauth creation of instances
   FitnessFunction();
 
   // Checks to see if the pattern located on right side of piece1 matches the

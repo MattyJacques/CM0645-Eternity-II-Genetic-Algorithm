@@ -14,10 +14,19 @@
 class Board
 {
 
-public:
+private:
+  int fitScore;          // Holds fitness score for the board
+  int boardID;           // Holds the ID of the board
 
+public:
   // Vector of all pieces within board
   std::vector<std::vector<PuzzlePiece>> boardVec; 
+
+  // Initialises the fitness score
+  Board();
+
+  // Returns the fitness score of the board
+  int GetFitScore();
 
   // Destructor that deletes the instance of the class
   ~Board();

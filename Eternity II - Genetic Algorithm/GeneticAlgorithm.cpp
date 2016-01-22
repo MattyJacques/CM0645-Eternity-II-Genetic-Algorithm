@@ -60,6 +60,13 @@ GeneticAlgorithm* GeneticAlgorithm::GetInstance()
 
 } // GetInstance()
 
+int GeneticAlgorithm::GetPopSize()
+{ // Returns the size of the population
+
+  return popSize;
+
+} // GetPopSize()
+
 
 void GeneticAlgorithm::RunGA()
 { // Main function of the GA that continually runs
