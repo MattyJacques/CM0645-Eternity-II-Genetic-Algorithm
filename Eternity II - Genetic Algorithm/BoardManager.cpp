@@ -1,5 +1,13 @@
+// Title        : BoardManager.h
+// Purpose      : Holds information on the boards, such as puzzle piece data
+// Author       : Matthew Jacques
+// Date         : 6/12/2015
+
+
 #include "BoardManager.h"
-#include <math.h>
+#include "GeneticAlgorithm.h" // Population size
+#include <algorithm>          // Random_shuffle()
+#include <time.h>             // time()
 
 
 // Initialise to null
@@ -42,21 +50,28 @@ void BoardManager::CreateInitialBoard(Board * theBoard)
     theBoard->boardVec.push_back(newVec);
   }
 
-  for (PuzzlePiece piece : pieceVec)
-  { // Loop through the collection of pieces
+  //for (int i = 0; i < GeneticAlgorithm::GetInstance()->GetPopSize() - 1; i++)
+  //{
 
-    // Add piece to line on board
-    theBoard->boardVec[index].push_back(piece);
-    count++;
+    srand((unsigned int)time(NULL));
+    std::random_shuffle(pieceVec.begin(), pieceVec.end());
 
-    // If reached the end of the line for the board, move onto next 
-    if (count == boardSize)
-    {
-      index++;
-      count = 0;
+    for (PuzzlePiece piece : pieceVec)
+    { // Loop through the collection of pieces
+
+      // Add piece to line on board
+      theBoard->boardVec[index].push_back(piece);
+      count++;
+
+      // If reached the end of the line for the board, move onto next 
+      if (count == boardSize + 1)
+      {
+        index++;
+        count = 0;
+      }
+
     }
-
-  }
+  //}
 
 } // CreateInitialBoard()
 

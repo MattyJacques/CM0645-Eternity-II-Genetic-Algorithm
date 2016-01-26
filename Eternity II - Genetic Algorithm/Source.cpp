@@ -44,7 +44,7 @@ void Initialise()
   //cout << "Population Size: ";
   //cin >> popSize;
 
-  GeneticAlgorithm::CreateInstance(1, 1, 1, 1, 16);
+  GeneticAlgorithm::CreateInstance(1, 1, 1, 100, 16);
   FileReader* pInst = FileReader::GetInstance();
   pInst->OpenFile("Puzzles/FitTest.e2");
   pInst->ReadPieceFile();

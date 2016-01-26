@@ -10,6 +10,10 @@
 #include <time.h>               // Time for srand
 
 
+// Initialise to nullptr
+Crossover* Crossover::pInstance = nullptr;
+
+
 Crossover::Crossover()
 { // Private for singleton
 
@@ -56,28 +60,37 @@ void Crossover::RouletteSelect(int parents[2])
 { // Selects candidates via the roulette wheel method mentioned within the report
   // in chapter 3, section 3.5.1
 
-  int totalFitness = 0;
-  int count = 0;
+  int totalFitness = 0;   // Holds the combined fitness of all boards
+  int oldFitness = 0;     // Holds the older combined fitness score
 
   for (Board i : BoardManager::GetInstance()->boards)
-  {
+  { // Loops through all boards and total up all fitness scores from boards
+
     totalFitness += i.GetFitScore();
   }
 
-  srand(time(NULL));
+  // Seeds time and gets two random numbers to use to pick from wheel
+  srand((unsigned int)time(NULL));
   parents[0] = rand() % totalFitness;
   parents[1] = rand() % totalFitness;
 
-  totalFitness = 0;
+  totalFitness = 0;   // Set to 0 to accumulate total fitness again
 
-  for (int i = 0; i < BoardManager::GetInstance()->boards.size(); i++)
-  {
+  for (unsigned int i = 0; i < BoardManager::GetInstance()->boards.size(); i++)
+  { // Loops through all boards accumulating the fitness scores, if random number
+    // is between total fitness and the previous total fitness, set the ID of
+    // the parent
 
+    // Set the previous fitness and add on the fitness score of the next board
+    oldFitness = totalFitness;
     totalFitness += BoardManager::GetInstance()->boards[i].GetFitScore();
 
-    if (totalFitness <= parents[0])
+    // If section has been found for first parent, set ID
+    if (totalFitness >= parents[0] && parents[0] >= oldFitness)
       parents[0] = i;
-    if (totalFitness <= parents[1])
+
+    // If section has been found for first parent, set ID
+    if (totalFitness >= parents[1] && parents[1] >= oldFitness)
       parents[1] = i;
 
   }
