@@ -5,6 +5,7 @@
 
 
 #include "GeneticAlgorithm.h" // Include header for the class
+#include "Crossover.h"        // Ability to use crossover
 #include <iostream>           // DEBUG
 
 
@@ -23,14 +24,14 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double crossRate,
   elitism = eliteRate;
   crossover = crossRate;
   mutation = mutationRate;
-  popSize = population;
+  popSize = population - 1;
   
 
   total = elitism + crossover + mutation;
 
-  elitism = (int)(elitism * popSize / total);
-  crossover = (int)(crossover * popSize / total);
-  mutation = (int)(mutation * popSize / total);
+  elitism = (int)(elitism * population / total);
+  crossover = (int)(crossover * population / total);
+  mutation = (int)(mutation * population / total);
 
   BoardManager::GetInstance()->InitialiseData(boardSize, 22);
 
@@ -71,14 +72,23 @@ int GeneticAlgorithm::GetPopSize()
 void GeneticAlgorithm::RunGA()
 { // Main function of the GA that continually runs
 
-  for (int i = 0; i < popSize; i++)
+  for (int i = 0; i <= popSize; i++)
   {
     Board newBoard;
     BoardManager::GetInstance()->CreateInitialBoard(&newBoard);
     BoardManager::GetInstance()->boards.push_back(newBoard);
   }
 
-  std::cout << FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->boards[0]);
+  for (int i = 0; i <= popSize; i++)
+  {
+    
+    std::cout << i << " " << FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->boards[i]) << std::endl;
+
+  }
+
+  Crossover::GetInstance()->SetMethod(ONEPOINT, TOURNAMENT);
+  Crossover::GetInstance()->DoCrossover();
+
   /*
   start
   set generation

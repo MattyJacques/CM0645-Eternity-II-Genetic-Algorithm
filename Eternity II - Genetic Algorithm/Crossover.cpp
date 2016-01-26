@@ -6,6 +6,7 @@
 
 #include "Crossover.h"
 #include "BoardManager.h"       // Access to board vector
+#include "GeneticAlgorithm.h"   // Population size
 #include <iostream>             // Error output
 #include <time.h>               // Time for srand
 
@@ -15,7 +16,10 @@ Crossover* Crossover::pInstance = nullptr;
 
 
 Crossover::Crossover()
-{ // Private for singleton
+{ // Seeds rand() and sets tournament size
+
+  srand((unsigned int)time(NULL));
+  tournamentSize = 20;
 
 } // Crossover()
 
@@ -30,15 +34,29 @@ Crossover* Crossover::GetInstance()
 
 } // GetInstance()
 
+
 void Crossover::DoCrossover()
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
 
-  int parents[2] = { -1, -1 };
+  int parents[2] = { -1, -1 };    // Board ID of the parents
 
-  SelectParents(parents);
+  // Loop to make sure both selected parents are not the same candidate
+  while (parents[0] == parents[1])
+    SelectParents(parents);
+
+  std::cout << parents[0] << " " << parents[1] << std::endl;
 
 } // DoCrossover()
+
+
+void Crossover::SetMethod(CrossoverType cross, SelectionType select)
+{ // Sets the crossover and selection type to use for crossover
+
+  crossType = cross;
+  selectType = select;
+
+} // SetMethod()
 
 
 void Crossover::SelectParents(int parents[2])
@@ -70,9 +88,10 @@ void Crossover::RouletteSelect(int parents[2])
   }
 
   // Seeds time and gets two random numbers to use to pick from wheel
-  srand((unsigned int)time(NULL));
-  parents[0] = rand() % totalFitness;
-  parents[1] = rand() % totalFitness;
+  //srand((unsigned int)time(NULL));
+  parents[0] = GenRandomNum(totalFitness);
+  parents[1] = GenRandomNum(totalFitness);
+  std::cout << parents[0] << " " << parents[1] << std::endl; // DEBUG@@@@@@@@@@@@
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
 
@@ -100,7 +119,34 @@ void Crossover::RouletteSelect(int parents[2])
 
 void Crossover::TournamentSelect(int parents[2])
 { // Selects candidates via the tournament selection method mentioned within the
-  // report in chapter 3, section 3.5.3
+  // report in chapter 3 section 3.5.3 Does not remove candidate from selection
+  // after being selected so candidate can be in tournament multiple times.
+
+  int highfitness;          // Holds the current highest fitness found
+  int index;                // Holds random index to compare fitness
+
+  for (int i = 0; i < 2; i++)
+  { // Loop to find both parents
+
+    // Initialise to -1 ready for next tournament
+    highfitness = -1;
+    index = -1;
+
+    for (int j = 0; j < tournamentSize; j++)
+    { // Test 20 random candidates storing highest fitness and ID
+
+      // Generate a random index then test to see if the fitness score of that
+      // candidate is highest than the current stored fitness
+      index = GenRandomNum(GeneticAlgorithm::GetInstance()->GetPopSize() - 1);
+      if (BoardManager::GetInstance()->boards[index].GetFitScore() > highfitness)
+      {
+        parents[i] = index;
+        highfitness = BoardManager::GetInstance()->boards[index].GetFitScore();
+      }
+
+    } // for j < tournamentSize
+
+  } // for i < 2
 
 } // TournamentSelect()
 
@@ -109,3 +155,16 @@ void Crossover::Reproduce(int parent1, int parent2)
 {
 
 } // Reproduce()
+
+
+int Crossover::GenRandomNum(int max)
+{ // Generates a random number between 0 and max
+
+  int randomInt = 0;
+  max += 1;
+
+  randomInt = (int)(max * rand() / (RAND_MAX + 1.0));
+
+  return randomInt;
+
+} // GenerateRandomNum()

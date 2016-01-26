@@ -413,6 +413,8 @@ int FitnessFunction::CheckFitness(Board* theBoard)
   CheckBottomEdge();
   CheckBottomRight();
 
+  pBoard->SetFitScore(score);
+
   return score;
 
 } // CheckFitness()

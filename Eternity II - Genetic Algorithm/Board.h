@@ -28,6 +28,9 @@ public:
   // Returns the fitness score of the board
   int GetFitScore();
 
+  // Sets the fitness score for this particular board
+  void SetFitScore(int score);
+
   // Destructor that deletes the instance of the class
   ~Board();
 
