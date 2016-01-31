@@ -15,7 +15,9 @@ BoardManager* BoardManager::pInstance = nullptr;
 
 
 BoardManager::BoardManager()
-{ // Private constructor for singleton
+{ // Seeds rand() with time
+
+  srand((unsigned int)time(NULL));
 
 } // BoardManager()
 
@@ -38,7 +40,7 @@ void BoardManager::InitialiseData(int size, int patNum)
 
 } // InitialiseData()
 
-void BoardManager::CreateInitialBoard(Board * theBoard)
+void BoardManager::CreateInitialBoard(Board* theBoard)
 { // Creates the inital generation of boards
 
   int index = 0;
@@ -50,28 +52,23 @@ void BoardManager::CreateInitialBoard(Board * theBoard)
     theBoard->boardVec.push_back(newVec);
   }
 
-  //for (int i = 0; i < GeneticAlgorithm::GetInstance()->GetPopSize() - 1; i++)
-  //{
+  std::random_shuffle(pieceVec.begin(), pieceVec.end());
 
-    srand((unsigned int)time(NULL));
-    std::random_shuffle(pieceVec.begin(), pieceVec.end());
+  for (PuzzlePiece piece : pieceVec)
+  { // Loop through the collection of pieces
 
-    for (PuzzlePiece piece : pieceVec)
-    { // Loop through the collection of pieces
+    // Add piece to line on board
+    theBoard->boardVec[index].push_back(piece);
+    count++;
 
-      // Add piece to line on board
-      theBoard->boardVec[index].push_back(piece);
-      count++;
-
-      // If reached the end of the line for the board, move onto next 
-      if (count == boardSize + 1)
-      {
-        index++;
-        count = 0;
-      }
-
+    // If reached the end of the line for the board, move onto next 
+    if (count == boardSize + 1)
+    {
+      index++;
+      count = 0;
     }
-  //}
+
+  }
 
 } // CreateInitialBoard()
 

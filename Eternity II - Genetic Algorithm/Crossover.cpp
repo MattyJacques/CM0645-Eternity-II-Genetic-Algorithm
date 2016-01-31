@@ -9,6 +9,7 @@
 #include "GeneticAlgorithm.h"   // Population size
 #include <iostream>             // Error output
 #include <time.h>               // Time for srand
+#include <vector>               // Create vector
 
 
 // Initialise to nullptr
@@ -16,9 +17,8 @@ Crossover* Crossover::pInstance = nullptr;
 
 
 Crossover::Crossover()
-{ // Seeds rand() and sets tournament size
+{ // Sets tournament size
 
-  srand((unsigned int)time(NULL));
   tournamentSize = 20;
 
 } // Crossover()
@@ -91,7 +91,6 @@ void Crossover::RouletteSelect(int parents[2])
   //srand((unsigned int)time(NULL));
   parents[0] = GenRandomNum(totalFitness);
   parents[1] = GenRandomNum(totalFitness);
-  std::cout << parents[0] << " " << parents[1] << std::endl; // DEBUG@@@@@@@@@@@@
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
 
@@ -155,6 +154,28 @@ void Crossover::Reproduce(int parent1, int parent2)
 {
 
 } // Reproduce()
+
+
+void Crossover::OnePoint(int parent1, int parent2)
+{ // Takes two candidates, selects a point of the candidate to slice and exchanges
+  // the data after that point with the second parent, explained fully in the
+  // report, chapter 3, section 3.4.1
+
+  std::vector<PuzzlePiece> offspring1;
+  std::vector<PuzzlePiece> offspring2;
+
+  // Maybe better to actually use parents, but what about elitism
+
+  for (int i = 0; i < BoardManager::GetInstance()->pieceVec.size(); i++)
+  {
+    if (i <= BoardManager::GetInstance()->pieceVec.size() / 2)
+    {
+
+    }
+  }
+
+
+} // OnePoint()
 
 
 int Crossover::GenRandomNum(int max)

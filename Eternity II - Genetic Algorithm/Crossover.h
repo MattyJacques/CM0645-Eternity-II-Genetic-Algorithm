@@ -23,7 +23,7 @@ private:
   SelectionType selectType;             // Holds method of candidate selection
   int tournamentSize;                   // Holds how large tournaments are
 
-  // Seeds rand() and sets tournament size
+  // Sets tournament size
   Crossover();
 
   // Selects with candidates to use for reproduction with the selection method
@@ -39,8 +39,14 @@ private:
   // after being selected so candidate can be in tournament multiple times.
   void TournamentSelect(int parents[2]);
 
-  // WRITE COMMENT
+  // Calls whichever crossover method that has been selected during the start of
+  // the application
   void Reproduce(int parent1, int parent2);
+
+  // Takes two candidates, selects a point of the candidate to slice and exchanges
+  // the data after that point with the second parent, explained fully in the
+  // report, chapter 3, section 3.4.1
+  void OnePoint(int parent1, int parent2);
 
   // Generates a random number between 0 and max
   int GenRandomNum(int max);

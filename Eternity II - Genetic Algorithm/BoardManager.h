@@ -19,7 +19,7 @@ private:
   int patternNum;                     // Amount of patterns within board
   static BoardManager* pInstance;     // Current instance of class
 
-  // Private constructor for singleton
+  // Seeds rand() with time
   BoardManager();
 
 public:
