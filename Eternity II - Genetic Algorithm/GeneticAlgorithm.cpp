@@ -61,12 +61,12 @@ GeneticAlgorithm* GeneticAlgorithm::GetInstance()
 
 } // GetInstance()
 
-int GeneticAlgorithm::GetPopSize()
-{ // Returns the size of the population
-
-  return popSize;
-
-} // GetPopSize()
+//int GeneticAlgorithm::GetPopSize()
+//{ // Returns the size of the population
+//
+//  return popSize;
+//
+//} // GetPopSize()
 
 
 void GeneticAlgorithm::RunGA()
@@ -75,19 +75,19 @@ void GeneticAlgorithm::RunGA()
   for (int i = 0; i <= popSize; i++)
   {
     Board newBoard;
-    BoardManager::GetInstance()->CreateInitialBoard(&newBoard);
-    BoardManager::GetInstance()->boards.push_back(newBoard);
+    BoardManager::GetInstance()->InitFullBoard(&newBoard);
+    BoardManager::GetInstance()->currBoards->push_back(newBoard);
   }
 
   for (int i = 0; i <= popSize; i++)
   {
     
-    std::cout << i << " " << FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->boards[i]) << std::endl;
+    std::cout << i << " " << FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->currBoards->at(i)) << std::endl;
 
   }
 
   Crossover::GetInstance()->SetMethod(ONEPOINT, TOURNAMENT);
-  Crossover::GetInstance()->DoCrossover();
+  Crossover::GetInstance()->DoCrossover(popSize);
 
   /*
   start

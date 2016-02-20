@@ -35,17 +35,29 @@ Crossover* Crossover::GetInstance()
 } // GetInstance()
 
 
-void Crossover::DoCrossover()
+void Crossover::DoCrossover(int popSize)
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
 
-  int parents[2] = { -1, -1 };    // Board ID of the parents
+  std::vector<Board> newVec;
+  BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->currBoards;
+  BoardManager::GetInstance()->currBoards = std::make_shared<std::vector<Board>>(newVec);
 
-  // Loop to make sure both selected parents are not the same candidate
-  while (parents[0] == parents[1])
-    SelectParents(parents);
+  while (BoardManager::GetInstance()->currBoards->size() < popSize)
+  { // While the new vector is not filled with the right population size
+    // make more candidates
 
-  std::cout << parents[0] << " " << parents[1] << std::endl;
+    int parents[2] = { -1, -1 };    // Board ID of the parents
+
+    // Loop to make sure both selected parents are not the same candidate
+    while (parents[0] == parents[1])
+      SelectParents(parents, popSize);
+
+    std::cout << parents[0] << " " << parents[1] << std::endl;
+
+    Reproduce(parents);
+
+  }
 
 } // DoCrossover()
 
@@ -59,14 +71,14 @@ void Crossover::SetMethod(CrossoverType cross, SelectionType select)
 } // SetMethod()
 
 
-void Crossover::SelectParents(int parents[2])
-{ // Selects with candidates to use for reproduction with the selection method
+void Crossover::SelectParents(int parents[2], int popSize)
+{ // Selects with candidates to use for reproduction with the selection method  
   // chosen on start up
 
   if (selectType == ROULETTE) // If roulette method was chosen
     RouletteSelect(parents);
   else if (selectType == TOURNAMENT) // If tournament method was chosen
-    TournamentSelect(parents);
+    TournamentSelect(parents, popSize);
   else // Output error, method not recognised
     std::cout << "Selection method not recognised" << std::endl;
 
@@ -76,12 +88,12 @@ void Crossover::SelectParents(int parents[2])
 
 void Crossover::RouletteSelect(int parents[2])
 { // Selects candidates via the roulette wheel method mentioned within the report
-  // in chapter 3, section 3.5.1
+  // in chapter 3
 
   int totalFitness = 0;   // Holds the combined fitness of all boards
   int oldFitness = 0;     // Holds the older combined fitness score
 
-  for (Board i : BoardManager::GetInstance()->boards)
+  for (Board i : *BoardManager::GetInstance()->currBoards)
   { // Loops through all boards and total up all fitness scores from boards
 
     totalFitness += i.GetFitScore();
@@ -94,14 +106,14 @@ void Crossover::RouletteSelect(int parents[2])
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
 
-  for (unsigned int i = 0; i < BoardManager::GetInstance()->boards.size(); i++)
+  for (unsigned int i = 0; i < BoardManager::GetInstance()->currBoards->size(); i++)
   { // Loops through all boards accumulating the fitness scores, if random number
     // is between total fitness and the previous total fitness, set the ID of
     // the parent
 
     // Set the previous fitness and add on the fitness score of the next board
     oldFitness = totalFitness;
-    totalFitness += BoardManager::GetInstance()->boards[i].GetFitScore();
+    totalFitness += BoardManager::GetInstance()->currBoards->at(i).GetFitScore();
 
     // If section has been found for first parent, set ID
     if (totalFitness >= parents[0] && parents[0] >= oldFitness)
@@ -116,9 +128,9 @@ void Crossover::RouletteSelect(int parents[2])
 } // RouletteSelect()
 
 
-void Crossover::TournamentSelect(int parents[2])
+void Crossover::TournamentSelect(int parents[2], int popSize)
 { // Selects candidates via the tournament selection method mentioned within the
-  // report in chapter 3 section 3.5.3 Does not remove candidate from selection
+  // report in chapter 3. Does not remove candidate from selection
   // after being selected so candidate can be in tournament multiple times.
 
   int highfitness;          // Holds the current highest fitness found
@@ -136,11 +148,11 @@ void Crossover::TournamentSelect(int parents[2])
 
       // Generate a random index then test to see if the fitness score of that
       // candidate is highest than the current stored fitness
-      index = GenRandomNum(GeneticAlgorithm::GetInstance()->GetPopSize() - 1);
-      if (BoardManager::GetInstance()->boards[index].GetFitScore() > highfitness)
+      index = GenRandomNum(popSize - 1);
+      if ((BoardManager::GetInstance()->prevBoards->at(index).GetFitScore()) > highfitness)
       {
         parents[i] = index;
-        highfitness = BoardManager::GetInstance()->boards[index].GetFitScore();
+        highfitness = BoardManager::GetInstance()->prevBoards->at(index).GetFitScore();
       }
 
     } // for j < tournamentSize
@@ -149,31 +161,72 @@ void Crossover::TournamentSelect(int parents[2])
 
 } // TournamentSelect()
 
+void Crossover::Reproduce(int parents[2])
+{ // Calls whichever crossover method that has been selected during the start of
+  // the application
 
-void Crossover::Reproduce(int parent1, int parent2)
-{
+  if (crossType == ONEPOINT)
+    OnePoint(parents);
+  else if (crossType == TWOPOINT)
+    //TwoPoint(parents);
+    int i = 0;
+  else
+    std::cout << "Crossover method not recognised" << std::endl;
 
 } // Reproduce()
 
 
-void Crossover::OnePoint(int parent1, int parent2)
+void Crossover::OnePoint(int parents[2])
 { // Takes two candidates, selects a point of the candidate to slice and exchanges
   // the data after that point with the second parent, explained fully in the
-  // report, chapter 3, section 3.4.1
+  // report, chapter 3
 
-  std::vector<PuzzlePiece> offspring1;
-  std::vector<PuzzlePiece> offspring2;
+  Board offspring[2];
+  int xIndex = 0;
+  int yIndex = 0;
 
-  // Maybe better to actually use parents, but what about elitism
+  for (int i = 0; i < 2; i++)
+    BoardManager::GetInstance()->InitEmptyBoard(&offspring[i]);
 
   for (int i = 0; i < BoardManager::GetInstance()->pieceVec.size(); i++)
   {
     if (i <= BoardManager::GetInstance()->pieceVec.size() / 2)
-    {
+    { // If we are below 50% of pieces in board
+
+      offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[0]).boardVec[yIndex][xIndex]);
+
+      offspring[1].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[1]).boardVec[yIndex][xIndex]);
 
     }
-  }
+    else if (i > BoardManager::GetInstance()->pieceVec.size() / 2)
+    { // If we are greater than 50% pieces in board
 
+      offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[1]).boardVec[yIndex][xIndex]);
+
+      offspring[1].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[0]).boardVec[yIndex][xIndex]);
+
+    }
+
+    xIndex++;
+
+    if (xIndex == BoardManager::GetInstance()->boardSize + 1)
+    { // If we have reached the end of the line of the board, increment
+      xIndex = 0;
+      yIndex++;
+    }
+
+  } // for i < pieceVec.size()
+
+  
+  for (int i = 0; i < 2; i++)
+  {
+    offspring[i].SetBoardID((int)BoardManager::GetInstance()->currBoards->size() + 1);
+    BoardManager::GetInstance()->currBoards->push_back(offspring[i]);
+  }
 
 } // OnePoint()
 

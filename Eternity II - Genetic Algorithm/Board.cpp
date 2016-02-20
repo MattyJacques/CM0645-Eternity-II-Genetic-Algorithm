@@ -28,6 +28,13 @@ void Board::SetFitScore(int score)
 
 } // SetFireScore()
 
+void Board::SetBoardID(int id)
+{ // Sets the ID of the board
+
+  boardID = id;
+
+} // SetBoardID()
+
 Board::~Board()
 { // Destructor that deletes the instance of the class
 

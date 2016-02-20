@@ -40,7 +40,7 @@ public:
   static GeneticAlgorithm* GetInstance();
 
   // Returns the size of the population
-  int GetPopSize();
+  //int GetPopSize();
 
   // Main function of the GA that continually runs
   void RunGA();

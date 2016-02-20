@@ -28,25 +28,25 @@ private:
 
   // Selects with candidates to use for reproduction with the selection method
   // chosen on start up
-  void SelectParents(int parents[2]);
+  void SelectParents(int parents[2], int popSize);
 
   // Selects candidates via the roulette wheel method mentioned within the report
-  // in chapter 3, section 3.5.1
+  // in chapter 3
   void RouletteSelect(int parents[2]);
 
   // Selects candidates via the tournament selection method mentioned within the
-  // report in chapter 3, section 3.5.3. Does not remove candidate from selection
+  // report in chapter 3. Does not remove candidate from selection
   // after being selected so candidate can be in tournament multiple times.
-  void TournamentSelect(int parents[2]);
+  void TournamentSelect(int parents[2], int popSize);
 
   // Calls whichever crossover method that has been selected during the start of
   // the application
-  void Reproduce(int parent1, int parent2);
+  void Reproduce(int parents[2]);
 
   // Takes two candidates, selects a point of the candidate to slice and exchanges
   // the data after that point with the second parent, explained fully in the
-  // report, chapter 3, section 3.4.1
-  void OnePoint(int parent1, int parent2);
+  // report, chapter 3
+  void OnePoint(int parents[2]);
 
   // Generates a random number between 0 and max
   int GenRandomNum(int max);
@@ -57,7 +57,7 @@ public:
 
   // Selects the parent candidates then commences with crossover with chosen
   // methods
-  void DoCrossover();
+  void DoCrossover(int popSize);
 
   // Sets the crossover and selection type to use for crossover
   void SetMethod(CrossoverType cross, SelectionType select);

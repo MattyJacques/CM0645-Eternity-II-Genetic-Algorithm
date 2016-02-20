@@ -15,9 +15,13 @@ BoardManager* BoardManager::pInstance = nullptr;
 
 
 BoardManager::BoardManager()
-{ // Seeds rand() with time
+{ // Seeds rand() with time and initalises currBoards
 
   srand((unsigned int)time(NULL));
+
+  std::vector<Board> newVec;
+  currBoards = std::make_shared<std::vector<Board>>(newVec);
+
 
 } // BoardManager()
 
@@ -40,18 +44,16 @@ void BoardManager::InitialiseData(int size, int patNum)
 
 } // InitialiseData()
 
-void BoardManager::CreateInitialBoard(Board* theBoard)
+void BoardManager::InitFullBoard(Board* theBoard)
 { // Creates the inital generation of boards
 
   int index = 0;
   int count = 0;
 
-  for (int i = 0; i <= boardSize; i++)
-  { // Loop through and create vector of vector for the board
-    std::vector<PuzzlePiece> newVec;
-    theBoard->boardVec.push_back(newVec);
-  }
+  // Fill vector of vectors with empty vectors
+  InitEmptyBoard(theBoard);
 
+  // Shuffle order of puzzle pieces
   std::random_shuffle(pieceVec.begin(), pieceVec.end());
 
   for (PuzzlePiece piece : pieceVec)
@@ -71,6 +73,17 @@ void BoardManager::CreateInitialBoard(Board* theBoard)
   }
 
 } // CreateInitialBoard()
+
+void BoardManager::InitEmptyBoard(Board * theBoard)
+{ // Initialises the boards vector of vectors with empty vectors
+
+  for (int i = 0; i <= boardSize; i++)
+  { // Loop through and create vector of vector for the board
+    std::vector<PuzzlePiece> newVec;
+    theBoard->boardVec.push_back(newVec);
+  }
+
+} // InitialiseBoard
 
 
 BoardManager::~BoardManager()

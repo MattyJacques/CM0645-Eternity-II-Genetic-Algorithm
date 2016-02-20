@@ -31,6 +31,9 @@ public:
   // Sets the fitness score for this particular board
   void SetFitScore(int score);
 
+  // Sets the ID of the board
+  void SetBoardID(int id);
+
   // Destructor that deletes the instance of the class
   ~Board();
 
