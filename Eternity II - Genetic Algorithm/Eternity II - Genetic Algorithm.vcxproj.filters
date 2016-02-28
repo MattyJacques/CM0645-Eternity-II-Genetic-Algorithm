@@ -39,6 +39,9 @@
     <ClCompile Include="Crossover.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mutation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Crossover.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mutation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

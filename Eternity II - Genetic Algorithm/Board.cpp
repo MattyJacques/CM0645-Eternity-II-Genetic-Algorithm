@@ -14,12 +14,14 @@ Board::Board()
 
 } // Board()
 
+
 int Board::GetFitScore()
 { // Returns the fitness score of the board
 
   return fitScore;
 
 } // GetFitScore()
+
 
 void Board::SetFitScore(int score)
 { // Sets the fitness score for this particular board
@@ -28,12 +30,14 @@ void Board::SetFitScore(int score)
 
 } // SetFireScore()
 
+
 void Board::SetBoardID(int id)
 { // Sets the ID of the board
 
   boardID = id;
 
 } // SetBoardID()
+
 
 Board::~Board()
 { // Destructor that deletes the instance of the class

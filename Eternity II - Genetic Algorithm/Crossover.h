@@ -23,7 +23,7 @@ private:
   SelectionType selectType;             // Holds method of candidate selection
   int tournamentSize;                   // Holds how large tournaments are
 
-  // Sets tournament size
+  // Sets tournament size, initalise methods to default
   Crossover();
 
   // Selects with candidates to use for reproduction with the selection method
@@ -48,9 +48,6 @@ private:
   // report, chapter 3
   void OnePoint(int parents[2]);
 
-  // Generates a random number between 0 and max
-  int GenRandomNum(int max);
-
 public:
   // Returns the current instance of the class, creates if needed
   static Crossover* GetInstance();
@@ -62,4 +59,3 @@ public:
   // Sets the crossover and selection type to use for crossover
   void SetMethod(CrossoverType cross, SelectionType select);
 };
-

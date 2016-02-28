@@ -17,9 +17,11 @@ Crossover* Crossover::pInstance = nullptr;
 
 
 Crossover::Crossover()
-{ // Sets tournament size
+{ // Sets tournament size, initalise methods to default
 
   tournamentSize = 20;
+  crossType = ONEPOINT;
+  selectType = ROULETTE;
 
 } // Crossover()
 
@@ -101,8 +103,8 @@ void Crossover::RouletteSelect(int parents[2])
 
   // Seeds time and gets two random numbers to use to pick from wheel
   //srand((unsigned int)time(NULL));
-  parents[0] = GenRandomNum(totalFitness);
-  parents[1] = GenRandomNum(totalFitness);
+  parents[0] = GeneticAlgorithm::GetInstance()->GenRandomNum(0, totalFitness);
+  parents[1] = GeneticAlgorithm::GetInstance()->GenRandomNum(0, totalFitness);
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
 
@@ -148,7 +150,7 @@ void Crossover::TournamentSelect(int parents[2], int popSize)
 
       // Generate a random index then test to see if the fitness score of that
       // candidate is highest than the current stored fitness
-      index = GenRandomNum(popSize - 1);
+      index = GeneticAlgorithm::GetInstance()->GenRandomNum(0, popSize - 1);
       if ((BoardManager::GetInstance()->prevBoards->at(index).GetFitScore()) > highfitness)
       {
         parents[i] = index;
@@ -160,6 +162,7 @@ void Crossover::TournamentSelect(int parents[2], int popSize)
   } // for i < 2
 
 } // TournamentSelect()
+
 
 void Crossover::Reproduce(int parents[2])
 { // Calls whichever crossover method that has been selected during the start of
@@ -229,16 +232,3 @@ void Crossover::OnePoint(int parents[2])
   }
 
 } // OnePoint()
-
-
-int Crossover::GenRandomNum(int max)
-{ // Generates a random number between 0 and max
-
-  int randomInt = 0;
-  max += 1;
-
-  randomInt = (int)(max * rand() / (RAND_MAX + 1.0));
-
-  return randomInt;
-
-} // GenerateRandomNum()
