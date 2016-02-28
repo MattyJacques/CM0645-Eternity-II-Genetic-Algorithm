@@ -77,5 +77,8 @@ public:
   // Checks the fitness of the candidate provided by the GA
   int CheckFitness(Board* theBoard);
 
+  // Destructor that deletes the instance of the class
+  ~FitnessFunction();
+
 };
 

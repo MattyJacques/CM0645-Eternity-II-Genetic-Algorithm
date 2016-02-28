@@ -418,3 +418,15 @@ int FitnessFunction::CheckFitness(Board* theBoard)
   return score;
 
 } // CheckFitness()
+
+
+FitnessFunction::~FitnessFunction()
+{ // Destructor that deletes the instance of the class
+
+  // Delete the instance of the fitness function
+  delete pInstance;
+
+  // Change to pointer to null
+  pInstance = nullptr;
+
+}

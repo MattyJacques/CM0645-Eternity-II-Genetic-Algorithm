@@ -62,10 +62,10 @@ public:
   int GetLeft();
 
   // Returns the orientation of the puzzle piece
-  int  GetOrientation();
+  int GetOrientation();
 
   // Returns the piece ID of the puzzle piece
-  int  GetPieceID();
+  int GetPieceID();
 
   // Returns the type of piece
   PieceType GetType();

@@ -44,7 +44,7 @@ public:
   // Initialises the boards vector of vectors with empty vectors
   void InitEmptyBoard(Board* theBoard);
 
-  // Cleans up
+  // Destructor to delete the instance of the class
   ~BoardManager();
 
 };

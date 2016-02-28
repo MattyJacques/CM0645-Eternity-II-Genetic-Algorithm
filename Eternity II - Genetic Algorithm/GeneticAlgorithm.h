@@ -18,7 +18,7 @@ class GeneticAlgorithm
 {
 
 private:
-  static GeneticAlgorithm* pAlgorithm;  // Holds the current instance for class
+  static GeneticAlgorithm* pInstance;  // Holds the current instance for class
   double elitism;                       // Holds the elitism rate
   double mutation;                      // Holds the mutation rate
   int popSize;                          // Holds the population size

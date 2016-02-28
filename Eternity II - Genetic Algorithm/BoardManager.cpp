@@ -36,6 +36,7 @@ BoardManager * BoardManager::GetInstance()
 
 } // GetInstance()
 
+
 void BoardManager::InitialiseData(int size, int patNum)
 { // Sets how many patterns to be used and how many pieces there are per board
 
@@ -43,6 +44,7 @@ void BoardManager::InitialiseData(int size, int patNum)
   patternNum = patNum;
 
 } // InitialiseData()
+
 
 void BoardManager::InitFullBoard(Board* theBoard)
 { // Creates the inital generation of boards
@@ -74,6 +76,7 @@ void BoardManager::InitFullBoard(Board* theBoard)
 
 } // CreateInitialBoard()
 
+
 void BoardManager::InitEmptyBoard(Board * theBoard)
 { // Initialises the boards vector of vectors with empty vectors
 
@@ -87,6 +90,11 @@ void BoardManager::InitEmptyBoard(Board * theBoard)
 
 
 BoardManager::~BoardManager()
-{ // Cleans up
+{ // Destructor to delete the instance of the class
+
+  currBoards = nullptr;
+  prevBoards = nullptr;
+  delete pInstance;
+  pInstance = nullptr;
 
 } // ~BoardManager()

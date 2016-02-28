@@ -232,3 +232,11 @@ void Crossover::OnePoint(int parents[2])
   }
 
 } // OnePoint()
+
+Crossover::~Crossover()
+{ // Destructor to delete the instance of the class
+  
+  delete pInstance;
+  pInstance = nullptr;
+
+} // ~Crosover()

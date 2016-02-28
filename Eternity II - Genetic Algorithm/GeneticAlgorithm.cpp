@@ -10,7 +10,7 @@
 
 
 // Initialise the pointer to the instance
-GeneticAlgorithm* GeneticAlgorithm::pAlgorithm = nullptr;
+GeneticAlgorithm* GeneticAlgorithm::pInstance = nullptr;
 
 
 GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate, 
@@ -113,9 +113,9 @@ GeneticAlgorithm::~GeneticAlgorithm()
 { // Destructor that deletes the instance of the class
 
   // Delete the instance of the GA
-  delete pAlgorithm;
+  delete pInstance;
 
   // Change to pointer to null
-  pAlgorithm = nullptr;
+  pInstance = nullptr;
 
 } // ~GeneticAlgorithm()

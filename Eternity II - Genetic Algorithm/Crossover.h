@@ -58,4 +58,7 @@ public:
 
   // Sets the crossover and selection type to use for crossover
   void SetMethod(CrossoverType cross, SelectionType select);
+
+  // Destructor to delete the instance of the class
+  ~Crossover();
 };
