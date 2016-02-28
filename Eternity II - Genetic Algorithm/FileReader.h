@@ -8,15 +8,18 @@
 #include "PuzzlePiece.h"    // Includes piece type enum
 #include <fstream>          // Includes file input function
 #include <string>           // Includes strings and stoi
+#include <vector>           // Include vectors for filenames
 
 
 class FileReader
 {
 
 private:
-  static FileReader* pInstance;   // Holds the current instance for the class
-  std::ifstream theFile;          // File open to read from
+  static FileReader* pInstance;       // Holds the current instance for the class
+  std::ifstream theFile;              // File open to read from
+  std::vector<std::string> filenames; // Holds all filenames held in directory
 
+  // Private for singleton
   FileReader();
 
 public:
@@ -33,6 +36,13 @@ public:
   // Reads the piece file that has already been opened, storing piece info
   // in the boards piece array
   void ReadPieceFile();
+
+  // Creates a new puzzle piece and stores in the puzzle piece vector
+  void CreatePiece(int pData[5]);
+
+  // Takes string of data and parses into the array of integers to use to create
+  // the puzzle piece
+  void ParseData(std::string line, int pData[5]);
 
   // Checks to see what type of piece is currently being read, returning the
   // answer

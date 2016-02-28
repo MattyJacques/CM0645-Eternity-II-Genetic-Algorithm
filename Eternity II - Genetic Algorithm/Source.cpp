@@ -19,29 +19,30 @@ void Initialise()
   double mutationRate = 0;      // Holds the rate of mutation in GA
   int popSize = 0;
   
-  // Output asking for board size then handles user input
-  cout << "Board Size: ";
-  cin >> boardSize;
+  //// Output asking for board size then handles user input
+  //cout << "Board Size: ";
+  //cin >> boardSize;
 
-  // Output asking for how many patterns to use in board, handles user input
-  cout << "Number of patterns: ";
-  cin >> patternNum;
+  //// Output asking for how many patterns to use in board, handles user input
+  //cout << "Number of patterns: ";
+  //cin >> patternNum;
 
-  // Output asking how many elite for generations in GA then handles user input
-  cout << "Elitism Rate: ";
-  cin >> eliteRate;
+  //// Output asking how many elite for generations in GA then handles user input
+  //cout << "Elitism Rate: ";
+  //cin >> eliteRate;
 
-  // Output asking for mutation rate for GA then handles user input
-  cout << "Mutation Rate: ";
-  cin >> mutationRate;
+  //// Output asking for mutation rate for GA then handles user input
+  //cout << "Mutation Rate: ";
+  //cin >> mutationRate;
 
-  // Output asking for population size for a generation then handles user input
-  cout << "Population Size: ";
-  cin >> popSize;
+  //// Output asking for population size for a generation then handles user input
+  //cout << "Population Size: ";
+  //cin >> popSize;
 
   GeneticAlgorithm::CreateInstance(1, 1, 100, 16);
   FileReader* pInst = FileReader::GetInstance();
   pInst->OpenFile("Puzzles/FitTest.e2");
+  pInst->ScanFileDirectory();
   pInst->ReadPieceFile();
 
   for (PuzzlePiece i : BoardManager::GetInstance()->pieceVec)
