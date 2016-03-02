@@ -1,8 +1,6 @@
 #include <iostream>
 #include "GeneticAlgorithm.h"     // To create and call the GA
 #include "FileReader.h"
-#include "BoardManager.h"
-#include "FitnessFunction.h"
 
 
 using namespace std;

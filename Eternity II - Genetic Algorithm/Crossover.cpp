@@ -29,7 +29,7 @@ void Crossover::DoCrossover(int popSize)
   BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->currBoards;
   BoardManager::GetInstance()->currBoards = std::make_shared<std::vector<Board>>(newVec);
 
-  while (BoardManager::GetInstance()->currBoards->size() < popSize)
+  while (BoardManager::GetInstance()->currBoards->size() < popSize - 1)
   { // While the new vector is not filled with the right population size
     // make more candidates
 

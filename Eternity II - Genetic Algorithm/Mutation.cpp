@@ -18,6 +18,14 @@ Mutation::Mutation()
 } // Mutation()
 
 
+void Mutation::CalcMutRate(double rate, int popSize)
+{ // Calculates how many mutations to implement per generation
+
+  mutNum = (rate * popSize) / 100;
+
+} // CalcMutRate()
+
+
 void Mutation::GetRandPiece(int index[2])
 { // Sets the 2 dimensional index for a random piece out of the inner pieces
   // of the board
@@ -59,10 +67,11 @@ void Mutation::Swap(int boardID)
 } // Swap()
 
 
-void Mutation::SetMethod(MutateType type)
+void Mutation::Setup(MutateType type, double rate, int popSize)
 { // Sets the method of mutation to use for this attempt
 
   mutType = type;
+  CalcMutRate(rate, popSize);
 
 } // SetMethod()
 
@@ -76,7 +85,7 @@ void Mutation::DoMutation()
   {
 
     boardID = GeneticAlgorithm::GetInstance()->GenRandomNum(0,
-                (int)BoardManager::GetInstance()->currBoards->size());
+                (int)BoardManager::GetInstance()->currBoards->size() - 1);
 
     if (mutType == SWAP)
       Swap(boardID);

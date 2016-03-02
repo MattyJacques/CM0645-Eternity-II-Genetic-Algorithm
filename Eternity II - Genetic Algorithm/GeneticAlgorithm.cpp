@@ -18,18 +18,11 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate,
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation
 
-  double total = 0;
+  theCrossover.SetMethod(ONEPOINT, TOURNAMENT);
+  theMutation.Setup(SWAP, mutationRate, population);
 
+  popSize = population;
   elitism = eliteRate;
-  mutation = mutationRate;
-  popSize = population - 1;
-  
-
-  total = elitism + mutation;
-
-  elitism = (int)(elitism * population / total);
-  //crossover = (int)(crossover * population / total);
-  mutation = (int)(mutation * population / total);
 
   BoardManager::GetInstance()->InitialiseData(boardSize, 22);
 
@@ -62,23 +55,26 @@ GeneticAlgorithm* GeneticAlgorithm::GetInstance()
 void GeneticAlgorithm::RunGA()
 { // Main function of the GA that continually runs
 
-  for (int i = 0; i <= popSize; i++)
+  for (int i = 0; i < popSize; i++)
   {
     Board newBoard;
     BoardManager::GetInstance()->InitFullBoard(&newBoard);
     BoardManager::GetInstance()->currBoards->push_back(newBoard);
   }
 
-  for (int i = 0; i <= popSize; i++)
+  while (true)
   {
-    
-    theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
-    std::cout << i + 1 << " " << BoardManager::GetInstance()->currBoards->at(i).fitScore << std::endl;
+    for (int i = 0; i < popSize; i++)
+    {
 
+      theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
+      std::cout << i + 1 << " " << BoardManager::GetInstance()->currBoards->at(i).fitScore << std::endl;
+
+    }
+
+    theCrossover.DoCrossover(popSize);
+    theMutation.DoMutation();
   }
-
-  theCrossover.SetMethod(ONEPOINT, TOURNAMENT);
-  theCrossover.DoCrossover(popSize);
 
   /*
   start

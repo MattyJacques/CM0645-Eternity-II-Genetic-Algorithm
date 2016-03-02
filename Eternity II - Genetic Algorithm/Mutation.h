@@ -18,6 +18,9 @@ private:
   MutateType mutType;                    // Holds method of mutation
   double mutNum;                         // Number to mutate per generation 
 
+  // Calculates how many mutations to implement per generation
+  void CalcMutRate(double rate, int popSize);
+
   // Sets the 2 dimensional index for a random piece out of the inner pieces
   // of the board
   void GetRandPiece(int index[2]);
@@ -30,7 +33,7 @@ public:
   Mutation();
 
   // Sets the method of mutation to use for this attempt
-  void SetMethod(MutateType type);
+  void Setup(MutateType type, double rate, int popSize);
 
   void DoMutation();
 };
