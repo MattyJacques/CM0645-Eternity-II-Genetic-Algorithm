@@ -11,10 +11,6 @@
 #include <time.h>               // Time for srand
 
 
-// Initialise to nullptr
-Crossover* Crossover::pInstance = nullptr;
-
-
 Crossover::Crossover()
 { // Sets tournament size, initalise methods to default
 
@@ -23,17 +19,6 @@ Crossover::Crossover()
   selectType = ROULETTE;
 
 } // Crossover()
-
-
-Crossover* Crossover::GetInstance()
-{ // Returns the current instance of the class, creates if needed
-
-  if (!pInstance)
-    pInstance = new Crossover();
-
-  return pInstance;
-
-} // GetInstance()
 
 
 void Crossover::DoCrossover(int popSize)
@@ -309,12 +294,3 @@ void Crossover::FixDuplicates(Board* pBoard, std::vector<PuzzlePiece> pieces,
   }
 
 } // FixDuplicates()
-
-
-Crossover::~Crossover()
-{ // Destructor to delete the instance of the class
-  
-  delete pInstance;
-  pInstance = nullptr;
-
-} // ~Crosover()

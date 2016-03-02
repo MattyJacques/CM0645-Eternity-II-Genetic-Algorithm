@@ -7,15 +7,9 @@
 #include "FitnessFunction.h"    // Include the header file
 
 
-// Initialise the pointer to the instance
-FitnessFunction* FitnessFunction::pInstance = nullptr;
-
-
 FitnessFunction::FitnessFunction()
-{
+{ // Initialse board and board manager pointers
 
-  int boardSize = 0;
-  int score = 0;
   pBoard = nullptr;
   pBoardMan = BoardManager::GetInstance();
 
@@ -360,17 +354,6 @@ void FitnessFunction::CheckInnerPieces()
 } // CheckInnerPieces()
 
 
-FitnessFunction* FitnessFunction::GetInstance()
-{ // Returns the current instance of the class, creates if needed
-
-  if (!pInstance)
-    pInstance = new FitnessFunction();
-
-  return pInstance;
-
-} // GetInstance()
-
-
 void FitnessFunction::CheckFitness(Board* theBoard)
 { // Checks the fitness of the candidate provided by the GA
 
@@ -391,15 +374,3 @@ void FitnessFunction::CheckFitness(Board* theBoard)
   CheckBottomRight();
 
 } // CheckFitness()
-
-
-FitnessFunction::~FitnessFunction()
-{ // Destructor that deletes the instance of the class
-
-  // Delete the instance of the fitness function
-  delete pInstance;
-
-  // Change to pointer to null
-  pInstance = nullptr;
-
-}

@@ -14,12 +14,8 @@ class FitnessFunction
 {
 
 private:
-  static FitnessFunction* pInstance;    // Holds the current instance of class
   Board* pBoard;                        // Holds pointer to current board
   BoardManager* pBoardMan;              // For access to board size
-
-  // Private to avoid unauth creation of instances
-  FitnessFunction();
 
   // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
@@ -69,14 +65,10 @@ private:
   void CheckInnerPieces();
 
 public:
-  // Returns the current instance of the class, creates if needed
-  static FitnessFunction* GetInstance();
+  // Initialse board and board manager pointers
+  FitnessFunction();
 
   // Checks the fitness of the candidate provided by the GA
   void CheckFitness(Board* theBoard);
-
-  // Destructor that deletes the instance of the class
-  ~FitnessFunction();
-
 };
 

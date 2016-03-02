@@ -72,13 +72,13 @@ void GeneticAlgorithm::RunGA()
   for (int i = 0; i <= popSize; i++)
   {
     
-    FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
-    std::cout << i << " " << BoardManager::GetInstance()->currBoards->at(i).fitScore << std::endl;
+    theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
+    std::cout << i + 1 << " " << BoardManager::GetInstance()->currBoards->at(i).fitScore << std::endl;
 
   }
 
-  Crossover::GetInstance()->SetMethod(ONEPOINT, TOURNAMENT);
-  Crossover::GetInstance()->DoCrossover(popSize);
+  theCrossover.SetMethod(ONEPOINT, TOURNAMENT);
+  theCrossover.DoCrossover(popSize);
 
   /*
   start

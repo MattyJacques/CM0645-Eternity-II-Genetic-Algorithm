@@ -10,16 +10,13 @@
 #include <iostream>           // Debug output
 
 
-// Initialise to nullptr
-Mutation* Mutation::pInstance = nullptr;
-
-
 Mutation::Mutation()
 { // Initialise mutation method
 
   mutType = SWAP;
 
 } // Mutation()
+
 
 void Mutation::GetRandPiece(int index[2])
 { // Sets the 2 dimensional index for a random piece out of the inner pieces
@@ -60,17 +57,6 @@ void Mutation::Swap(int boardID)
   pBoard->boardVec[pieceIndex2[0]][pieceIndex2[1]] = temp;
 
 } // Swap()
-
-
-Mutation * Mutation::GetInstance()
-{ // Returns the current instance of the class, creates if needed
-
-  if (!pInstance)
-    pInstance = new Mutation;
-
-  return pInstance;
-
-} // GetInstance()
 
 
 void Mutation::SetMethod(MutateType type)

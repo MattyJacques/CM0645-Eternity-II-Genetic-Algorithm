@@ -9,17 +9,23 @@
 
 #include "BoardManager.h"           // Board creation, access to board vector
 #include "FitnessFunction.h"        // Evalute fitness in GA process
+#include "Crossover.h"
+#include "Mutation.h"
 
 
 class GeneticAlgorithm
 {
 
 private:
-  static GeneticAlgorithm* pInstance;  // Holds the current instance for class
+  static GeneticAlgorithm* pInstance;   // Holds the current instance for class
   double elitism;                       // Holds the elitism rate
   double mutation;                      // Holds the mutation rate
   int popSize;                          // Holds the population size
   int boardSize;                        // Holds the board size
+  Crossover theCrossover;               // Object to handle crossover
+  Mutation theMutation;                 // Object to handle mutation
+  FitnessFunction theFitness;           // Object ot handle calculating fitness
+
 
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation

@@ -23,13 +23,9 @@ class Crossover
 {
 
 private:
-  static Crossover* pInstance;          // Holds current instance of class
   CrossoverType crossType;              // Holds what crossover method to use
   SelectionType selectType;             // Holds method of candidate selection
   int tournamentSize;                   // Holds how large tournaments are
-
-  // Sets tournament size, initalise methods to default
-  Crossover();
 
   // Selects with candidates to use for reproduction with the selection method
   // chosen on start up
@@ -70,8 +66,8 @@ private:
                      std::vector<std::vector<int>> indexes);
 
 public:
-  // Returns the current instance of the class, creates if needed
-  static Crossover* GetInstance();
+  // Sets tournament size, initalise methods to default
+  Crossover();
 
   // Selects the parent candidates then commences with crossover with chosen
   // methods
@@ -79,7 +75,4 @@ public:
 
   // Sets the crossover and selection type to use for crossover
   void SetMethod(CrossoverType cross, SelectionType select);
-
-  // Destructor to delete the instance of the class
-  ~Crossover();
 };
