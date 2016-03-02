@@ -16,8 +16,8 @@ enum CrossoverType { ONEPOINT, TWOPOINT };
 // Readability for methods of selection
 enum SelectionType { ROULETTE, TOURNAMENT };
 
-class Board;
-class PuzzlePiece;
+struct Board;
+struct PuzzlePiece;
 
 class Crossover
 {

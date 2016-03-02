@@ -7,11 +7,7 @@
 #pragma once
 
 
-// Enum so the code can use colours for the tile pieces
-enum segLocation { TOP, RIGHT, BOTTOM, LEFT };
 
-// Ease of use for the type of puzzle piece
-enum PieceType { CORNER, EDGE, INNER };
 
 
 class PuzzlePiece

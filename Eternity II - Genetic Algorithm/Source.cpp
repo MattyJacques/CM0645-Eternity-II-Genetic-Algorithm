@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Board.h"                // To create board instance
 #include "GeneticAlgorithm.h"     // To create and call the GA
 #include "FileReader.h"
 #include "BoardManager.h"
@@ -47,7 +46,7 @@ void Initialise()
 
   for (PuzzlePiece i : BoardManager::GetInstance()->pieceVec)
   {
-    cout << i.GetPieceID() << " " << i.GetTop() << " " << i.GetLeft() << " " << i.GetBottom() << " " << i.GetRight() << endl;
+    cout << i.pieceID << " " << i.segments[TOP] << " " << i.segments[LEFT] << " " << i.segments[BOTTOM] << " " << i.segments[RIGHT] << endl;
   }
   GeneticAlgorithm::GetInstance()->RunGA();
 

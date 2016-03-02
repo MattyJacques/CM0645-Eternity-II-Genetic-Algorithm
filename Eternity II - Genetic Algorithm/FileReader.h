@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include "PuzzlePiece.h"    // Includes piece type enum
+
+#include "BoardManager.h"   // For PieceType
 #include <fstream>          // Includes file input function
 #include <string>           // Includes strings and stoi
 #include <vector>           // Include vectors for filenames

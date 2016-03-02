@@ -11,9 +11,6 @@
 #include "FitnessFunction.h"        // Evalute fitness in GA process
 
 
-class Board;                        // Allows to create board objects
-
-
 class GeneticAlgorithm
 {
 

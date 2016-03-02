@@ -28,7 +28,7 @@ bool FitnessFunction::IsMatchSide(PuzzlePiece piece1, PuzzlePiece piece2)
 
   bool result = false;
 
-  if (piece1.GetRight() == piece2.GetLeft())
+  if (piece1.segments[RIGHT] == piece2.segments[LEFT])
   {
     result = true;
   }
@@ -44,7 +44,7 @@ bool FitnessFunction::IsMatchBottom(PuzzlePiece piece1, PuzzlePiece piece2)
 
   bool result = false;
 
-  if (piece1.GetBottom() == piece2.GetTop())
+  if (piece1.segments[BOTTOM] == piece2.segments[TOP])
   {
     result = true;
   }
@@ -58,7 +58,7 @@ void FitnessFunction::CheckTopLeft()
 { // Checks the top left corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces
 
-  if (pBoard->boardVec[0][0].GetType() == CORNER)
+  if (pBoard->boardVec[0][0].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
 
     score += 25;
@@ -88,7 +88,7 @@ void FitnessFunction::CheckTopRight()
 { // Checks the top right corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces
 
-  if (pBoard->boardVec[0][pBoardMan->boardSize].GetType() == CORNER)
+  if (pBoard->boardVec[0][pBoardMan->boardSize].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
 
     score += 25;
@@ -120,7 +120,7 @@ void FitnessFunction::CheckBottomLeft()
 { // Checks the bottom left corner to see if the piece is the correct type and
   // if the edges of that piece match adjacent pieces
 
-  if (pBoard->boardVec[pBoardMan->boardSize][0].GetType() == CORNER)
+  if (pBoard->boardVec[pBoardMan->boardSize][0].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
 
     score += 25;
@@ -152,8 +152,7 @@ void FitnessFunction::CheckBottomRight()
 { // Checks the bottom right corner to see if the piece is the correct type and
   // if the edges of that piece match adjacent pieces
 
-  if (pBoard->boardVec[pBoardMan->boardSize][pBoardMan->boardSize].GetType() 
-    == CORNER)
+  if (pBoard->boardVec[pBoardMan->boardSize][pBoardMan->boardSize].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
 
     score += 25;
@@ -190,7 +189,7 @@ void FitnessFunction::CheckTopEdge()
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
   {
-    if (pBoard->boardVec[0][i].GetType() == EDGE)
+    if (pBoard->boardVec[0][i].type == EDGE)
     { // If edge piece on edge slot
 
       score += 15;
@@ -209,7 +208,7 @@ void FitnessFunction::CheckTopEdge()
     }
   }
 
-  if (pBoard->boardVec[0][pBoardMan->boardSize - 1].GetType() == EDGE)
+  if (pBoard->boardVec[0][pBoardMan->boardSize - 1].type == EDGE)
   { // If the piece in the slot 1 to the left of top right corner is edge
 
     score += 15;
@@ -233,7 +232,7 @@ void FitnessFunction::CheckLeftEdge()
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
   {
-    if (pBoard->boardVec[i][0].GetType() == EDGE)
+    if (pBoard->boardVec[i][0].type == EDGE)
     { // If piece is of edge type
 
       score += 15;
@@ -252,7 +251,7 @@ void FitnessFunction::CheckLeftEdge()
     }
   }
 
-  if (pBoard->boardVec[pBoardMan->boardSize - 1][0].GetType() == EDGE)
+  if (pBoard->boardVec[pBoardMan->boardSize - 1][0].type == EDGE)
   { // If piece above bottom left corner is edge type
 
     score += 15;
@@ -276,7 +275,7 @@ void FitnessFunction::CheckRightEdge()
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
   {
-    if (pBoard->boardVec[i][pBoardMan->boardSize].GetType() == EDGE)
+    if (pBoard->boardVec[i][pBoardMan->boardSize].type == EDGE)
     { // If piece is edge type
 
       score += 15;
@@ -298,7 +297,7 @@ void FitnessFunction::CheckRightEdge()
   }
 
   if (pBoard->boardVec[pBoardMan->boardSize - 1]
-    [pBoardMan->boardSize].GetType() == EDGE)
+    [pBoardMan->boardSize].type == EDGE)
   { // If piece above bottom right corner is edge
 
     score += 15;
@@ -322,7 +321,7 @@ void FitnessFunction::CheckBottomEdge()
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
   {
-    if (pBoard->boardVec[pBoardMan->boardSize][i].GetType() == EDGE)
+    if (pBoard->boardVec[pBoardMan->boardSize][i].type == EDGE)
     { // If piece is edge type
 
       score += 15;
@@ -344,7 +343,7 @@ void FitnessFunction::CheckBottomEdge()
   }
 
   if (pBoard->boardVec[pBoardMan->boardSize]
-    [pBoardMan->boardSize - 1].GetType() == EDGE)
+    [pBoardMan->boardSize - 1].type == EDGE)
   { // If piece left of bottom right corner is edge
 
     score += 15;
@@ -413,7 +412,7 @@ int FitnessFunction::CheckFitness(Board* theBoard)
   CheckBottomEdge();
   CheckBottomRight();
 
-  pBoard->SetFitScore(score);
+  pBoard->fitScore = score;
 
   return score;
 

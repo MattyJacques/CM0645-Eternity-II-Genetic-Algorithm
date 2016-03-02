@@ -117,12 +117,12 @@ void FileReader::CreatePiece(int pData[5])
   // Set each element of the piece to the parsed section of data
   PuzzlePiece newPiece;
 
-  newPiece.SetPieceID(pData[0]);
-  newPiece.SetType(CheckType(pData));
-  newPiece.SetTop(pData[1]);
-  newPiece.SetLeft(pData[2]);
-  newPiece.SetBottom(pData[3]);
-  newPiece.SetRight(pData[4]);
+  newPiece.pieceID = pData[0];
+  newPiece.type = CheckType(pData);
+  newPiece.segments[TOP] = pData[1];
+  newPiece.segments[LEFT] = pData[2];
+  newPiece.segments[BOTTOM] = pData[3];
+  newPiece.segments[RIGHT] = pData[4];
 
   // Add peice to vector of pieces
   BoardManager::GetInstance()->pieceVec.push_back(newPiece);

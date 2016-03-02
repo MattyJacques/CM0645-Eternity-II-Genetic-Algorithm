@@ -7,10 +7,34 @@
 #pragma once
 
 
-#include "PuzzlePiece.h"        // For piece collection vector
-#include "Board.h"              // For board collection vector 
 #include <vector>               // Creating vectors
 #include <memory>               // Shared pointers
+
+
+// Enum so the code can use colours for the tile pieces
+enum segLocation { TOP, RIGHT, BOTTOM, LEFT };
+
+// Ease of use for the type of puzzle piece
+enum PieceType { CORNER, EDGE, INNER };
+
+
+struct PuzzlePiece
+{
+  int pieceID;      // Holds the ID of the puzzle piece
+  PieceType type;    // Holds the type of the puzzle piece, example corner, edge
+  int orientation;  // Holds the rotation of the puzzle piece
+  int segments[4];  // Holds the pattern for each segment of the piece
+};
+
+
+struct Board
+{
+  int fitScore;       // Holds fitness score for the board
+  int boardID;        // Holds the ID of the board
+  
+  // Vector of all pieces within board
+  std::vector<std::vector<PuzzlePiece>> boardVec;
+};
 
 
 class BoardManager

@@ -7,7 +7,6 @@
 #pragma once
 
 
-#include "Board.h"
 #include "BoardManager.h"       // For board size access
 
 

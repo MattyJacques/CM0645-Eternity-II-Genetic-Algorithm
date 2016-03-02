@@ -46,14 +46,14 @@ void BoardManager::InitialiseData(int size, int patNum)
 } // InitialiseData()
 
 
-void BoardManager::InitFullBoard(Board* theBoard)
+void BoardManager::InitFullBoard(Board* pBoard)
 { // Creates the inital generation of boards
 
   int index = 0;
   int count = 0;
 
   // Fill vector of vectors with empty vectors
-  InitEmptyBoard(theBoard);
+  InitEmptyBoard(pBoard);
 
   // Shuffle order of puzzle pieces
   std::random_shuffle(pieceVec.begin(), pieceVec.end());
@@ -62,7 +62,7 @@ void BoardManager::InitFullBoard(Board* theBoard)
   { // Loop through the collection of pieces
 
     // Add piece to line on board
-    theBoard->boardVec[index].push_back(piece);
+    pBoard->boardVec[index].push_back(piece);
     count++;
 
     // If reached the end of the line for the board, move onto next 
@@ -77,13 +77,13 @@ void BoardManager::InitFullBoard(Board* theBoard)
 } // CreateInitialBoard()
 
 
-void BoardManager::InitEmptyBoard(Board * theBoard)
+void BoardManager::InitEmptyBoard(Board * pBoard)
 { // Initialises the boards vector of vectors with empty vectors
 
   for (int i = 0; i <= boardSize; i++)
   { // Loop through and create vector of vector for the board
     std::vector<PuzzlePiece> newVec;
-    theBoard->boardVec.push_back(newVec);
+    pBoard->boardVec.push_back(newVec);
   }
 
 } // InitialiseBoard

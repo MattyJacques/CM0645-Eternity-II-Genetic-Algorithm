@@ -98,7 +98,7 @@ void Crossover::RouletteSelect(int parents[2])
   for (Board i : *BoardManager::GetInstance()->currBoards)
   { // Loops through all boards and total up all fitness scores from boards
 
-    totalFitness += i.GetFitScore();
+    totalFitness += i.fitScore;
   }
 
   // Seeds time and gets two random numbers to use to pick from wheel
@@ -115,7 +115,7 @@ void Crossover::RouletteSelect(int parents[2])
 
     // Set the previous fitness and add on the fitness score of the next board
     oldFitness = totalFitness;
-    totalFitness += BoardManager::GetInstance()->currBoards->at(i).GetFitScore();
+    totalFitness += BoardManager::GetInstance()->currBoards->at(i).fitScore;
 
     // If section has been found for first parent, set ID
     if (totalFitness >= parents[0] && parents[0] >= oldFitness)
@@ -151,10 +151,10 @@ void Crossover::TournamentSelect(int parents[2], int popSize)
       // Generate a random index then test to see if the fitness score of that
       // candidate is highest than the current stored fitness
       index = GeneticAlgorithm::GetInstance()->GenRandomNum(0, popSize - 1);
-      if ((BoardManager::GetInstance()->prevBoards->at(index).GetFitScore()) > highfitness)
+      if ((BoardManager::GetInstance()->prevBoards->at(index).fitScore) > highfitness)
       {
         parents[i] = index;
-        highfitness = BoardManager::GetInstance()->prevBoards->at(index).GetFitScore();
+        highfitness = BoardManager::GetInstance()->prevBoards->at(index).fitScore;
       }
 
     } // for j < tournamentSize
@@ -227,7 +227,7 @@ void Crossover::OnePoint(int parents[2])
   
   for (int i = 0; i < 2; i++)
   {
-    offspring[i].SetBoardID((int)BoardManager::GetInstance()->currBoards->size() + 1);
+    offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->size() + 1;
     BoardManager::GetInstance()->currBoards->push_back(offspring[i]);
   }
 
@@ -277,9 +277,9 @@ void Crossover::GetDuplicates(Board* pBoard, std::vector<PuzzlePiece>* pieces,
 
   for (int i = 0; i < checkIDs.size(); i++)
   {
-    if (!checkIDs[pBoard->boardVec[yIndex][xIndex].GetPieceID() - 1])
+    if (!checkIDs[pBoard->boardVec[yIndex][xIndex].pieceID - 1])
     {
-      checkIDs[pBoard->boardVec[yIndex][xIndex].GetPieceID() - 1] = true;
+      checkIDs[pBoard->boardVec[yIndex][xIndex].pieceID - 1] = true;
     }
     else
     {
