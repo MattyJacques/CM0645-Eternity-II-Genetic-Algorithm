@@ -14,7 +14,6 @@ class FitnessFunction
 {
 
 private:
-  int score;                            // Holds the current fitness score
   static FitnessFunction* pInstance;    // Holds the current instance of class
   Board* pBoard;                        // Holds pointer to current board
   BoardManager* pBoardMan;              // For access to board size
@@ -74,7 +73,7 @@ public:
   static FitnessFunction* GetInstance();
 
   // Checks the fitness of the candidate provided by the GA
-  int CheckFitness(Board* theBoard);
+  void CheckFitness(Board* theBoard);
 
   // Destructor that deletes the instance of the class
   ~FitnessFunction();

@@ -225,7 +225,6 @@ void Crossover::OnePoint(int parents[2])
   
   for (int i = 0; i < 2; i++)
   {
-    offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->size() + 1;
     BoardManager::GetInstance()->currBoards->push_back(offspring[i]);
   }
 

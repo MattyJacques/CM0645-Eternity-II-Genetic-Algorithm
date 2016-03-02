@@ -72,7 +72,8 @@ void GeneticAlgorithm::RunGA()
   for (int i = 0; i <= popSize; i++)
   {
     
-    std::cout << i << " " << FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->currBoards->at(i)) << std::endl;
+    FitnessFunction::GetInstance()->CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
+    std::cout << i << " " << BoardManager::GetInstance()->currBoards->at(i).fitScore << std::endl;
 
   }
 
