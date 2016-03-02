@@ -7,12 +7,17 @@
 #pragma once
 
 
+#include <vector>               // Create vector
+
+
 // Readability for methods of crossover
 enum CrossoverType { ONEPOINT, TWOPOINT };
 
 // Readability for methods of selection
 enum SelectionType { ROULETTE, TOURNAMENT };
 
+class Board;
+class PuzzlePiece;
 
 class Crossover
 {
@@ -47,6 +52,22 @@ private:
   // the data after that point with the second parent, explained fully in the
   // report, chapter 3
   void OnePoint(int parents[2]);
+
+  // Scans through candidate to check if puzzle pieces end up appearing twice
+  // within the same candidate, taking the duplicate list from one candidate
+  // to place pieces within the candidate that no longer has them
+  void CheckDuplication();
+
+  // Scans through the candidate board to see if there are any pieces that appear
+  // more than once within the candidate, uses vector to store puzzle pieces
+  void GetDuplicates(Board* pBoard, std::vector<PuzzlePiece>* pieces, 
+                     std::vector<std::vector<int>>* indexes);
+
+  // Uses the vector of pieces along with the vector of slot indexes to place
+  // pieces that are needed to to have every unique puzzle piece with in the
+  // candidate
+  void FixDuplicates(Board* pBoard, std::vector<PuzzlePiece> pieces,
+                     std::vector<std::vector<int>> indexes);
 
 public:
   // Returns the current instance of the class, creates if needed

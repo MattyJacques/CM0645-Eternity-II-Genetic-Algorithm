@@ -9,7 +9,6 @@
 #include "GeneticAlgorithm.h"   // Population size
 #include <iostream>             // Error output
 #include <time.h>               // Time for srand
-#include <vector>               // Create vector
 
 
 // Initialise to nullptr
@@ -58,6 +57,7 @@ void Crossover::DoCrossover(int popSize)
     std::cout << parents[0] << " " << parents[1] << std::endl;
 
     Reproduce(parents);
+    CheckDuplication();
 
   }
 
@@ -232,6 +232,87 @@ void Crossover::OnePoint(int parents[2])
   }
 
 } // OnePoint()
+
+
+void Crossover::CheckDuplication()
+{ // Scans through candidate to check if puzzle pieces end up appearing twice
+  // within the same candidate, taking the duplicate list from one candidate
+  // to place pieces within the candidate that no longer has them
+
+  Board* pOffspring[2];
+  std::vector<PuzzlePiece> pieces[2];
+  std::vector<std::vector<int>> indexes[2];
+
+  pOffspring[0] = &BoardManager::GetInstance()->currBoards->at(
+                    BoardManager::GetInstance()->currBoards->size() - 2);
+  pOffspring[1] = &BoardManager::GetInstance()->currBoards->at(
+                    BoardManager::GetInstance()->currBoards->size() - 1);
+
+  for (int i = 0; i < 2; i++)
+    GetDuplicates(pOffspring[i], &pieces[i], &indexes[i]);
+
+  for (int i = 0; i < 2; i++)
+    FixDuplicates(pOffspring[i], pieces[1 - i], indexes[i]);
+
+  pieces[0].clear();
+  indexes[0].clear();
+  pieces[1].clear();
+  indexes[1].clear();
+
+  for (int i = 0; i < 2; i++)
+    GetDuplicates(pOffspring[i], &pieces[i], &indexes[i]);
+
+} // CheckDuplication()
+
+
+void Crossover::GetDuplicates(Board* pBoard, std::vector<PuzzlePiece>* pieces,
+                              std::vector<std::vector<int>>* indexes)
+{ // Scans through the candidate board to see if there are any pieces that appear
+  // more than once within the candidate, uses vector to store puzzle pieces
+
+  std::vector<bool> checkIDs(pBoard->boardVec.size() * pBoard->boardVec.size(), 
+                             false);
+  int xIndex = 0;
+  int yIndex = 0;
+
+  for (int i = 0; i < checkIDs.size(); i++)
+  {
+    if (!checkIDs[pBoard->boardVec[yIndex][xIndex].GetPieceID() - 1])
+    {
+      checkIDs[pBoard->boardVec[yIndex][xIndex].GetPieceID() - 1] = true;
+    }
+    else
+    {
+      pieces->push_back(pBoard->boardVec[yIndex][xIndex]);
+      std::vector<int> index = { yIndex, xIndex };
+      indexes->push_back(index);
+    }
+
+    xIndex++;
+
+    if (xIndex == BoardManager::GetInstance()->boardSize + 1)
+    { // If we have reached the end of the line of the board, increment
+      xIndex = 0;
+      yIndex++;
+    }
+  }
+
+} // GetDuplicates()
+
+
+void Crossover::FixDuplicates(Board* pBoard, std::vector<PuzzlePiece> pieces, 
+                              std::vector<std::vector<int>> indexes)
+{ // Uses the vector of pieces along with the vector of slot indexes to place
+  // pieces that are needed to to have every unique puzzle piece with in the
+  // candidate
+
+  for (int i = 0; i < pieces.size(); i++)
+  {
+    pBoard->boardVec[indexes[i][0]][indexes[i][1]] = pieces[i];
+  }
+
+} // FixDuplicates()
+
 
 Crossover::~Crossover()
 { // Destructor to delete the instance of the class

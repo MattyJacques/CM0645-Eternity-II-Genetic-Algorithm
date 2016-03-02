@@ -41,10 +41,10 @@ void GeneticAlgorithm::CreateInstance(double eliteRate, double mutationRate,
 { // Creates the static instance for the class, passing over the variables
   // needed for the GA to the constructor
 
-  if (!pAlgorithm)
+  if (!pInstance)
   { // If the instance of the algorithm has not already been created, create
     // a new instance by calling the constructor
-    pAlgorithm = new GeneticAlgorithm(eliteRate, mutationRate, 
+    pInstance = new GeneticAlgorithm(eliteRate, mutationRate,
                                       popSize, boardSize);
   }
 
@@ -54,7 +54,7 @@ void GeneticAlgorithm::CreateInstance(double eliteRate, double mutationRate,
 GeneticAlgorithm* GeneticAlgorithm::GetInstance()
 { // Returns the current instance of the class
 
-  return pAlgorithm; // Return the pointer
+  return pInstance; // Return the pointer
 
 } // GetInstance()
 
