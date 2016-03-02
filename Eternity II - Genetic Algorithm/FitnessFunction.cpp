@@ -22,34 +22,24 @@ FitnessFunction::FitnessFunction()
 } // FitnessFunction()
 
 
-bool FitnessFunction::IsMatchSide(PuzzlePiece piece1, PuzzlePiece piece2)
+bool FitnessFunction::IsMatchSide(int yIndex1, int xIndex1, int yIndex2, 
+                                  int xIndex2)
 { // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
 
-  bool result = false;
-
-  if (piece1.segments[RIGHT] == piece2.segments[LEFT])
-  {
-    result = true;
-  }
-
-  return result;
+  return (BoardManager::GetInstance()->GetPattern(pBoard, yIndex1, xIndex1, RIGHT)
+    == BoardManager::GetInstance()->GetPattern(pBoard, yIndex2, xIndex2, LEFT));
 
 } // IsMatchSide()
 
 
-bool FitnessFunction::IsMatchBottom(PuzzlePiece piece1, PuzzlePiece piece2)
+bool FitnessFunction::IsMatchBottom(int yIndex1, int xIndex1, int yIndex2,
+                                    int xIndex2)
 { // Checks to see if the pattern located on bottom side of piece1 matches the
   // pattern located on the top of piece2
 
-  bool result = false;
-
-  if (piece1.segments[BOTTOM] == piece2.segments[TOP])
-  {
-    result = true;
-  }
-
-  return result;
+  return (BoardManager::GetInstance()->GetPattern(pBoard, yIndex1, xIndex1, BOTTOM)
+    == BoardManager::GetInstance()->GetPattern(pBoard, yIndex2, xIndex2, TOP));
 
 } // IsMatchBottom()
 
@@ -63,7 +53,7 @@ void FitnessFunction::CheckTopLeft()
 
     score += 25;
 
-    if (IsMatchSide(pBoard->boardVec[0][0], pBoard->boardVec[0][1]))
+    if (IsMatchSide(0, 0, 0, 1))
     { // Check to see if the pattern on the right of the corner piece matches
       // the pattern on the left of the piece to the right
 
@@ -71,7 +61,7 @@ void FitnessFunction::CheckTopLeft()
 
     }
 
-    if (IsMatchBottom(pBoard->boardVec[0][0], pBoard->boardVec[1][0]))
+    if (IsMatchBottom(0, 0, 1, 0))
     { // Check to see if the pattern on the bottom of the corner piece matches
       // the pattern on the top of the piece below
 
@@ -93,8 +83,7 @@ void FitnessFunction::CheckTopRight()
 
     score += 25;
 
-    if (IsMatchSide(pBoard->boardVec[0][pBoardMan->boardSize - 1],
-      pBoard->boardVec[0][pBoardMan->boardSize]))
+    if (IsMatchSide(0, pBoardMan->boardSize - 1, 0, pBoardMan->boardSize))
     { // Check to see if the pattern on the right side of the piece to left of
       // the corner, matches the pattern on the left of the corner piece
 
@@ -102,8 +91,7 @@ void FitnessFunction::CheckTopRight()
 
     }
 
-    if (IsMatchBottom(pBoard->boardVec[0][pBoardMan->boardSize],
-      pBoard->boardVec[1][pBoardMan->boardSize]))
+    if (IsMatchBottom(0, pBoardMan->boardSize, 1, pBoardMan->boardSize))
     { // Check to see if the pattern on the bottom of the corner piece matches
       // the pattern on the top of the piece below
 
@@ -125,8 +113,7 @@ void FitnessFunction::CheckBottomLeft()
 
     score += 25;
 
-    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize][0],
-      pBoard->boardVec[pBoardMan->boardSize][1]))
+    if (IsMatchSide(pBoardMan->boardSize, 0, pBoardMan->boardSize, 1))
     { // Check to see if the pattern on the right side of the corner piece 
       // matches the pattern located on the left side of the piece to the right
 
@@ -134,8 +121,7 @@ void FitnessFunction::CheckBottomLeft()
 
     }
 
-    if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1][0],
-      pBoard->boardVec[pBoardMan->boardSize][0]))
+    if (IsMatchBottom(pBoardMan->boardSize - 1, 0, pBoardMan->boardSize, 0))
     { // Check to see if the pattern on the bottom of the piece above the 
       // corner matches the pattern located on the top of the corner
 
@@ -157,9 +143,8 @@ void FitnessFunction::CheckBottomRight()
 
     score += 25;
 
-    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize]
-      [pBoardMan->boardSize - 1], pBoard->boardVec[pBoardMan->boardSize]
-      [pBoardMan->boardSize]))
+    if (IsMatchSide(pBoardMan->boardSize, pBoardMan->boardSize - 1, 
+        pBoardMan->boardSize, pBoardMan->boardSize))
     { // Check to see if the pattern on the right side of the piece to the left
       // of the corner matches the pattern located on the left of the corner
 
@@ -167,9 +152,8 @@ void FitnessFunction::CheckBottomRight()
 
     }
 
-    if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1]
-      [pBoardMan->boardSize], pBoard->boardVec[pBoardMan->boardSize]
-      [pBoardMan->boardSize]))
+    if (IsMatchBottom(pBoardMan->boardSize - 1, pBoardMan->boardSize, 
+                      pBoardMan->boardSize, pBoardMan->boardSize))
     { // Check to see if the pattern located on the bottom of the piece located
       // above the corner matches the pattern located on the top of the corner
 
@@ -194,13 +178,13 @@ void FitnessFunction::CheckTopEdge()
 
       score += 15;
 
-      if (IsMatchSide(pBoard->boardVec[0][i], pBoard->boardVec[0][i + 1]))
+      if (IsMatchSide(0, i, 0, i + 1))
       { // If edge pattern matches edge piece to the right
 
         score += 5;
       }
 
-      if (IsMatchBottom(pBoard->boardVec[0][i], pBoard->boardVec[1][i]))
+      if (IsMatchBottom(0, i, 1, i))
       { // If edge pattern matches inner connection on bottom
 
         score += 5;
@@ -213,8 +197,7 @@ void FitnessFunction::CheckTopEdge()
 
     score += 15;
 
-    if (IsMatchBottom(pBoard->boardVec[0][pBoardMan->boardSize - 1],
-      pBoard->boardVec[1][pBoardMan->boardSize - 1]))
+    if (IsMatchBottom(0, pBoardMan->boardSize - 1, 1, pBoardMan->boardSize - 1))
     { // If piece left of the top right corner bottom pattern matches piece
       // underneath
 
@@ -237,13 +220,13 @@ void FitnessFunction::CheckLeftEdge()
 
       score += 15;
 
-      if (IsMatchSide(pBoard->boardVec[i][0], pBoard->boardVec[i][1]))
+      if (IsMatchSide(i, 0, i, 1))
       { // If edge piece right pattern matches inner connection
 
         score += 5;
       }
 
-      if (IsMatchBottom(pBoard->boardVec[i][0], pBoard->boardVec[i+1][0]))
+      if (IsMatchBottom(i, 0, i + 1, 0))
       { // If edge piece bottom pattern matches top of piece underneath
 
         score += 5;
@@ -256,8 +239,7 @@ void FitnessFunction::CheckLeftEdge()
 
     score += 15;
 
-    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize - 1][0],
-      pBoard->boardVec[pBoardMan->boardSize - 1][1]))
+    if (IsMatchSide(pBoardMan->boardSize - 1, 0, pBoardMan->boardSize - 1, 1))
     { // If piece above bottom left corner right pattern matches inner 
       // connection
 
@@ -280,15 +262,13 @@ void FitnessFunction::CheckRightEdge()
 
       score += 15;
 
-      if (IsMatchSide(pBoard->boardVec[i][pBoardMan->boardSize - 1],
-        pBoard->boardVec[i][pBoardMan->boardSize]))
+      if (IsMatchSide(i, pBoardMan->boardSize - 1, i, pBoardMan->boardSize))
       { // If edge piece matches inner connection to right
 
         score += 5;
       }
 
-      if (IsMatchBottom(pBoard->boardVec[i][pBoardMan->boardSize],
-        pBoard->boardVec[i + 1][pBoardMan->boardSize]))
+      if (IsMatchBottom(i, pBoardMan->boardSize, i + 1, pBoardMan->boardSize))
       { // If edge piece matches piece below
 
         score += 5;
@@ -302,9 +282,8 @@ void FitnessFunction::CheckRightEdge()
 
     score += 15;
 
-    if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize - 1]
-      [pBoardMan->boardSize - 1], pBoard->boardVec[pBoardMan->boardSize - 1]
-      [pBoardMan->boardSize]))
+    if (IsMatchSide(pBoardMan->boardSize - 1, pBoardMan->boardSize - 1, 
+                    pBoardMan->boardSize - 1, pBoardMan->boardSize))
     { // If piece matches connection to the left
 
       score += 5;
@@ -326,15 +305,13 @@ void FitnessFunction::CheckBottomEdge()
 
       score += 15;
 
-      if (IsMatchSide(pBoard->boardVec[pBoardMan->boardSize][i],
-        pBoard->boardVec[pBoardMan->boardSize][i + 1]))
+      if (IsMatchSide(pBoardMan->boardSize, i, pBoardMan->boardSize, i + 1))
       { // If right pattern matches next piece left
 
         score += 5;
       }
 
-      if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1][i],
-        pBoard->boardVec[pBoardMan->boardSize][i]))
+      if (IsMatchBottom(pBoardMan->boardSize - 1, i, pBoardMan->boardSize, i))
       {  // If top matched piece above
 
         score += 5;
@@ -348,8 +325,8 @@ void FitnessFunction::CheckBottomEdge()
 
     score += 15;
 
-    if (IsMatchBottom(pBoard->boardVec[pBoardMan->boardSize - 1][pBoardMan->boardSize - 1],
-      pBoard->boardVec[pBoardMan->boardSize][pBoardMan->boardSize - 1]))
+    if (IsMatchBottom(pBoardMan->boardSize - 1, pBoardMan->boardSize - 1, 
+                      pBoardMan->boardSize, pBoardMan->boardSize - 1))
     { // If top pattern matched inner connection
 
       score += 5;
@@ -366,13 +343,13 @@ void FitnessFunction::CheckInnerPieces()
   {
     for (int j = 1; j < pBoardMan->boardSize - 1; j++)
     {
-      if (IsMatchSide(pBoard->boardVec[i][j], pBoard->boardVec[i][j + 1]))
+      if (IsMatchSide(i, j, i, j + 1))
       { // If right side matches piece to the right
 
         score += 1;
       }
 
-      if (IsMatchBottom(pBoard->boardVec[i][j], pBoard->boardVec[i + 1][j]))
+      if (IsMatchBottom(i, j, i + 1, j))
       { // If bottom side matches piece below
 
         score += 1;

@@ -89,6 +89,17 @@ void BoardManager::InitEmptyBoard(Board * pBoard)
 } // InitialiseBoard
 
 
+int BoardManager::GetPattern(Board* pBoard, int yIndex, int xIndex, 
+                             segLocation segment)
+{ // Returns the ID of the pattern located on the piece with in the index 
+  // provided taking into consideration the orientation of the piece
+  
+  // Modular of 4 to keep segment index 3 or below
+  return pBoard->boardVec[yIndex][xIndex].segments[
+                    (segment + pBoard->boardVec[yIndex][xIndex].orientation) % 4];
+
+} // GetPattern()
+
 BoardManager::~BoardManager()
 { // Destructor to delete the instance of the class
 

@@ -54,8 +54,6 @@ void Crossover::DoCrossover(int popSize)
     while (parents[0] == parents[1])
       SelectParents(parents, popSize);
 
-    std::cout << parents[0] << " " << parents[1] << std::endl;
-
     Reproduce(parents);
     CheckDuplication();
 

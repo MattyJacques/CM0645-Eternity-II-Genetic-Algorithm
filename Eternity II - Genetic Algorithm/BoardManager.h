@@ -19,7 +19,9 @@ enum PieceType { CORNER, EDGE, INNER };
 
 
 struct PuzzlePiece
-{
+{ // Holds all the data needed to a puzzle piece of a board, including pattern
+  // IDs and the type of piece
+
   int pieceID;      // Holds the ID of the puzzle piece
   PieceType type;    // Holds the type of the puzzle piece, example corner, edge
   int orientation;  // Holds the rotation of the puzzle piece
@@ -28,7 +30,10 @@ struct PuzzlePiece
 
 
 struct Board
-{
+{ // Holds the data needed for the board, this includes the fitness score of
+  // the board, the ID of the board and the location of the pieces within the
+  // board
+
   int fitScore;       // Holds fitness score for the board
   int boardID;        // Holds the ID of the board
   
@@ -63,10 +68,14 @@ public:
   void InitialiseData(int size, int patNum);
 
   // Creates the inital generation of boards
-  void InitFullBoard(Board* theBoard);
+  void InitFullBoard(Board* pBoard);
 
   // Initialises the boards vector of vectors with empty vectors
-  void InitEmptyBoard(Board* theBoard);
+  void InitEmptyBoard(Board* pBoard);
+
+  // Returns the ID of the pattern located on the piece with in the index 
+  // provided taking into consideration the orientation of the piece
+  int GetPattern(Board* pBoard, int yIndex, int xIndex, segLocation segment);
 
   // Destructor to delete the instance of the class
   ~BoardManager();

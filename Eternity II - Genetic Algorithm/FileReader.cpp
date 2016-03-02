@@ -123,6 +123,7 @@ void FileReader::CreatePiece(int pData[5])
   newPiece.segments[LEFT] = pData[2];
   newPiece.segments[BOTTOM] = pData[3];
   newPiece.segments[RIGHT] = pData[4];
+  newPiece.orientation = 0;
 
   // Add peice to vector of pieces
   BoardManager::GetInstance()->pieceVec.push_back(newPiece);
