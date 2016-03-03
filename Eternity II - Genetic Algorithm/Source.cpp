@@ -39,7 +39,7 @@ void Initialise()
   GeneticAlgorithm::CreateInstance(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP);
   
   FileReader theReader;
-  theReader.OpenFile("Puzzles/FitTest.e2");
+  theReader.OpenFile("Puzzles/256 - 22.e2");
   
 } // Initialise()
 

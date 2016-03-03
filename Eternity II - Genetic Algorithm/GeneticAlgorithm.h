@@ -20,6 +20,7 @@ private:
   double elitism;                       // Holds the elitism rate
   int popSize;                          // Holds the population size
   int maxFitness;                       // Holds the maximum fitness reached
+  int maxFitnessOfGen;                  // Holds the max fitness of current gen
   int genCount;                         // Count of how many generations passed
   Crossover theCrossover;               // Object to handle crossover
   Mutation theMutation;                 // Object to handle mutation

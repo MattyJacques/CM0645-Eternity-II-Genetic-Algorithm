@@ -28,6 +28,7 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate,
   elitism = eliteRate;
 
   maxFitness = 0;
+  maxFitnessOfGen = 0;
   genCount = 0;
 
   BoardManager::GetInstance()->InitialiseData(boardSize, patNum);
@@ -60,7 +61,6 @@ GeneticAlgorithm* GeneticAlgorithm::GetInstance()
 
 } // GetInstance()
 
-
 void GeneticAlgorithm::RunGA()
 { // Main function of the GA that continually runs
 
@@ -74,16 +74,23 @@ void GeneticAlgorithm::RunGA()
   while (true)
   {
     genCount++;
+    maxFitnessOfGen = 0;
 
     for (int i = 0; i < popSize; i++)
     {
 
-      if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i)) > maxFitness)
-        maxFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+      if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i)) > maxFitnessOfGen)
+      {
+        if (maxFitness < BoardManager::GetInstance()->currBoards->at(i).fitScore)
+        {
+          maxFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+        }
 
+        maxFitnessOfGen = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+      }
     }
 
-    std::cout << "Generation " << genCount << ": " << maxFitness << std::endl;
+    std::cout << "Generation " << genCount << ": This gen: " << maxFitnessOfGen << " Max Reached: " << maxFitness << std::endl;
 
     theCrossover.DoCrossover(popSize);
     theMutation.DoMutation();

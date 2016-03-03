@@ -104,9 +104,9 @@ void FileReader::CreatePiece(int pData[5])
   newPiece.pieceID = pData[0];
   newPiece.type = CheckType(pData);
   newPiece.segments[TOP] = pData[1];
-  newPiece.segments[LEFT] = pData[2];
+  newPiece.segments[RIGHT] = pData[2];
   newPiece.segments[BOTTOM] = pData[3];
-  newPiece.segments[RIGHT] = pData[4];
+  newPiece.segments[LEFT] = pData[4];
   newPiece.orientation = 0;
 
   // Add peice to vector of pieces
