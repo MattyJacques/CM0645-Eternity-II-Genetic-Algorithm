@@ -36,20 +36,18 @@ void Initialise()
   //cout << "Population Size: ";
   //cin >> popSize;
 
-  GeneticAlgorithm::CreateInstance(1, 1, 1000, 16);
+  GeneticAlgorithm::CreateInstance(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP);
+  
   FileReader theReader;
   theReader.OpenFile("Puzzles/FitTest.e2");
-
-  GeneticAlgorithm::GetInstance()->RunGA();
-
-  GeneticAlgorithm::GetInstance();
-
+  
 } // Initialise()
 
 
 void main()
 {
   Initialise();
+  GeneticAlgorithm::GetInstance()->RunGA();
  /* while (solution not found)
   {
     selection;

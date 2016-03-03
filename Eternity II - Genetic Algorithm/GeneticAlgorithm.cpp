@@ -13,12 +13,16 @@ GeneticAlgorithm* GeneticAlgorithm::pInstance = nullptr;
 
 
 GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate, 
-  int population, int boardSize)
+                                   int population, int boardSize, int patNum,  
+                                   CrossoverType crossType, 
+                                   SelectionType selectType, 
+                                   MutateType mutType)
 { // Constructor that sets the elite, crossover and mutation rates, along with
-  // the size of the population for each generation
+  // the size of the population for each generation. Also handles crossover and
+  // mutation methods
 
-  theCrossover.SetMethod(ONEPOINT, TOURNAMENT);
-  theMutation.Setup(SWAP, mutationRate, population);
+  theCrossover.SetMethod(crossType, selectType);
+  theMutation.Setup(mutType, mutationRate, population);
 
   popSize = population;
   elitism = eliteRate;
@@ -26,21 +30,24 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate,
   maxFitness = 0;
   genCount = 0;
 
-  BoardManager::GetInstance()->InitialiseData(boardSize, 22);
+  BoardManager::GetInstance()->InitialiseData(boardSize, patNum);
 
 } // GeneticAlgorithm()
 
 
 void GeneticAlgorithm::CreateInstance(double eliteRate, double mutationRate, 
-                                      int popSize, int boardSize)
+                                      int popSize, int boardSize, int patNum,
+                                      CrossoverType crossType, 
+                                      SelectionType selectType, 
+                                      MutateType mutType)
 { // Creates the static instance for the class, passing over the variables
   // needed for the GA to the constructor
 
   if (!pInstance)
   { // If the instance of the algorithm has not already been created, create
     // a new instance by calling the constructor
-    pInstance = new GeneticAlgorithm(eliteRate, mutationRate,
-                                      popSize, boardSize);
+    pInstance = new GeneticAlgorithm(eliteRate, mutationRate, popSize, boardSize,
+                                     patNum, crossType, selectType, mutType);
   }
 
 } // CreateInstance()

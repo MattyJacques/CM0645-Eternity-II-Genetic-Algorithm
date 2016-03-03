@@ -27,15 +27,18 @@ private:
 
 
   // Constructor that sets the elite, crossover and mutation rates, along with
-  // the size of the population for each generation
+  // the size of the population for each generation. Also handles crossover and
+  // mutation methods
   GeneticAlgorithm(double eliteRate, double mutationRate, int popSize, 
-                   int boardSize);
+                   int boardSize, int patNum, CrossoverType crossType,
+                   SelectionType selectType, MutateType mutType);
 
 public:
   // Creates the static instance for the class, passing over the variables
   // needed for the GA to the constructor
   static void CreateInstance(double eliteRate, double mutationRate, int popSize,
-                             int boardSize);
+                             int boardSize, int patNum, CrossoverType crossType,
+                             SelectionType selectType, MutateType mutType);
 
   // Returns the current instance of the class
   static GeneticAlgorithm* GetInstance();
