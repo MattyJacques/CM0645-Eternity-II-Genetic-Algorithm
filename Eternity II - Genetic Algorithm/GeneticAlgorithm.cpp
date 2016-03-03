@@ -12,7 +12,7 @@
 GeneticAlgorithm* GeneticAlgorithm::pInstance = nullptr;
 
 
-GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate, 
+GeneticAlgorithm::GeneticAlgorithm(int eliteRate, double mutationRate, 
                                    int population, int boardSize, int patNum,  
                                    CrossoverType crossType, 
                                    SelectionType selectType, 
@@ -21,11 +21,10 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate,
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
 
-  theCrossover.SetMethod(crossType, selectType);
+  theCrossover.SetMethod(crossType, selectType, eliteRate);
   theMutation.Setup(mutType, mutationRate, population);
 
   popSize = population;
-  elitism = eliteRate;
 
   maxFitness = 0;
   maxFitnessOfGen = 0;
@@ -36,7 +35,7 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate,
 } // GeneticAlgorithm()
 
 
-void GeneticAlgorithm::CreateInstance(double eliteRate, double mutationRate, 
+void GeneticAlgorithm::CreateInstance(int eliteRate, double mutationRate, 
                                       int popSize, int boardSize, int patNum,
                                       CrossoverType crossType, 
                                       SelectionType selectType, 

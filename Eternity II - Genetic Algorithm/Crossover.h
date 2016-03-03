@@ -26,6 +26,11 @@ private:
   CrossoverType crossType;              // Holds what crossover method to use
   SelectionType selectType;             // Holds method of candidate selection
   int tournamentSize;                   // Holds how large tournaments are
+  int eliteRate;                        // Holds how many candidates to keep
+
+  // Adds the best and worst candidtes from the previous generation to the new
+  // generation. The amount of candidates is declared in eliteRate
+  void DoElitism();
 
   // Selects with candidates to use for reproduction with the selection method
   // chosen on start up
@@ -73,6 +78,7 @@ public:
   // methods
   void DoCrossover(int popSize);
 
-  // Sets the crossover and selection type to use for crossover
-  void SetMethod(CrossoverType cross, SelectionType select);
+  // Sets the crossover and selection type to use for crossover along with
+  // the elitism rate
+  void SetMethod(CrossoverType cross, SelectionType select, int elite);
 };

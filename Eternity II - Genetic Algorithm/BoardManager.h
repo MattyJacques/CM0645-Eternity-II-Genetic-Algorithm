@@ -39,6 +39,12 @@ struct Board
   
   // Vector of all pieces within board
   std::vector<std::vector<PuzzlePiece>> boardVec;
+
+  // Overrides the less than operator for sorting
+  bool operator < (const Board theBoard) const
+  {
+    return (fitScore < theBoard.fitScore);
+  }
 };
 
 

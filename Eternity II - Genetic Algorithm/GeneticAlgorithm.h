@@ -17,7 +17,6 @@ class GeneticAlgorithm
 
 private:
   static GeneticAlgorithm* pInstance;   // Holds the current instance for class
-  double elitism;                       // Holds the elitism rate
   int popSize;                          // Holds the population size
   int maxFitness;                       // Holds the maximum fitness reached
   int maxFitnessOfGen;                  // Holds the max fitness of current gen
@@ -30,14 +29,14 @@ private:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
-  GeneticAlgorithm(double eliteRate, double mutationRate, int popSize, 
+  GeneticAlgorithm(int eliteRate, double mutationRate, int popSize, 
                    int boardSize, int patNum, CrossoverType crossType,
                    SelectionType selectType, MutateType mutType);
 
 public:
   // Creates the static instance for the class, passing over the variables
   // needed for the GA to the constructor
-  static void CreateInstance(double eliteRate, double mutationRate, int popSize,
+  static void CreateInstance(int eliteRate, double mutationRate, int popSize,
                              int boardSize, int patNum, CrossoverType crossType,
                              SelectionType selectType, MutateType mutType);
 

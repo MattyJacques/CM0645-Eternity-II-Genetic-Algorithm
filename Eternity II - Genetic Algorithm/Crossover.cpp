@@ -5,8 +5,9 @@
 
 
 #include "Crossover.h"
-#include "GeneticAlgorithm.h"   // Population size
+#include "GeneticAlgorithm.h"   // Random number generation
 #include <iostream>             // Error output
+#include <algorithm>            // Sorting functionality
 
 
 Crossover::Crossover()
@@ -27,6 +28,8 @@ void Crossover::DoCrossover(int popSize)
   BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->currBoards;
   BoardManager::GetInstance()->currBoards = std::make_shared<std::vector<Board>>(newVec);
 
+  DoElitism();
+
   while (BoardManager::GetInstance()->currBoards->size() < popSize - 1)
   { // While the new vector is not filled with the right population size
     // make more candidates
@@ -45,11 +48,37 @@ void Crossover::DoCrossover(int popSize)
 } // DoCrossover()
 
 
-void Crossover::SetMethod(CrossoverType cross, SelectionType select)
-{ // Sets the crossover and selection type to use for crossover
+void Crossover::DoElitism()
+{ // Adds the best and worst candidtes from the previous generation to the new
+  // generation. The amount of candidates is declared in eliteRate
+
+  // Sort the vector in ascending order to for easy access to elites
+  std::sort(BoardManager::GetInstance()->prevBoards->begin(), 
+            BoardManager::GetInstance()->prevBoards->end());
+
+  for (int i = 1; i < eliteRate + 1; i++)
+  { // Take the best and the worst candidates from the previous generation
+    // and push to the new generation vector
+
+    // Push worst on to new population
+    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
+                                                        ->prevBoards->begin()[i]);
+
+    // Push best on to new population
+    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
+                                                        ->prevBoards->end()[-i]);
+  }
+
+} // DoElitism()
+
+
+void Crossover::SetMethod(CrossoverType cross, SelectionType select, int elite)
+{ // Sets the crossover and selection type to use for crossover along with
+  // the elitism rate
 
   crossType = cross;
   selectType = select;
+  eliteRate = elite;
 
 } // SetMethod()
 
