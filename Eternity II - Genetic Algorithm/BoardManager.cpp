@@ -51,6 +51,8 @@ void BoardManager::InitFullBoard(Board* pBoard)
   int index = 0;
   int count = 0;
 
+  pBoard->boardID = (int)currBoards->size() + 1;
+
   // Fill vector of vectors with empty vectors
   InitEmptyBoard(pBoard);
 
@@ -78,8 +80,6 @@ void BoardManager::InitFullBoard(Board* pBoard)
 
 void BoardManager::InitEmptyBoard(Board* pBoard)
 { // Initialises the boards vector of vectors with empty vectors
-
-  pBoard->boardID = (int)currBoards->size() + 1;
 
   for (int i = 0; i <= boardSize; i++)
   { // Loop through and create vector of vector for the board

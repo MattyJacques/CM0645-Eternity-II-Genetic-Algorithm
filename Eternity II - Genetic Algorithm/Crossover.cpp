@@ -170,7 +170,11 @@ void Crossover::OnePoint(int parents[2])
   int yIndex = 0;
 
   for (int i = 0; i < 2; i++)
+  {
     BoardManager::GetInstance()->InitEmptyBoard(&offspring[i]);
+    offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->
+                                size() + (i + 1);
+  }
 
   for (int i = 0; i < BoardManager::GetInstance()->pieceVec.size(); i++)
   {
