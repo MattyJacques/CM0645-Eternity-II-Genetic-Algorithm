@@ -10,7 +10,19 @@
 
 
 FileReader::FileReader()
-{ // Calls to the file directory for available piece data files
+{ // Calls to the file directory for available piece data files, make sure
+  // puzzle piece vector is initialised
+
+  if (BoardManager::GetInstance()->pieceVec.size() == 0)
+  { // Make sure puzzle piece vector is initialised before pushing
+
+    for (int i = 0; i < 3; i++)
+    { // Create new puzzle piece vector and push onto puzzle piece vector
+
+      std::vector<PuzzlePiece> newVec;
+      BoardManager::GetInstance()->pieceVec.push_back(newVec);
+    }
+  }
 
   ScanFileDirectory();
 
@@ -109,8 +121,13 @@ void FileReader::CreatePiece(int pData[5])
   newPiece.segments[LEFT] = pData[4];
   newPiece.orientation = 0;
 
-  // Add peice to vector of pieces
-  BoardManager::GetInstance()->pieceVec.push_back(newPiece);
+  // Add piece to appropriate vector within pieces vector
+  if (newPiece.type == CORNER)
+    BoardManager::GetInstance()->pieceVec[CORNER].push_back(newPiece);
+  else if (newPiece.type == EDGE)
+    BoardManager::GetInstance()->pieceVec[EDGE].push_back(newPiece);
+  else
+    BoardManager::GetInstance()->pieceVec[INNER].push_back(newPiece);
 
 } // CreatePiece()
 

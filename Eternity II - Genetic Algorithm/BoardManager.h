@@ -58,13 +58,28 @@ private:
   // Seeds rand() with time and initalises currBoards
   BoardManager();
 
+  // Initialises the top edge (not including corners) of the board read for
+  // inner pieces to be inserted
+  void InitTopEdge(Board* pBoard);
+
+  // Initialises the left, right and bottom edges of the board along with
+  // the corner slots of the board
+  void InitCornersSides(Board* pBoard);
+
+  // Adds pieces to the empty boards, top edge first, moving on to inner slots
+  // then finally filling in the corners, side edges and bottom edge
+  void AddPieces(Board* pBoard);
+
 public:
-  int boardSize;                        // How many pieces per board
-  std::vector<PuzzlePiece> pieceVec;    // Collection of all pieces to be used
+  int boardSize;                      // How many pieces per board
+
+  // Collection of all pieces to be used split into corner, edge and inner types
+  std::vector<std::vector<PuzzlePiece>> pieceVec;    
 
   // Boards in current generation
   std::shared_ptr<std::vector<Board>> currBoards;
 
+  // Board in previous generation
   std::shared_ptr<std::vector<Board>> prevBoards;
 
   // Returns the instance to the class, if none currently exists, creates one
@@ -73,7 +88,7 @@ public:
   // Sets how many patterns to be used and how many pieces there are per board
   void InitialiseData(int size, int patNum);
 
-  // Creates the inital generation of boards
+  // Creates the inital board filled with randomised order of pieces
   void InitFullBoard(Board* pBoard);
 
   // Initialises the boards vector of vectors with empty vectors

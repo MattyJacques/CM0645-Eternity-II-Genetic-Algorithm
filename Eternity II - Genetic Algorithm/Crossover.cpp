@@ -207,7 +207,7 @@ void Crossover::OnePoint(int parents[2])
 
   for (int i = 0; i < BoardManager::GetInstance()->pieceVec.size(); i++)
   {
-    if (i <= BoardManager::GetInstance()->pieceVec.size() / 2)
+    if (i <= BoardManager::GetInstance()->pieceVec.size() / 2) // BROKEN DUE TO NEW PIECEVEC
     { // If we are below 50% of pieces in board
 
       offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
@@ -217,7 +217,7 @@ void Crossover::OnePoint(int parents[2])
         prevBoards->at(parents[1]).boardVec[yIndex][xIndex]);
 
     }
-    else if (i > BoardManager::GetInstance()->pieceVec.size() / 2)
+    else if (i > BoardManager::GetInstance()->pieceVec.size() / 2) // BROKEN DUE TO NEW PIECEVEC
     { // If we are greater than 50% pieces in board
 
       offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->

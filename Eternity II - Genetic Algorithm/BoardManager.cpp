@@ -46,20 +46,38 @@ void BoardManager::InitialiseData(int size, int patNum)
 
 
 void BoardManager::InitFullBoard(Board* pBoard)
-{ // Creates the inital generation of boards
+{ // Creates the inital board filled with randomised order of pieces
 
-  int index = 0;
-  int count = 0;
-
+  // Set the ID of the board
   pBoard->boardID = (int)currBoards->size() + 1;
 
   // Fill vector of vectors with empty vectors
   InitEmptyBoard(pBoard);
 
-  // Shuffle order of puzzle pieces
-  std::random_shuffle(pieceVec.begin(), pieceVec.end());
+  for (int i = 0; i < 3; i++)
+  { // Loop to shuffle all piece types
 
-  for (PuzzlePiece piece : pieceVec)
+    // Shuffle order of puzzle pieces
+    std::random_shuffle(pieceVec[i].begin(), pieceVec[i].end());
+  }
+
+  // Add pieces to empty vectors
+  AddPieces(pBoard);
+
+} // CreateInitialBoard()
+
+
+void BoardManager::AddPieces(Board* pBoard)
+{ // Adds pieces to the empty boards, top edge first, moving on to inner slots
+  // then finally filling in the corners, side edges and bottom edge
+
+  int index = 1;    // Index of current vector to place piece in
+  int count = 0;    // Count how mant pieces places to increment index
+
+  // Add edge pieces to vectors that will contain inner pieces
+  InitTopEdge(pBoard);
+
+  for (PuzzlePiece piece : pieceVec[INNER])
   { // Loop through the collection of pieces
 
     // Add piece to line on board
@@ -67,15 +85,55 @@ void BoardManager::InitFullBoard(Board* pBoard)
     count++;
 
     // If reached the end of the line for the board, move onto next 
-    if (count == boardSize + 1)
+    if (count == boardSize - 1)
     {
       index++;
       count = 0;
     }
-
   }
 
-} // CreateInitialBoard()
+  // Add rest of border pieces
+  InitCornersSides(pBoard);
+
+} // AddPieces()
+
+
+void BoardManager::InitTopEdge(Board* pBoard)
+{ // Initialises the top edge (not including corners) of the board read for
+  // inner pieces to be inserted
+
+  for (int i = 0; i <= boardSize - 2; i++)
+  { // Add edge pieces to inner 13 vectors (so not board edges)
+
+    pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i]);
+  }
+
+} // InitTopEdge()
+
+
+void BoardManager::InitCornersSides(Board* pBoard)
+{ // Initialises the left, right and bottom edges of the board along with
+  // the corner slots of the board
+
+  pBoard->boardVec[0].push_back(pieceVec[CORNER][0]);
+  pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][1]);
+
+  for (int i = 0; i < boardSize - 1; i++)
+  {
+    pBoard->boardVec[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
+    pBoard->boardVec[boardSize].push_back(pieceVec[EDGE]
+                                                  [i + (boardSize * 2) - 2]);
+  }
+
+  for (int i = 0; i <= boardSize - 2; i++)
+  {
+    pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
+  }
+
+  pBoard->boardVec[0].push_back(pieceVec[CORNER][2]);
+  pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][3]);
+
+} // InitCornerSides()
 
 
 void BoardManager::InitEmptyBoard(Board* pBoard)
