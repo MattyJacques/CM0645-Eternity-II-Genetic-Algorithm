@@ -5,10 +5,8 @@
 
 
 #include "Crossover.h"
-#include "BoardManager.h"       // Access to board vector
 #include "GeneticAlgorithm.h"   // Population size
 #include <iostream>             // Error output
-#include <time.h>               // Time for srand
 
 
 Crossover::Crossover()

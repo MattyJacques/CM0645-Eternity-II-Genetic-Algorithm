@@ -7,10 +7,9 @@
 #pragma once
 
 
-#include "BoardManager.h"           // Board creation, access to board vector
 #include "FitnessFunction.h"        // Evalute fitness in GA process
-#include "Crossover.h"
-#include "Mutation.h"
+#include "Crossover.h"              // Crossover of candidates
+#include "Mutation.h"               // Mutation of candidates
 
 
 class GeneticAlgorithm
@@ -20,6 +19,8 @@ private:
   static GeneticAlgorithm* pInstance;   // Holds the current instance for class
   double elitism;                       // Holds the elitism rate
   int popSize;                          // Holds the population size
+  int maxFitness;                       // Holds the maximum fitness reached
+  int genCount;                         // Count of how many generations passed
   Crossover theCrossover;               // Object to handle crossover
   Mutation theMutation;                 // Object to handle mutation
   FitnessFunction theFitness;           // Object ot handle calculating fitness

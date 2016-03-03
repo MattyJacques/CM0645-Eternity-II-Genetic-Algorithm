@@ -37,10 +37,8 @@ void Initialise()
   //cin >> popSize;
 
   GeneticAlgorithm::CreateInstance(1, 1, 1000, 16);
-  FileReader* pInst = FileReader::GetInstance();
-  pInst->OpenFile("Puzzles/FitTest.e2");
-  pInst->ScanFileDirectory();
-  pInst->ReadPieceFile();
+  FileReader theReader;
+  theReader.OpenFile("Puzzles/FitTest.e2");
 
   GeneticAlgorithm::GetInstance()->RunGA();
 

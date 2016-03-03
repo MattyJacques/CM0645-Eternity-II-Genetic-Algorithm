@@ -354,7 +354,7 @@ void FitnessFunction::CheckInnerPieces()
 } // CheckInnerPieces()
 
 
-void FitnessFunction::CheckFitness(Board* theBoard)
+int FitnessFunction::CheckFitness(Board* theBoard)
 { // Checks the fitness of the candidate provided by the GA
 
   
@@ -372,5 +372,7 @@ void FitnessFunction::CheckFitness(Board* theBoard)
   CheckBottomLeft();
   CheckBottomEdge();
   CheckBottomRight();
+
+  return pBoard->fitScore;
 
 } // CheckFitness()

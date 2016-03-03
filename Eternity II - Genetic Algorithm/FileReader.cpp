@@ -5,41 +5,25 @@
 
 
 #include "FileReader.h"     // Include the header for the class
-#include "BoardManager.h"   // Include BoardManager for piece array access
 #include <iostream>         // Include input and output library
-#include <windows.h>
-#include <sys\types.h>
-
-
-// Initialise the pointer to the instance
-FileReader* FileReader::pInstance = nullptr;
+#include <windows.h>        // Include file directory functions
 
 
 FileReader::FileReader()
-{ 
+{ // Calls to the file directory for available piece data files
+
+  ScanFileDirectory();
 
 } // FileReader()
 
 
-FileReader* FileReader::GetInstance()
-{ // If the instance is not already created, create the instaqnce of the class
-  // then return the pointer to the instance
-
-  // Check to see if instance already exists, if not, create the new instance
-  if (!pInstance)
-    pInstance = new FileReader();
-
-  // Return pointer to the instance of the class
-  return pInstance;
-
-} // GetInstance()
-
-
-void FileReader::OpenFile(const char * fileName)
-{ // Opens the file using the filename provided
+void FileReader::OpenFile(const char* fileName)
+{ // Opens the file using the filename provided then calls to read the file
 
   // Open the file
   theFile.open(fileName);
+
+  ReadPieceFile();
 
 } // OpenFile()
 
@@ -203,12 +187,3 @@ PieceType FileReader::CheckType(int* pData)
   return type;
 
 } // CheckType()
-
-
-FileReader::~FileReader()
-{ // Deletes the instance of the class, then sets pointer to nullptr
-
-  delete pInstance;
-  pInstance = nullptr;
-
-} // ~FileReader()

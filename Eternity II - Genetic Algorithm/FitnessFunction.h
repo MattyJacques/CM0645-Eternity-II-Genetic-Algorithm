@@ -69,6 +69,6 @@ public:
   FitnessFunction();
 
   // Checks the fitness of the candidate provided by the GA
-  void CheckFitness(Board* theBoard);
+  int CheckFitness(Board* theBoard);
 };
 

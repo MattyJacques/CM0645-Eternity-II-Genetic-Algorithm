@@ -3,10 +3,11 @@
 // Author       : Matthew Jacques
 // Date         : 19/11/2015
 
+
 #pragma once
 
 
-#include "BoardManager.h"   // For PieceType
+#include "BoardManager.h"   // For PieceType & piece vector
 #include <fstream>          // Includes file input function
 #include <string>           // Includes strings and stoi
 #include <vector>           // Include vectors for filenames
@@ -20,18 +21,8 @@ private:
   std::ifstream theFile;              // File open to read from
   std::vector<std::string> filenames; // Holds all filenames held in directory
 
-  // Private for singleton
-  FileReader();
-
-public:
-  // Returns the pointer to the instance of the class
-  static FileReader* GetInstance();
-
-  // Opens the file with the name given in the parameters
-  void OpenFile(const char* fileName);
-
-  // Scans the directory for puzzle files, storing names in array for loading
-  // if the user wants to use one of them
+   // Scans the directory for puzzle files, storing names in array for loading
+   // if the user wants to use one of them
   void ScanFileDirectory();
 
   // Reads the piece file that has already been opened, storing piece info
@@ -49,8 +40,11 @@ public:
   // answer
   PieceType CheckType(int* pData);
 
-  // Deletes the instance of the call and nulls memory
-  ~FileReader();
+public:
+  // Calls to scan the directory for piece data files
+  FileReader();
 
+  // Opens the file using the filename provided then calls to read the file
+  void OpenFile(const char* fileName);
 };
 

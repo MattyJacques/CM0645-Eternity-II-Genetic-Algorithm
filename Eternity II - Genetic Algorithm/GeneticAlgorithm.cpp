@@ -5,7 +5,6 @@
 
 
 #include "GeneticAlgorithm.h" // Include header for the class
-#include "Crossover.h"        // Ability to use crossover
 #include <iostream>           // DEBUG
 
 
@@ -23,6 +22,9 @@ GeneticAlgorithm::GeneticAlgorithm(double eliteRate, double mutationRate,
 
   popSize = population;
   elitism = eliteRate;
+
+  maxFitness = 0;
+  genCount = 0;
 
   BoardManager::GetInstance()->InitialiseData(boardSize, 22);
 
@@ -64,13 +66,17 @@ void GeneticAlgorithm::RunGA()
 
   while (true)
   {
+    genCount++;
+
     for (int i = 0; i < popSize; i++)
     {
 
-      theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
-      std::cout << i + 1 << " " << BoardManager::GetInstance()->currBoards->at(i).fitScore << std::endl;
+      if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i)) > maxFitness)
+        maxFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
 
     }
+
+    std::cout << "Generation " << genCount << ": " << maxFitness << std::endl;
 
     theCrossover.DoCrossover(popSize);
     theMutation.DoMutation();

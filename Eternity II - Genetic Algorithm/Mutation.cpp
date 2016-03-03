@@ -5,7 +5,6 @@
 
 
 #include "Mutation.h"
-#include "BoardManager.h"     // Access to boards
 #include "GeneticAlgorithm.h" // Get random number
 #include <iostream>           // Debug output
 

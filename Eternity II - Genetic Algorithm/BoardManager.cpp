@@ -5,7 +5,6 @@
 
 
 #include "BoardManager.h"
-#include "GeneticAlgorithm.h" // Population size
 #include <algorithm>          // Random_shuffle()
 #include <time.h>             // time()
 
