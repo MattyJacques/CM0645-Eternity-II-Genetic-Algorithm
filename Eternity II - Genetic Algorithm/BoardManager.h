@@ -71,6 +71,14 @@ private:
   // then finally filling in the corners, side edges and bottom edge
   void AddPieces(Board* pBoard);
 
+  // If an official Eternity II solve attempt, make sure the start piece
+  // constraint is met by placing the piece with the ID 139 on slot [8][7]
+  void FixStartPiece(Board* pBoard);
+
+  // Swap the piece with the given index with the piece in the starting piece
+  // slot according to the Eternity II rule book. (Slot [8][7])
+  void SwapPiece(Board* pBoard, int yIndex, int xIndex);
+
 public:
   int boardSize;                      // How many pieces per board
 
@@ -90,7 +98,7 @@ public:
   void InitialiseData(int size, int patNum);
 
   // Creates the inital board filled with randomised order of pieces
-  void InitFullBoard(Board* pBoard);
+  void InitFullBoard(Board* pBoard, bool startPiece);
 
   // Initialises the boards vector of vectors with empty vectors
   void InitEmptyBoard(Board* pBoard);

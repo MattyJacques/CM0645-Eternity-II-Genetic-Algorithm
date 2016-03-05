@@ -10,7 +10,7 @@
 
 void GeneticAlgorithm::Setup(int eliteRate, double mutationRate, int population, int boardSize, int patNum,  
                              CrossoverType crossType, SelectionType selectType, 
-                             MutateType mutType)
+                             MutateType mutType, bool startCons)
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
@@ -25,6 +25,7 @@ void GeneticAlgorithm::Setup(int eliteRate, double mutationRate, int population,
   maxFitness = 0;           // Initialise maximum fitness GA has reached
   maxFitnessOfGen = 0;      // Initialise maximum fitness of current generation
   genCount = 0;             // Initialise generation count
+  startPiece = startCons;   // Set if the start piece constraint is active
 
   // Initialise the board manager with the board size and number of patterns
   BoardManager::GetInstance()->InitialiseData(boardSize, patNum);
@@ -38,7 +39,7 @@ void GeneticAlgorithm::RunGA()
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
     Board newBoard;
-    BoardManager::GetInstance()->InitFullBoard(&newBoard);
+    BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
     BoardManager::GetInstance()->currBoards->push_back(newBoard);
   }
 

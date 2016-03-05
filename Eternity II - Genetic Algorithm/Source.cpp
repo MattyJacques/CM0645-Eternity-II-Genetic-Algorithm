@@ -18,7 +18,7 @@ void Initialise(GeneticAlgorithm* theGA)
   
   // INSERT FILE READING SETTINGS
 
-  theGA->Setup(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP);
+  theGA->Setup(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP, false);
   
   FileReader theReader;
   theReader.OpenFile("Puzzles/256 - 22.e2");
@@ -33,6 +33,6 @@ void main()
 
   GeneticAlgorithm theGA;    // Create algorithm object
   Initialise(&theGA);        // Initialise object methods
-  theGA.RunGA;               // Run the algorithm loop
+  theGA.RunGA();               // Run the algorithm loop
 
 } // main()

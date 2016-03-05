@@ -25,7 +25,7 @@ void Mutation::CalcMutRate(double rate, int popSize)
 } // CalcMutRate()
 
 
-void Mutation::GetRandPiece(int index[2], PieceType type)
+void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
 { // Sets the 2 dimensional index for a random piece with the type given
   // as a parameter
 
@@ -93,16 +93,34 @@ void Mutation::GetRandPiece(int index[2], PieceType type)
   else
   { // Set the indexs in the array to two random number between 1 and the size
     // of the board - 1 to get two inner type pieces
-    index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                              boardSize - 1);
-    index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                              boardSize - 1);
+
+    if (startPiece)
+    { // If starting piece constraint is active, make sure starting piece is not
+      // chosen as the random piece
+
+      do
+      { // Get a random piece index and loop while that index matches the start
+        // slot index
+        index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+          boardSize - 1);
+        index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+          boardSize - 1);
+      } while (index[0] == 8 && index[1] == 7);
+
+    }
+    else
+    { // If start constraint is not active, just chose any random inner piece
+      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+        boardSize - 1);
+      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+        boardSize - 1);
+    }
   }
 
 } // GetRandPiece()
 
 
-void Mutation::Swap(int boardID)
+void Mutation::Swap(int boardID, bool startPiece)
 { // Swaps two random pieces in the board that has the ID given as the parameter
 
   int pieceIndex1[2];     // Holds index of the first piece
@@ -114,8 +132,8 @@ void Mutation::Swap(int boardID)
 
   // Get random piece type for mutation, get a two random pieces of that type
   PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
-  GetRandPiece(pieceIndex1, type);
-  GetRandPiece(pieceIndex2, type);
+  GetRandPiece(pieceIndex1, type, startPiece);
+  GetRandPiece(pieceIndex2, type, startPiece);
 
   // Move puzzle piece to temp storage
   temp = pBoard->boardVec[pieceIndex1[0]][pieceIndex1[1]];
@@ -139,7 +157,7 @@ void Mutation::Setup(MutateType type, double rate, int popSize)
 } // SetMethod()
 
 
-void Mutation::DoMutation()
+void Mutation::DoMutation(bool startPiece)
 { // Randomly selects a board from the current population to be mutated
   // then calls the appropriate subrountine that will do the needed mutation
   // method on that board.
