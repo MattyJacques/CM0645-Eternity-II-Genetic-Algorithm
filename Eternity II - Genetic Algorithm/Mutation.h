@@ -39,7 +39,7 @@ public:
   void Setup(MutateType type, double rate, int popSize);
 
   // Randomly selects a board from the current population to be mutated
-  // then calls the appropriate subprogram that will do the needed mutation
+  // then calls the appropriate subroutine that will do the needed mutation
   // method on that board.
   void DoMutation();
 };

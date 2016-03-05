@@ -8,15 +8,9 @@
 #include <iostream>           // DEBUG
 
 
-// Initialise the pointer to the instance
-GeneticAlgorithm* GeneticAlgorithm::pInstance = nullptr;
-
-
-GeneticAlgorithm::GeneticAlgorithm(int eliteRate, double mutationRate, 
-                                   int population, int boardSize, int patNum,  
-                                   CrossoverType crossType, 
-                                   SelectionType selectType, 
-                                   MutateType mutType)
+void GeneticAlgorithm::Setup(int eliteRate, double mutationRate, int population, int boardSize, int patNum,  
+                             CrossoverType crossType, SelectionType selectType, 
+                             MutateType mutType)
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
@@ -36,32 +30,6 @@ GeneticAlgorithm::GeneticAlgorithm(int eliteRate, double mutationRate,
   BoardManager::GetInstance()->InitialiseData(boardSize, patNum);
 
 } // GeneticAlgorithm()
-
-
-void GeneticAlgorithm::CreateInstance(int eliteRate, double mutationRate, 
-                                      int popSize, int boardSize, int patNum,
-                                      CrossoverType crossType, 
-                                      SelectionType selectType, 
-                                      MutateType mutType)
-{ // Creates the static instance for the class, passing over the variables
-  // needed for the GA to the constructor
-
-  if (!pInstance)
-  { // If the instance of the algorithm has not already been created, create
-    // a new instance by calling the constructor
-    pInstance = new GeneticAlgorithm(eliteRate, mutationRate, popSize, boardSize,
-                                     patNum, crossType, selectType, mutType);
-  }
-
-} // CreateInstance()
-
-
-GeneticAlgorithm* GeneticAlgorithm::GetInstance()
-{ // Returns the current instance of the class
-
-  return pInstance; // Return the pointer
-
-} // GetInstance()
 
 
 void GeneticAlgorithm::RunGA()
@@ -107,7 +75,8 @@ void GeneticAlgorithm::RunGA()
 
     // Complete mutation of population
     theMutation.DoMutation();
-  }
+
+  } // Main algorithm loop
 
   /*
   start
@@ -137,15 +106,3 @@ int GeneticAlgorithm::GenRandomNum(int min, int max)
   return (std::rand() % range) + min;
 
 } // GenerateRandomNum()
-
-
-GeneticAlgorithm::~GeneticAlgorithm()
-{ // Destructor that deletes the instance of the class
-
-  // Delete the instance of the GA
-  delete pInstance;
-
-  // Change to pointer to null
-  pInstance = nullptr;
-
-} // ~GeneticAlgorithm()

@@ -141,7 +141,7 @@ void Mutation::Setup(MutateType type, double rate, int popSize)
 
 void Mutation::DoMutation()
 { // Randomly selects a board from the current population to be mutated
-  // then calls the appropriate subprogram that will do the needed mutation
+  // then calls the appropriate subrountine that will do the needed mutation
   // method on that board.
 
   for (int i = 0; i < mutNum; i++)

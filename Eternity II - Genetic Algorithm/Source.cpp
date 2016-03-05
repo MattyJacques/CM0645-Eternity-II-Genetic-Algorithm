@@ -6,7 +6,7 @@
 using namespace std;
 
 
-void Initialise()
+void Initialise(GeneticAlgorithm* theGA)
 { // Creates instances for the puzzle board and genetic algorithm, asks the
   // user for input for the custom variables for the solver.
 
@@ -16,27 +16,9 @@ void Initialise()
   double mutationRate = 0;      // Holds the rate of mutation in GA
   int popSize = 0;
   
-  //// Output asking for board size then handles user input
-  //cout << "Board Size: ";
-  //cin >> boardSize;
+  // INSERT FILE READING SETTINGS
 
-  //// Output asking for how many patterns to use in board, handles user input
-  //cout << "Number of patterns: ";
-  //cin >> patternNum;
-
-  //// Output asking how many elite for generations in GA then handles user input
-  //cout << "Elitism Rate: ";
-  //cin >> eliteRate;
-
-  //// Output asking for mutation rate for GA then handles user input
-  //cout << "Mutation Rate: ";
-  //cin >> mutationRate;
-
-  //// Output asking for population size for a generation then handles user input
-  //cout << "Population Size: ";
-  //cin >> popSize;
-
-  GeneticAlgorithm::CreateInstance(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP);
+  theGA->Setup(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP);
   
   FileReader theReader;
   theReader.OpenFile("Puzzles/256 - 22.e2");
@@ -45,16 +27,12 @@ void Initialise()
 
 
 void main()
-{
-  Initialise();
-  GeneticAlgorithm::GetInstance()->RunGA();
- /* while (solution not found)
-  {
-    selection;
-    reproduce;
-    crossover;
-    mutation;
-    evaluation;
-  }*/
+{ // Creates the algorithm object, initialise the methods to be used this run
+  // of the genetic algorithm then call the main running of the genetic
+  // algorithm loop
+
+  GeneticAlgorithm theGA;    // Create algorithm object
+  Initialise(&theGA);        // Initialise object methods
+  theGA.RunGA;               // Run the algorithm loop
 
 } // main()
