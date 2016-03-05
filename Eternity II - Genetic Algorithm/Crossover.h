@@ -16,8 +16,8 @@ enum CrossoverType { ONEPOINT, TWOPOINT };
 // Readability for methods of selection
 enum SelectionType { ROULETTE, TOURNAMENT };
 
-struct Board;
-struct PuzzlePiece;
+struct Board;              // Usage of board types
+struct PuzzlePiece;        // Usage of puzzle piece types
 
 class Crossover
 {
@@ -32,8 +32,8 @@ private:
   // generation. The amount of candidates is declared in eliteRate
   void DoElitism();
 
-  // Selects with candidates to use for reproduction with the selection method
-  // chosen on start up
+  // Selects with candidates to use for reproduction with the selection method  
+  // chosen when the application was started
   void SelectParents(int parents[2], int popSize);
 
   // Selects candidates via the roulette wheel method mentioned within the report

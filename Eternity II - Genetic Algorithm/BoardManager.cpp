@@ -16,8 +16,10 @@ BoardManager* BoardManager::pInstance = nullptr;
 BoardManager::BoardManager()
 { // Seeds rand() with time and initalises currBoards
 
+  // Seed rand with time for random number generation
   srand((unsigned int)time(NULL));
 
+  // Create a new vector and set it to the current generation pointer
   std::vector<Board> newVec;
   currBoards = std::make_shared<std::vector<Board>>(newVec);
 
@@ -28,10 +30,11 @@ BoardManager::BoardManager()
 BoardManager * BoardManager::GetInstance()
 { // Returns the instance to the class, if none currently exists, creates one
 
-  if (!pInstance)
+  // If not pInstance, create one
+  if (!pInstance) 
     pInstance = new BoardManager;
 
-  return pInstance;
+  return pInstance;   // Return the instance
 
 } // GetInstance()
 
@@ -39,8 +42,8 @@ BoardManager * BoardManager::GetInstance()
 void BoardManager::InitialiseData(int size, int patNum)
 { // Sets how many patterns to be used and how many pieces there are per board
 
-  boardSize = size - 1;
-  patternNum = patNum;
+  boardSize = size - 1;    // boardSize - 1 to include 0 index
+  patternNum = patNum;     // Set number of patterns for the board
 
 } // InitialiseData()
 
@@ -80,13 +83,13 @@ void BoardManager::AddPieces(Board* pBoard)
   for (PuzzlePiece piece : pieceVec[INNER])
   { // Loop through the collection of pieces
 
-    // Add piece to line on board
+    // Add piece to line on board and increment push count
     pBoard->boardVec[index].push_back(piece);
     count++;
 
-    // If reached the end of the line for the board, move onto next 
     if (count == boardSize - 1)
-    {
+    { // If reached the end of the line for the board, move onto next line
+      // of the board
       index++;
       count = 0;
     }
@@ -103,8 +106,7 @@ void BoardManager::InitTopEdge(Board* pBoard)
   // inner pieces to be inserted
 
   for (int i = 0; i <= boardSize - 2; i++)
-  { // Add edge pieces to inner 13 vectors (so not board edges)
-
+  { // Add edge pieces to inner 13 vectors (so not left and right most vectors)
     pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i]);
   }
 
@@ -115,21 +117,27 @@ void BoardManager::InitCornersSides(Board* pBoard)
 { // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
 
+  // Push the first two corner pieces on to the top left and right corners
+  // of the board
   pBoard->boardVec[0].push_back(pieceVec[CORNER][0]);
   pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][1]);
 
   for (int i = 0; i < boardSize - 1; i++)
-  {
+  { // Loops through and push edge pieces on to the left and right edges
+    // of the board
     pBoard->boardVec[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
     pBoard->boardVec[boardSize].push_back(pieceVec[EDGE]
                                                   [i + (boardSize * 2) - 2]);
   }
 
   for (int i = 0; i <= boardSize - 2; i++)
-  {
+  { // Loops through and adds an edge piece to each vector for the bottom edge
+    // of the board
     pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
   }
 
+  // Push the last two corner pieces on to the bottom left and bottom right
+  // corners of the board
   pBoard->boardVec[0].push_back(pieceVec[CORNER][2]);
   pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][3]);
 
@@ -162,9 +170,9 @@ int BoardManager::GetPattern(Board* pBoard, int yIndex, int xIndex,
 BoardManager::~BoardManager()
 { // Destructor to delete the instance of the class
 
-  currBoards = nullptr;
-  prevBoards = nullptr;
-  delete pInstance;
-  pInstance = nullptr;
+  currBoards = nullptr;     // Delete current generation
+  prevBoards = nullptr;     // Delete previous generation
+  delete pInstance;         // Delete instance
+  pInstance = nullptr;      // Null instance
 
 } // ~BoardManager()

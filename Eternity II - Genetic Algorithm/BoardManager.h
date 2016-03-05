@@ -23,7 +23,7 @@ struct PuzzlePiece
   // IDs and the type of piece
 
   int pieceID;      // Holds the ID of the puzzle piece
-  PieceType type;    // Holds the type of the puzzle piece, example corner, edge
+  PieceType type;   // Holds the type of the puzzle piece, example corner, edge
   int orientation;  // Holds the rotation of the puzzle piece
   int segments[4];  // Holds the pattern for each segment of the piece
 };
@@ -40,9 +40,10 @@ struct Board
   // Vector of all pieces within board
   std::vector<std::vector<PuzzlePiece>> boardVec;
 
-  // Overrides the less than operator for sorting
+  // Overrides the less than operator for sorting to sort by fitness
   bool operator < (const Board theBoard) const
   {
+    // return if true fitness score is less than comparison
     return (fitScore < theBoard.fitScore);
   }
 };

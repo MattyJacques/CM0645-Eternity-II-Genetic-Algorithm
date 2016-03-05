@@ -24,6 +24,7 @@ FileReader::FileReader()
     }
   }
 
+  // Scan the directory for piece data files
   ScanFileDirectory();
 
 } // FileReader()
@@ -35,6 +36,7 @@ void FileReader::OpenFile(const char* fileName)
   // Open the file
   theFile.open(fileName);
 
+  // Read the piece file after opening
   ReadPieceFile();
 
 } // OpenFile()
@@ -91,7 +93,6 @@ void FileReader::ReadPieceFile()
 
     while (std::getline(theFile, line))
     { // While getline actually returns a line of data, proceed with parsing
-
       ParseData(line, pData);
       CreatePiece(pData);
   
@@ -175,7 +176,7 @@ PieceType FileReader::CheckType(int* pData)
   { // Loop for each quadrant to check if the pattern ID matches the edge pattern
 
     if (pData[i] == 0)
-    {
+    { // If the current quadrant has the edge pattern, increment the count
       count++;
     }
   }
@@ -183,15 +184,15 @@ PieceType FileReader::CheckType(int* pData)
   switch (count)
   { // Using how many edge patterns were counted, set the piece type
 
-  case 0:
+  case 0: // If no edge patterns, piece is of the inner type
     type = INNER;
     break;
 
-  case 1:
+  case 1: // If one edge pattern, piece is of the edge type
     type = EDGE;
     break;
 
-  case 2:
+  case 2: // If two edge patterns, piece is of the corner type
     type = CORNER;
     break;
 

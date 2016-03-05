@@ -44,13 +44,11 @@ void FitnessFunction::CheckTopLeft()
 
   if (pBoard->boardVec[0][0].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
-
     pBoard->fitScore += 25;
 
     if (IsMatchSide(0, 0, 0, 1))
     { // Check to see if the pattern on the right of the corner piece matches
       // the pattern on the left of the piece to the right
-
       pBoard->fitScore += 10;
 
     }
@@ -58,7 +56,6 @@ void FitnessFunction::CheckTopLeft()
     if (IsMatchBottom(0, 0, 1, 0))
     { // Check to see if the pattern on the bottom of the corner piece matches
       // the pattern on the top of the piece below
-
       pBoard->fitScore += 10;
 
     }
@@ -74,23 +71,18 @@ void FitnessFunction::CheckTopRight()
 
   if (pBoard->boardVec[0][pBoardMan->boardSize].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
-
     pBoard->fitScore += 25;
 
     if (IsMatchSide(0, pBoardMan->boardSize - 1, 0, pBoardMan->boardSize))
     { // Check to see if the pattern on the right side of the piece to left of
       // the corner, matches the pattern on the left of the corner piece
-
       pBoard->fitScore += 10;
-
     }
 
     if (IsMatchBottom(0, pBoardMan->boardSize, 1, pBoardMan->boardSize))
     { // Check to see if the pattern on the bottom of the corner piece matches
       // the pattern on the top of the piece below
-
       pBoard->fitScore += 10;
-
     }
 
   } // if corner type
@@ -104,23 +96,18 @@ void FitnessFunction::CheckBottomLeft()
 
   if (pBoard->boardVec[pBoardMan->boardSize][0].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
-
     pBoard->fitScore += 25;
 
     if (IsMatchSide(pBoardMan->boardSize, 0, pBoardMan->boardSize, 1))
     { // Check to see if the pattern on the right side of the corner piece 
       // matches the pattern located on the left side of the piece to the right
-
       pBoard->fitScore += 10;
-
     }
 
     if (IsMatchBottom(pBoardMan->boardSize - 1, 0, pBoardMan->boardSize, 0))
     { // Check to see if the pattern on the bottom of the piece above the 
       // corner matches the pattern located on the top of the corner
-
       pBoard->fitScore += 10;
-
     }
 
   } // if corner type
@@ -134,25 +121,20 @@ void FitnessFunction::CheckBottomRight()
 
   if (pBoard->boardVec[pBoardMan->boardSize][pBoardMan->boardSize].type == CORNER)
   { // Check to see if the piece in the slot is a corner, if so add 25 to score
-
     pBoard->fitScore += 25;
 
     if (IsMatchSide(pBoardMan->boardSize, pBoardMan->boardSize - 1, 
         pBoardMan->boardSize, pBoardMan->boardSize))
     { // Check to see if the pattern on the right side of the piece to the left
       // of the corner matches the pattern located on the left of the corner
-
       pBoard->fitScore += 10;
-
     }
 
     if (IsMatchBottom(pBoardMan->boardSize - 1, pBoardMan->boardSize, 
                       pBoardMan->boardSize, pBoardMan->boardSize))
     { // Check to see if the pattern located on the bottom of the piece located
       // above the corner matches the pattern located on the top of the corner
-
       pBoard->fitScore += 10;
-
     }
 
   } // if corner type
@@ -166,35 +148,32 @@ void FitnessFunction::CheckTopEdge()
   // match with adjacent pieces
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
-  {
-    if (pBoard->boardVec[0][i].type == EDGE)
-    { // If edge piece on edge slot
+  { // Loop right the edge pieces on the top edge of the board checking fitness
 
+    if (pBoard->boardVec[0][i].type == EDGE)
+    { // If edge piece on edge slot add score and continue checks
       pBoard->fitScore += 15;
 
       if (IsMatchSide(0, i, 0, i + 1))
-      { // If edge pattern matches edge piece to the right
-
+      { // If edge pattern matches edge piece to the right add score
         pBoard->fitScore += 5;
       }
 
       if (IsMatchBottom(0, i, 1, i))
-      { // If edge pattern matches inner connection on bottom
-
+      { // If edge pattern matches inner connection on bottom add score
         pBoard->fitScore += 5;
       }
     }
   }
 
   if (pBoard->boardVec[0][pBoardMan->boardSize - 1].type == EDGE)
-  { // If the piece in the slot 1 to the left of top right corner is edge
-
+  { // If the piece in the slot 1 to the left of top right corner is edge add 
+    // score
     pBoard->fitScore += 15;
 
     if (IsMatchBottom(0, pBoardMan->boardSize - 1, 1, pBoardMan->boardSize - 1))
     { // If piece left of the top right corner bottom pattern matches piece
-      // underneath
-
+      // underneath add score
       pBoard->fitScore += 5;
     }
   }
@@ -208,35 +187,31 @@ void FitnessFunction::CheckLeftEdge()
   // pieces match with adjacent pieces
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
-  {
-    if (pBoard->boardVec[i][0].type == EDGE)
-    { // If piece is of edge type
+  {// Loop right the edge pieces on the top left of the board checking fitness
 
+    if (pBoard->boardVec[i][0].type == EDGE)
+    { // If piece is of edge type add score and continue checks
       pBoard->fitScore += 15;
 
       if (IsMatchSide(i, 0, i, 1))
-      { // If edge piece right pattern matches inner connection
-
+      { // If edge piece right pattern matches inner connection add score
         pBoard->fitScore += 5;
       }
 
       if (IsMatchBottom(i, 0, i + 1, 0))
-      { // If edge piece bottom pattern matches top of piece underneath
-
+      { // If edge piece bottom pattern matches top of piece underneath add score
         pBoard->fitScore += 5;
       }
     }
   }
 
   if (pBoard->boardVec[pBoardMan->boardSize - 1][0].type == EDGE)
-  { // If piece above bottom left corner is edge type
-
+  { // If piece above bottom left corner is edge type add score
     pBoard->fitScore += 15;
 
     if (IsMatchSide(pBoardMan->boardSize - 1, 0, pBoardMan->boardSize - 1, 1))
     { // If piece above bottom left corner right pattern matches inner 
-      // connection
-
+      // connection add score
       pBoard->fitScore += 5;
     }
   }
@@ -250,21 +225,19 @@ void FitnessFunction::CheckRightEdge()
   // pieces match with adjacent pieces
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
-  {
-    if (pBoard->boardVec[i][pBoardMan->boardSize].type == EDGE)
-    { // If piece is edge type
+  { // Loop right the edge pieces on the right edge of the board checking fitness
 
+    if (pBoard->boardVec[i][pBoardMan->boardSize].type == EDGE)
+    { // If piece is edge type add score and continue checks
       pBoard->fitScore += 15;
 
       if (IsMatchSide(i, pBoardMan->boardSize - 1, i, pBoardMan->boardSize))
-      { // If edge piece matches inner connection to right
-
+      { // If edge piece matches inner connection to right add score
         pBoard->fitScore += 5;
       }
 
       if (IsMatchBottom(i, pBoardMan->boardSize, i + 1, pBoardMan->boardSize))
-      { // If edge piece matches piece below
-
+      { // If edge piece matches piece below add score
         pBoard->fitScore += 5;
       }
     }
@@ -272,14 +245,12 @@ void FitnessFunction::CheckRightEdge()
 
   if (pBoard->boardVec[pBoardMan->boardSize - 1]
       [pBoardMan->boardSize].type == EDGE)
-  { // If piece above bottom right corner is edge
-
+  { // If piece above bottom right corner is edge add score
     pBoard->fitScore += 15;
 
     if (IsMatchSide(pBoardMan->boardSize - 1, pBoardMan->boardSize - 1, 
                     pBoardMan->boardSize - 1, pBoardMan->boardSize))
-    { // If piece matches connection to the left
-
+    { // If piece matches connection to the left add score
       pBoard->fitScore += 5;
     }
   }
@@ -293,21 +264,19 @@ void FitnessFunction::CheckBottomEdge()
   // pieces match with adjacent pieces
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
-  {
-    if (pBoard->boardVec[pBoardMan->boardSize][i].type == EDGE)
-    { // If piece is edge type
+  {// Loop right the edge pieces on the bottom edge of the board checking fitness
 
+    if (pBoard->boardVec[pBoardMan->boardSize][i].type == EDGE)
+    { // If piece is edge type add score and continue checks
       pBoard->fitScore += 15;
 
       if (IsMatchSide(pBoardMan->boardSize, i, pBoardMan->boardSize, i + 1))
-      { // If right pattern matches next piece left
-
+      { // If right pattern matches next piece left add score
         pBoard->fitScore += 5;
       }
 
       if (IsMatchBottom(pBoardMan->boardSize - 1, i, pBoardMan->boardSize, i))
-      {  // If top matched piece above
-
+      {  // If top matched piece above add score
         pBoard->fitScore += 5;
       }
     }
@@ -315,14 +284,12 @@ void FitnessFunction::CheckBottomEdge()
 
   if (pBoard->boardVec[pBoardMan->boardSize]
     [pBoardMan->boardSize - 1].type == EDGE)
-  { // If piece left of bottom right corner is edge
-
+  { // If piece left of bottom right corner is edge add score
     pBoard->fitScore += 15;
 
     if (IsMatchBottom(pBoardMan->boardSize - 1, pBoardMan->boardSize - 1, 
                       pBoardMan->boardSize, pBoardMan->boardSize - 1))
-    { // If top pattern matched inner connection
-
+    { // If top pattern matched inner connection add score
       pBoard->fitScore += 5;
     }
   }
@@ -334,18 +301,18 @@ void FitnessFunction::CheckInnerPieces()
 { // Checks the pieces in the inner slots of the board for matching connections
 
   for (int i = 1; i < pBoardMan->boardSize - 1; i++)
-  {
-    for (int j = 1; j < pBoardMan->boardSize - 1; j++)
-    {
-      if (IsMatchSide(i, j, i, j + 1))
-      { // If right side matches piece to the right
+  {  // Y index for checking slots, after line has completed, increment row
 
+    for (int j = 1; j < pBoardMan->boardSize - 1; j++)
+    { // X index for checking slots, after line has completed, increment coloumn
+
+      if (IsMatchSide(i, j, i, j + 1))
+      { // If right side matches piece to the right add score
         pBoard->fitScore += 1;
       }
 
       if (IsMatchBottom(i, j, i + 1, j))
-      { // If bottom side matches piece below
-
+      { // If bottom side matches piece below add score
         pBoard->fitScore += 1;
       }
     }
@@ -373,6 +340,7 @@ int FitnessFunction::CheckFitness(Board* theBoard)
   CheckBottomEdge();
   CheckBottomRight();
 
+  // Return fitness score for easier maximum fitness tracking
   return pBoard->fitScore;
 
 } // CheckFitness()

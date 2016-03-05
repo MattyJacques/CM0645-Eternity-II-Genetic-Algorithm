@@ -7,6 +7,9 @@
 #pragma once
 
 
+#include "BoardManager.h"    // PieceType enum
+
+
 // Readability for methods of mutation
 enum MutateType { SWAP, ROTATE, ROTATESWAP, REGIONSWAP, REGIONROTATE};
 
@@ -21,9 +24,9 @@ private:
   // Calculates how many mutations to implement per generation
   void CalcMutRate(double rate, int popSize);
 
-  // Sets the 2 dimensional index for a random piece out of the inner pieces
-  // of the board
-  void GetRandPiece(int index[2]);
+  // Sets the 2 dimensional index for a random piece with the type given
+  // as a parameter
+  void GetRandPiece(int index[2], PieceType type);
 
   // Swaps two random pieces in the board that has the ID given as the parameter
   void Swap(int boardID);
@@ -35,6 +38,9 @@ public:
   // Sets the method of mutation to use for this attempt
   void Setup(MutateType type, double rate, int popSize);
 
+  // Randomly selects a board from the current population to be mutated
+  // then calls the appropriate subprogram that will do the needed mutation
+  // method on that board.
   void DoMutation();
 };
 
