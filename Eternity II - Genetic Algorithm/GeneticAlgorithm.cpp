@@ -21,15 +21,18 @@ GeneticAlgorithm::GeneticAlgorithm(int eliteRate, double mutationRate,
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
 
+  // Set up the crossover object using the input methods
   theCrossover.SetMethod(crossType, selectType, eliteRate);
+
+  // Set up the mutation method using the input methods
   theMutation.Setup(mutType, mutationRate, population);
 
-  popSize = population;
+  popSize = population;     // Set the population for each generation
+  maxFitness = 0;           // Initialise maximum fitness GA has reached
+  maxFitnessOfGen = 0;      // Initialise maximum fitness of current generation
+  genCount = 0;             // Initialise generation count
 
-  maxFitness = 0;
-  maxFitnessOfGen = 0;
-  genCount = 0;
-
+  // Initialise the board manager with the board size and number of patterns
   BoardManager::GetInstance()->InitialiseData(boardSize, patNum);
 
 } // GeneticAlgorithm()
@@ -60,38 +63,49 @@ GeneticAlgorithm* GeneticAlgorithm::GetInstance()
 
 } // GetInstance()
 
+
 void GeneticAlgorithm::RunGA()
 { // Main function of the GA that continually runs
 
   for (int i = 0; i < popSize; i++)
-  {
+  { // Create initialise population of boards with randomised boards
     Board newBoard;
     BoardManager::GetInstance()->InitFullBoard(&newBoard);
     BoardManager::GetInstance()->currBoards->push_back(newBoard);
   }
 
   while (true)
-  {
-    genCount++;
-    maxFitnessOfGen = 0;
+  { // While the solution has not been found, continue working towards solution
+
+    genCount++;            // Increment the count of generations
+    maxFitnessOfGen = 0;   // Set maximum fitness of this generation
 
     for (int i = 0; i < popSize; i++)
-    {
+    { // Loop through every boards of population checking the fitness
 
-      if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i)) > maxFitnessOfGen)
-      {
+      if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i))
+                                  > maxFitnessOfGen)
+      { // If next maximum fitness of generation found, store new max fitness
+        // and check for max fitness this run of algorithm
+
         if (maxFitness < BoardManager::GetInstance()->currBoards->at(i).fitScore)
-        {
+        { // Check to see if this fitness is the new maximum fitness of run if
+          // so, store new fitness record
           maxFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
         }
 
+        // Set the new maximum fitness of generation
         maxFitnessOfGen = BoardManager::GetInstance()->currBoards->at(i).fitScore;
       }
     }
 
-    std::cout << "Generation " << genCount << ": This gen: " << maxFitnessOfGen << " Max Reached: " << maxFitness << std::endl;
+    // Output summary of generation
+    std::cout << "Generation " << genCount << ": " << maxFitness << std::endl;
 
+    // Complete crossover of population
     theCrossover.DoCrossover(popSize);
+
+    // Complete mutation of population
     theMutation.DoMutation();
   }
 

@@ -25,32 +25,18 @@ private:
   Mutation theMutation;                 // Object to handle mutation
   FitnessFunction theFitness;           // Object ot handle calculating fitness
 
-
+public:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
-  GeneticAlgorithm(int eliteRate, double mutationRate, int popSize, 
-                   int boardSize, int patNum, CrossoverType crossType,
-                   SelectionType selectType, MutateType mutType);
-
-public:
-  // Creates the static instance for the class, passing over the variables
-  // needed for the GA to the constructor
-  static void CreateInstance(int eliteRate, double mutationRate, int popSize,
-                             int boardSize, int patNum, CrossoverType crossType,
-                             SelectionType selectType, MutateType mutType);
-
-  // Returns the current instance of the class
-  static GeneticAlgorithm* GetInstance();
+  void Setup(int eliteRate, double mutationRate, int popSize,
+             int boardSize, int patNum, CrossoverType crossType,
+             SelectionType selectType, MutateType mutType);
 
   // Main function of the GA that continually runs
   void RunGA();
 
   // Generates a random number between min and max
-  int GenRandomNum(int min, int max);
-
-  // Destructor that deletes the instance of the class
-  ~GeneticAlgorithm();
-
+  static int GenRandomNum(int min, int max);
 };
 
