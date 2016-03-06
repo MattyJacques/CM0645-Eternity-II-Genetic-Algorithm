@@ -233,145 +233,67 @@ void BoardManager::RotatePiece(PuzzlePiece* piece, int mode)
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
 
-  int edgeIndex[2] = { -1, -1 };    // Holds the index for each edge pattern
-  int count = 0;                    // Holds how many edge patterns found
-
-  for (int i = 0; i < 4; i++)
-  { // Loop through each segment and check for edge pattern
-
-    // If segment contains edge pattern, note index of segment and increment
-    // edge pattern count
-    if (piece->segments[i] == 0)
-    {
-      edgeIndex[count] = i;
-      count++;
-    }
-  }
-
   if (piece->type == EDGE)         // If piece is edge, call to rotate edge
-    RotateEdge(piece, mode, edgeIndex);
+    RotateEdge(piece, mode);
   else if (piece->type == CORNER)  // If piece is corner, call to rotate corner
-    RotateCorner(piece, mode, edgeIndex);
+    RotateCorner(piece, mode);
 
 } // RotatePiece()
 
 
-void BoardManager::RotateEdge(PuzzlePiece* piece, int mode, int edgeIndex[2])
+void BoardManager::RotateEdge(PuzzlePiece* piece, int mode)
 { // Rotates an edge piece so the edge pattern matches the edge of the board
   // using the mode to determine what orientation value to set
 
   if (mode == 0)
-  { // If mode is set to top edge rotate so edge pattern is at the top of slot
-    // and if edge pattern is at index 0, no action needed
-
-    if (edgeIndex[0] == 1)       // If edge pattern is at index 1, rotate 3 times
-      piece->orientation = 3;
-    else if (edgeIndex[0] == 2)  // If edge pattern is at index 2, rotate twice
-      piece->orientation = 2;
-    else if (edgeIndex[0] == 3)  // If edge pattern is at index 3, rotate once
-      piece->orientation = 1;
+  { // If mode is set to top edge rotate set orientation to 2 so edge pattern 
+    // is facing the top of the original orientation
+    piece->orientation = 2;
   }
   else if (mode == 1)
-  { // If mode is set to right edge rotate so edge pattern is at the right of
-    // slot and if edge pattern is at index 1, no action needed
-
-    if (edgeIndex[0] == 0)       // If edge pattern is at index 0, rotate once
-      piece->orientation = 1;
-    else if (edgeIndex[0] == 2)  // If edge pattern is at index 2, rotate 3 times
-      piece->orientation = 3;
-    else if (edgeIndex[0] == 3)  // If edge pattern is at index 3, rotate twice
-      piece->orientation = 2;
+  { // If mode is set to right edge rotate set orientation to 3 so edge pattern 
+    // is facing the top of the original orientation
+    piece->orientation = 3;
   }
   else if (mode == 2)
-  { // If mode is set to bottom edge rotate so edge pattern is at the bottom of
-    // slot and if edge pattern is at index 2, no action needed
-
-    if (edgeIndex[0] == 0)       // If edge pattern is at index 0, rotate twice
-      piece->orientation = 2;
-    else if (edgeIndex[0] == 1)  // If edge pattern is at index 1, rotate once
-      piece->orientation = 1;
-    else if (edgeIndex[0] == 3)  // If edge pattern is at index 3, rotate 3 times
-      piece->orientation = 3;
+  { // If mode is set to bottom edge rotate set orientation to 2 so edge pattern 
+    // is facing the top of the original orientation
+    piece->orientation = 0;
   }
   else if (mode == 3)
-  { // If mode is set to left edge rotate so edge pattern is at the left of
-    // slot and if edge pattern is at index 3, no action needed
-
-    if (edgeIndex[0] == 0)       // If edge pattern is at index 0, rotate 3 times
-      piece->orientation = 3;
-    else if (edgeIndex[0] == 1)  // If edge pattern is at index 1, rotate twice
-      piece->orientation = 2;
-    else if (edgeIndex[0] == 2)  // If edge pattern is at index 2, rotate once
-      piece->orientation = 1;
+  { // If mode is set to left edge rotate set orientation to 2 so edge pattern 
+    // is facing the top of the original orientation
+    piece->orientation = 1;
   }
 
 } // RotateEdge()
 
 
-void BoardManager::RotateCorner(PuzzlePiece* piece, int mode, int edgeIndex[2])
+void BoardManager::RotateCorner(PuzzlePiece* piece, int mode)
 { // Rotates an corner piece so the corner pattern matches the edge of the board
   // using the mode to determine what orientation value to set
 
   if (mode == 0)
-  { // If mode is set to top left corner rotate so edge pattern is at the left
-    // and top of the slot and if edge pattern is at index 3 and 0, no action
-    // needed
-
-    // If pattern is at top and right, rotate 3 times
-    if (edgeIndex[0] == 0 && edgeIndex[1] == 1)
-      piece->orientation = 3;
-    // If pattern is at right and bottom, rotate twice
-    else if (edgeIndex[0] == 1 && edgeIndex[1] == 2)
-      piece->orientation = 2;
-    // If pattern is at bottom and left, rotate once
-    else if (edgeIndex[0] == 2 && edgeIndex[1] == 3)
-      piece->orientation = 1;
+  { // If mode is set to top left corner rotate  set orientation to 1 so that the
+    // edge pattern is facing the left and top of the origination orientation
+    piece->orientation = 1;
   }
   else if (mode == 1)
-  { // If mode is set to top right corner rotate so edge pattern is at the top
-    // and right of the slot and if edge pattern is at index 0 and 1, no action
-    // needed
-
-    // If pattern is at right and bottom, rotate 3 times
-    if (edgeIndex[0] == 1 && edgeIndex[1] == 2)
-      piece->orientation = 3;
-    // If pattern is at bottom and left, rotate twice
-    else if (edgeIndex[0] == 2 && edgeIndex[1] == 3)
-      piece->orientation = 2;
-    // If pattern is at left and top, rotate once
-    else if (edgeIndex[0] == 0 && edgeIndex[1] == 3)
-      piece->orientation = 1;
+  { // If mode is set to top right corner rotate  set orientation to 2 so that
+    // the edge pattern is facing the left and top of the origination orientation
+    piece->orientation = 2;
   }
   else if (mode == 2)
-  { // If mode is set to bottom left corner rotate so edge pattern is at the left
-    // and bottom of the slot and if edge pattern is at index 2 and 3, no action
-    // needed
-
-    // If pattern is at top and right, rotate twice
-    if (edgeIndex[0] == 0 && edgeIndex[1] == 1)
-      piece->orientation = 2;
-    // If pattern is at right and bottom, rotate once
-    else if (edgeIndex[0] == 1 && edgeIndex[1] == 2)
-      piece->orientation = 1;
-    // If pattern is at left and top, rotate 3 times
-    else if (edgeIndex[0] == 0 && edgeIndex[1] == 3)
-      piece->orientation = 3;
+  { // If mode is set to bottom left corner rotate  set orientation to 1 so that
+    // the edge pattern is facing the left and top of the origination orientation
+    piece->orientation = 0;
   }
   else if (mode == 3)
-  { // If mode is set to bottom right corner rotate so edge pattern is at the
-    // right and bottom of the slot and if edge pattern is at index 1 and 2, no
-    // action needed
-
-    // If pattern is at top and right, rotate once
-    if (edgeIndex[0] == 0 && edgeIndex[1] == 1)
-      piece->orientation = 1;
-    // If pattern is at bottom and left, rotate 3 times
-    else if (edgeIndex[0] == 2 && edgeIndex[1] == 3)
-      piece->orientation = 3;
-    // If pattern is at left and top, rotate twice
-    else if (edgeIndex[0] == 0 && edgeIndex[1] == 3)
-      piece->orientation = 2;
+  { // If mode is set to bottom right corner rotate  set orientation to 1 so that
+    // the edge pattern is facing the left and top of the origination orientation
+    piece->orientation = 3;
   }
+  
 
 } // RotateEdge()
 

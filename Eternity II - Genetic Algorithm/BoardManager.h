@@ -81,11 +81,11 @@ private:
 
   // Rotates an edge piece so the edge pattern matches the edge of the board
   // using the mode to determine what orientation value to set
-  void RotateEdge(PuzzlePiece* piece, int mode, int edgeIndex[2]);
+  void RotateEdge(PuzzlePiece* piece, int mode);
 
   // Rotates an corner piece so the corner pattern matches the edge of the board
   // using the mode to determine what orientation value to set
-  void RotateCorner(PuzzlePiece* piece, int mode, int edgeIndex[2]);
+  void RotateCorner(PuzzlePiece* piece, int mode);
 
 public:
   int boardSize;                      // How many pieces per board
