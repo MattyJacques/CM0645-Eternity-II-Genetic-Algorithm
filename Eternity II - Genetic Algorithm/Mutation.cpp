@@ -172,7 +172,7 @@ void Mutation::DoMutation(bool startPiece)
                                                 ->currBoards->size() - 1);
 
     if (mutType == SWAP)   // If mutation method is swap, do swap
-      Swap(boardID);
+      Swap(boardID, startPiece);
     //else if (mutType == ROTATE)
     //  Rotate();
     //else if (mutType == ROTATESWAP)

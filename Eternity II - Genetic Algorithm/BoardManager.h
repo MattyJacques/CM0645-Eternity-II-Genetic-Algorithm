@@ -77,7 +77,15 @@ private:
 
   // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [8][7])
-  void SwapPiece(Board* pBoard, int yIndex, int xIndex);
+  void SwapStartPiece(Board* pBoard, int yIndex, int xIndex);
+
+  // Rotates an edge piece so the edge pattern matches the edge of the board
+  // using the mode to determine what orientation value to set
+  void RotateEdge(PuzzlePiece* piece, int mode, int edgeIndex[2]);
+
+  // Rotates an corner piece so the corner pattern matches the edge of the board
+  // using the mode to determine what orientation value to set
+  void RotateCorner(PuzzlePiece* piece, int mode, int edgeIndex[2]);
 
 public:
   int boardSize;                      // How many pieces per board
@@ -106,6 +114,10 @@ public:
   // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
   int GetPattern(Board* pBoard, int yIndex, int xIndex, segLocation segment);
+
+  // Rotates the piece to match the edge of the board by setting the orientation
+  // so that the edge pattern matches the edge of the board. 
+  void RotatePiece(PuzzlePiece* piece, int mode);
 
   // Destructor to delete the instance of the class
   ~BoardManager();
