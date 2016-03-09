@@ -160,7 +160,7 @@ void BoardManager::InitTopEdge(Board* pBoard)
   for (int i = 0; i <= boardSize - 2; i++)
   { // Add edge pieces to inner 13 vectors (so not left and right most vectors)
     // Rotate as needed
-    RotatePiece(&pieceVec[EDGE][i], 0);
+    FixOrientation(&pieceVec[EDGE][i], 0, i + 1);
     pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i]);
   }
 
@@ -173,17 +173,17 @@ void BoardManager::InitCornersSides(Board* pBoard)
 
   // Push the first two corner pieces on to the top left and right corners
   // of the board rotating as needed
-  RotatePiece(&pieceVec[CORNER][0], 0);
+  FixOrientation(&pieceVec[CORNER][0], 0, 0);
   pBoard->boardVec[0].push_back(pieceVec[CORNER][0]);
-  RotatePiece(&pieceVec[CORNER][1], 1);
+  FixOrientation(&pieceVec[CORNER][1], 0, boardSize);
   pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][1]);
 
   for (int i = 0; i < boardSize - 1; i++)
   { // Loops through and push edge pieces on to the left and right edges
     // of the board rotating as needed
-    RotatePiece(&pieceVec[EDGE][i + boardSize - 1], 3);
+    FixOrientation(&pieceVec[EDGE][i + boardSize - 1], i, 0);
     pBoard->boardVec[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
-    RotatePiece(&pieceVec[EDGE][i + (boardSize * 2) - 2], 1);
+    FixOrientation(&pieceVec[EDGE][i + (boardSize * 2) - 2], i, boardSize);
     pBoard->boardVec[boardSize].push_back(pieceVec[EDGE]
                                                   [i + (boardSize * 2) - 2]);
   }
@@ -192,14 +192,14 @@ void BoardManager::InitCornersSides(Board* pBoard)
   { // Loops through and adds an edge piece to each vector for the bottom edge
     // of the board rotating as needed
     pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
-    RotatePiece(&pBoard->boardVec[i + 1].back(), 2);
+    FixOrientation(&pBoard->boardVec[i + 1].back(), boardSize, i);
   }
 
   // Push the last two corner pieces on to the bottom left and bottom right
   // corners of the board rotating as needed
-  RotatePiece(&pieceVec[CORNER][2], 2);
+  FixOrientation(&pieceVec[CORNER][2], boardSize, 0);
   pBoard->boardVec[0].push_back(pieceVec[CORNER][2]);
-  RotatePiece(&pieceVec[CORNER][3], 3);
+  FixOrientation(&pieceVec[CORNER][3], boardSize, boardSize);
   pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][3]);
 
 } // InitCornerSides()
@@ -229,9 +229,12 @@ int BoardManager::GetPattern(Board* pBoard, int yIndex, int xIndex,
 } // GetPattern()
 
   
-void BoardManager::RotatePiece(PuzzlePiece* piece, int mode)
+void BoardManager::FixOrientation(PuzzlePiece* piece, int y, int x)
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
+
+  // Calculate which mode to rotate with
+  int mode = GetMode(piece, y, x);
 
   if (piece->type == EDGE)         // If piece is edge, call to rotate edge
     RotateEdge(piece, mode);
@@ -293,9 +296,61 @@ void BoardManager::RotateCorner(PuzzlePiece* piece, int mode)
     // the edge pattern is facing the left and top of the origination orientation
     piece->orientation = 3;
   }
-  
 
 } // RotateEdge()
+
+
+int BoardManager::GetMode(PuzzlePiece* piece, int yIndex, int xIndex)
+{ // Returns an integer that corrospondes to which mode to send the rotate piece
+  // subroutines. Mode depends on which border or corner the piece is located
+
+  int mode = -1;    // Holds the mode that has been calculated
+
+  if (piece->type == EDGE)
+  { // If working out the mode for an edge piece, check index
+    if (yIndex == 0 && xIndex >= 1 && xIndex <= boardSize - 1)
+    { // If y = 0 and x is between 1 and boardSize - 1 set mode to top edge
+      mode = 0;
+    }
+    else if (yIndex >= 1 && yIndex <= boardSize - 1 && xIndex == boardSize)
+    { // If y is between 1 and boardSize - 1 and x = boardSize set mode to right
+      // edge
+      mode = 1;
+    }
+    else if (yIndex == boardSize && xIndex >= 1 && xIndex <= boardSize - 1)
+    { // If y = boardSize and x is between 1 and boardSize - 1, set mode to 
+      // bottom edge
+      mode = 2;
+    }
+    else if (yIndex >= 1 && yIndex <= boardSize - 1 && xIndex == 0)
+    { // If y is between 1 and boardSize - 1 and x = 0, set mode to left edge
+      mode = 3;
+    }
+    
+  }
+  else if (piece->type == CORNER)
+  {  // If working out the mode for an corner piece, check index
+    if (yIndex == 0 && xIndex == 0)
+    { // If y = 0 and x = 0 set mode to top left corner
+      mode = 0;
+    }
+    else if (yIndex == 0 && xIndex == boardSize)
+    { // If y = 0 and x = boardSize set mode to top right corner
+      mode = 1;
+    }
+    else if (yIndex == boardSize && xIndex == 0)
+    { // If y = boardSize and x = 0 set mode to bottom left corner
+      mode = 2;
+    }
+    else if (yIndex == boardSize && xIndex == boardSize)
+    { // If y = boardSize and x = boardSize set mode to bottom right corner
+      mode = 3;
+    }
+  }
+
+  return mode;     // Return calculated mode
+
+} // GetMode()
 
 
 BoardManager::~BoardManager()

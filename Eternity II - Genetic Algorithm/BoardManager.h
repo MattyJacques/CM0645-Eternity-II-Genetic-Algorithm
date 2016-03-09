@@ -87,6 +87,10 @@ private:
   // using the mode to determine what orientation value to set
   void RotateCorner(PuzzlePiece* piece, int mode);
 
+  // Returns an integer that corrospondes to which mode to send the rotate piece
+  // subroutines. Mode depends on which border or corner the piece is located
+  int GetMode(PuzzlePiece* piece, int yIndex, int xIndex);
+
 public:
   int boardSize;                      // How many pieces per board
 
@@ -117,7 +121,7 @@ public:
 
   // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
-  void RotatePiece(PuzzlePiece* piece, int mode);
+  void FixOrientation(PuzzlePiece* piece, int y, int x);
 
   // Destructor to delete the instance of the class
   ~BoardManager();

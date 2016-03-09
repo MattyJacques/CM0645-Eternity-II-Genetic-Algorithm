@@ -145,6 +145,21 @@ void Mutation::Swap(int boardID, bool startPiece)
   // Place first puzzle piece back in second puzzle piece slot
   pBoard->boardVec[pieceIndex2[0]][pieceIndex2[1]] = temp;
 
+  if (type == EDGE || type == CORNER)
+  { // Make sure the pieces are roatetd correctly if mutation occured on a corner 
+    // or edge piece
+
+    // Rotate piece 1
+    BoardManager::GetInstance()->FixOrientation(&pBoard->boardVec[pieceIndex1[0]]
+                                                [pieceIndex1[1]],pieceIndex1[0],
+                                                pieceIndex1[1]);
+
+    // Rotate piece 2
+    BoardManager::GetInstance()->FixOrientation(&pBoard->boardVec[pieceIndex2[0]]
+                                                [pieceIndex2[1]], pieceIndex2[0],
+                                                pieceIndex2[1]);
+  }
+
 } // Swap()
 
 
