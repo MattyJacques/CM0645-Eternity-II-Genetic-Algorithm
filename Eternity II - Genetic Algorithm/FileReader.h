@@ -28,12 +28,13 @@ private:
   // Returns the next number from the settings file to be loaded
   double GetNextSetting();
 
-  // Parses the selection, crossover and mutation methods from the settings file
-  void GetMethods(Settings* pSettings);
-
-   // Scans the directory for puzzle files, storing names in array for loading
-   // if the user wants to use one of them
+  // Scans the directory for puzzle files, storing names in array for loading
+  // if the user wants to use one of them
   void ScanFileDirectory();
+
+  // Takes string of data and parses into the array of integers to use to create		
+  // the puzzle piece		
+  void ParseData(std::string line, int pData[5]);
 
   // Creates a new puzzle piece and stores in the puzzle piece vector
   void CreatePiece(int pData[5]);
