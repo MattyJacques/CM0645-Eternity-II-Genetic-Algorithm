@@ -41,6 +41,10 @@ private:
   Mutation theMutation;                 // Object to handle mutation
   FitnessFunction theFitness;           // Object ot handle calculating fitness
 
+  // Outputs all of the loaded settings so the user can see what methods are
+  // used for solving attempt
+  void OutputSettings(Settings theSettings);
+
 public:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and

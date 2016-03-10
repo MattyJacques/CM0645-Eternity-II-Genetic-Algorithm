@@ -108,7 +108,8 @@ Settings FileReader::ReadSettingsFile()
     setData.eliteRate  = (int)GetNextSetting();
     setData.startCons  = GetNextSetting() == 1;
 
-    theFile.close();   // Close file after use
+    theFile.close();                     // Close file after use
+    printf("Loaded: settings.ini\n\n");  // Output loading complete
   }
 
   return setData;  // Return parsed data
@@ -151,12 +152,13 @@ void FileReader::ReadDataFile(const char* fileName)
 
     while (std::getline(theFile, line))
     { // While getline actually returns a line of data, proceed with parsing
-      ParseData(line, pData);
+      scanf(line.c_str(), "%i %i %i %i %i", pData[0], pData[1], pData[2], 
+            pData[3], pData[4]);
       CreatePiece(pData);
     } 
 
     theFile.close();                   // Close the file after use
-    printf("Loaded: %s \n", fileName); // Output success
+    printf("Loaded: %s\n\n", fileName); // Output success
   }
   else
   { // If the file was not open, output file not exist error
@@ -189,38 +191,6 @@ void FileReader::CreatePiece(int pData[5])
     BoardManager::GetInstance()->pieceVec[INNER].push_back(newPiece);
 
 } // CreatePiece()
-
-
-void FileReader::ParseData(std::string line, int pData[5])
-{ // Takes string of data and parses into the array of integers to use to create
-  // the puzzle piece
-
-  int j = 0;    // Holds the number of char for parsing
-
-  for (int i = 0; i <= 4; i++)
-  { // For loop to loop through and get the 5 bits of data that are on each
-    // line in a e2 file
-
-    std::string data; // Holds the data gathered from getline
-
-    while (line[j] != ' ' && j != line.length())
-    { // Loops though to check for whitespace in the file or it has reached
-      // the end of the data from that line. Data is added to the string on
-      // each pass
-
-      data += line[j];    // Add the char to the string to be converted
-      j++;                // Increment char counter for parsing
-    }
-
-    // If whitepsace was found in line, skip to next char
-    if (line[j] == ' ')
-      j++;
-
-    // Convert the data to a int and set it to appropriate element
-    pData[i] = std::stoi(data);
-  } // for (int i = 0; i <= 4; i++)
-
-} // ParseData()
 
 
 PieceType FileReader::CheckType(int* pData)

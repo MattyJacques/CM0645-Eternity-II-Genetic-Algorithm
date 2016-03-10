@@ -29,11 +29,46 @@ void GeneticAlgorithm::Setup(Settings theSettings)
   // Set if the start piece constraint is active
   startPiece = theSettings.startCons;
 
+  // Output all settings to user
+  OutputSettings(theSettings);
+
   // Initialise the board manager with the board size and number of patterns
   BoardManager::GetInstance()->InitialiseData(theSettings.boardSize, 
                                               theSettings.patternNum);
 
 } // GeneticAlgorithm()
+
+
+void GeneticAlgorithm::OutputSettings(Settings theSettings)
+{ // Outputs all of the loaded settings so the user can see what methods are
+  // used for solving attempt
+
+  printf("Board Size: %i\nNumber of Patterns: %i\nPopulation Size: %i\n"
+         "Mutation Rate: %.2f%%\nElitism Rate: %i\n", theSettings.boardSize, 
+         theSettings.patternNum, theSettings.popSize, theSettings.mutRate, theSettings.eliteRate);
+
+  if (theSettings.selectType == ROULETTE)
+    printf("Selection: Roulette\n");
+  else if (theSettings.selectType == TOURNAMENT)
+    printf("Selection: Tournament\n");
+
+  if (theSettings.crossType == ONEPOINT)
+    printf("Crossover: One-Point\n");
+  else if (theSettings.crossType == TWOPOINT)
+    printf("Crossover: Two-Point\n");
+
+  if (theSettings.mutType == SWAP)
+    printf("Mutation: Swap\n\n");
+  else if (theSettings.mutType == ROTATE)
+    printf("Mutation: Rotate\n\n");
+  else if (theSettings.mutType == ROTATESWAP)
+    printf("Mutation: Rotate & Swap\n\n");
+  else if (theSettings.mutType == REGIONROTATE)
+    printf("Mutation: Region Rotate\n\n");
+  else if (theSettings.mutType == REGIONSWAP)
+    printf("Mutation: Region Swap\n\n");
+
+} // OutputSettings()
 
 
 void GeneticAlgorithm::RunGA()

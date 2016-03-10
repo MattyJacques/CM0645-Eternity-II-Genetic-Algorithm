@@ -38,10 +38,6 @@ private:
   // Creates a new puzzle piece and stores in the puzzle piece vector
   void CreatePiece(int pData[5]);
 
-  // Takes string of data and parses into the array of integers to use to create
-  // the puzzle piece
-  void ParseData(std::string line, int pData[5]);
-
   // Checks to see what type of piece is currently being read, returning the
   // answer
   PieceType CheckType(int* pData);
