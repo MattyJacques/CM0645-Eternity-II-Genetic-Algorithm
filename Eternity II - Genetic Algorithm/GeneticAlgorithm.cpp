@@ -43,20 +43,26 @@ void GeneticAlgorithm::OutputSettings(Settings theSettings)
 { // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
 
+  // Print out the data on the board along with the population size, mutation
+  // rate and elitism rate
   printf("Board Size: %i\nNumber of Patterns: %i\nPopulation Size: %i\n"
          "Mutation Rate: %.2f%%\nElitism Rate: %i\n", theSettings.boardSize, 
-         theSettings.patternNum, theSettings.popSize, theSettings.mutRate, theSettings.eliteRate);
+         theSettings.patternNum, theSettings.popSize, theSettings.mutRate, 
+         theSettings.eliteRate);
 
+  // Print out the enum value as a string for selection
   if (theSettings.selectType == ROULETTE)
     printf("Selection: Roulette\n");
   else if (theSettings.selectType == TOURNAMENT)
     printf("Selection: Tournament\n");
 
+  // Print out the enum value as a string for crossover
   if (theSettings.crossType == ONEPOINT)
     printf("Crossover: One-Point\n");
   else if (theSettings.crossType == TWOPOINT)
     printf("Crossover: Two-Point\n");
 
+  // Print out the enum value as a string for mutation
   if (theSettings.mutType == SWAP)
     printf("Mutation: Swap\n\n");
   else if (theSettings.mutType == ROTATE)
