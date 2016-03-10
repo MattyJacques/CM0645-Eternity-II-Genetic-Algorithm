@@ -8,27 +8,30 @@
 #include <iostream>           // DEBUG
 
 
-void GeneticAlgorithm::Setup(int eliteRate, double mutationRate, int population, int boardSize, int patNum,  
-                             CrossoverType crossType, SelectionType selectType, 
-                             MutateType mutType, bool startCons)
+void GeneticAlgorithm::Setup(Settings theSettings)
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
 
   // Set up the crossover object using the input methods
-  theCrossover.SetMethod(crossType, selectType, eliteRate);
+  theCrossover.SetMethod(theSettings.crossType, theSettings.selectType, 
+                         theSettings.eliteRate);
 
   // Set up the mutation method using the input methods
-  theMutation.Setup(mutType, mutationRate, population);
+  theMutation.Setup(theSettings.mutType, theSettings.mutRate, 
+                    theSettings.popSize);
 
-  popSize = population;     // Set the population for each generation
-  maxFitness = 0;           // Initialise maximum fitness GA has reached
-  maxFitnessOfGen = 0;      // Initialise maximum fitness of current generation
-  genCount = 0;             // Initialise generation count
-  startPiece = startCons;   // Set if the start piece constraint is active
+  popSize = theSettings.popSize; // Set the population for each generation
+  maxFitness = 0;                // Initialise maximum fitness GA has reached
+  maxFitnessOfGen = 0;           // Init maximum fitness of current generation
+  genCount = 0;                  // Init generation count
+
+  // Set if the start piece constraint is active
+  startPiece = theSettings.startCons;
 
   // Initialise the board manager with the board size and number of patterns
-  BoardManager::GetInstance()->InitialiseData(boardSize, patNum);
+  BoardManager::GetInstance()->InitialiseData(theSettings.boardSize, 
+                                              theSettings.patternNum);
 
 } // GeneticAlgorithm()
 

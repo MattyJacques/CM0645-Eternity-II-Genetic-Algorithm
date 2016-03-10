@@ -7,21 +7,13 @@ using namespace std;
 
 
 void Initialise(GeneticAlgorithm* theGA)
-{ // Creates instances for the puzzle board and genetic algorithm, asks the
-  // user for input for the custom variables for the solver.
-
-  int boardSize = 0;            // Holds grid size, official EII = 16
-  int patternNum = 0;           // Holds how many patterns to use in board
-  double eliteRate = 0;         // Holds how many elites in population
-  double mutationRate = 0;      // Holds the rate of mutation in GA
-  int popSize = 0;
-  
-  // INSERT FILE READING SETTINGS
-
-  theGA->Setup(1, 1, 1000, 16, 22, ONEPOINT, TOURNAMENT, SWAP, false);
+{ // Calls to read all the data from the settings file and data files. Sets up
+  // the algorithm with the loaded values
   
   FileReader theReader;
-  theReader.OpenFile("Puzzles/256 - 22.e2");
+  theGA->Setup(theReader.ReadSettingsFile());
+  
+  theReader.ReadDataFile("Puzzles/256 - 22.e2");
   
 } // Initialise()
 

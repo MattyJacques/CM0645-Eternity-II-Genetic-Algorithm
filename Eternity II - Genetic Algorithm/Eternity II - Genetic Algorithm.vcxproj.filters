@@ -58,22 +58,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Puzzles\16.b">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Puzzles\100.b">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Puzzles\100.d">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Puzzles\256.e2">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Puzzles\FitTest.e2">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Puzzles\Template.e2">
+    <None Include="settings.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

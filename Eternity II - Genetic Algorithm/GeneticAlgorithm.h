@@ -12,6 +12,22 @@
 #include "Mutation.h"               // Mutation of candidates
 
 
+struct Settings
+{ // Holds data loaded from the settings file to be used to set up the
+  // algorithm.
+
+  int boardSize;               // Size of the board
+  int patternNum;              // Number of patterns in board
+  int popSize;                 // How many candidates in generation
+  int eliteRate;               // How many candidates to save per generation
+  SelectionType selectType;    // Which selection method to use
+  CrossoverType crossType;     // Which crossover method to use
+  MutateType mutType;          // Which mutation method to use
+  double mutRate;              // Rate of mutation to apply
+  bool startCons;              // Whether the start constraint is active
+};
+
+
 class GeneticAlgorithm
 {
 
@@ -29,9 +45,7 @@ public:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
-  void Setup(int eliteRate, double mutationRate, int popSize,
-             int boardSize, int patNum, CrossoverType crossType,
-             SelectionType selectType, MutateType mutType, bool startCons);
+  void Setup(Settings theSettings);
 
   // Main function of the GA that continually runs
   void RunGA();

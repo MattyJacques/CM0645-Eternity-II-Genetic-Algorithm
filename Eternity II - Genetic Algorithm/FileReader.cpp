@@ -5,6 +5,8 @@
 
 
 #include "FileReader.h"     // Include the header for the class
+#include "Crossover.h"      // Selection and Crossover type
+#include "Mutation.h"       // Mutation type
 #include <iostream>         // Include input and output library
 #include <windows.h>        // Include file directory functions
 
@@ -30,14 +32,18 @@ FileReader::FileReader()
 } // FileReader()
 
 
-void FileReader::OpenFile(const char* fileName)
-{ // Opens the file using the filename provided then calls to read the file
+bool FileReader::OpenFile(const char* fileName)
+{ // Opens the file using the filename provided return whether successful
+  
+  bool result = false;
 
   // Open the file
   theFile.open(fileName);
 
-  // Read the piece file after opening
-  ReadPieceFile();
+  if (theFile.is_open())
+    result = true;
+
+  return result;
 
 } // OpenFile()
 
@@ -80,29 +86,81 @@ void FileReader::ScanFileDirectory()
 } // ScanFileDirectory()
 
 
-void FileReader::ReadPieceFile()
-{ // Reads in how many pieces are in the file then sorts information from
-  // file into the puzzle peice array. Outputs error if file does not exist
+Settings FileReader::ReadSettingsFile()
+{ // Reads the settings file named "settings.ini" in the root directory, 
+  // setting the appropriate values that have been read in to the algorithm
 
-  std::string line;                     // Stores current like to be parsed
-  int pData[5];                         // Holds parsed data from the line
+  Settings setData;    // Holds all of the loaded settings data
 
-  if (theFile.is_open())
+  if (OpenFile("settings.ini"))
   { // Checks to see if the file is open before proceeding with reading of the
     // file
+    
+    // Parse the data from the settings file using GetNextSetting(), setting 
+    // value to appropriate fields in settings stuct
+    setData.boardSize  = (int)GetNextSetting();
+    setData.patternNum = (int)GetNextSetting();
+    setData.popSize    = (int)GetNextSetting();
+    setData.selectType = (SelectionType)(int)GetNextSetting();
+    setData.crossType  = (CrossoverType)(int)GetNextSetting();
+    setData.mutType    = (MutateType)(int)GetNextSetting();
+    setData.mutRate    = GetNextSetting();
+    setData.eliteRate  = (int)GetNextSetting();
+    setData.startCons  = GetNextSetting() == 1;
+
+    theFile.close();   // Close file after use
+  }
+
+  return setData;  // Return parsed data
+
+} // ReadSettingsFile()
+
+
+double FileReader::GetNextSetting()
+{ // Returns the next number from the settings file to be loaded
+
+  std::string line;         // Stores current line to be parsed
+  double data = -1;         // Holds the data that has been parsed
+
+  while (std::getline(theFile, line))
+  { // Read in the next line
+    if (!line.empty() && line[0] != '*')
+    { // If line is not empty or comment line, parse the data in to data var
+
+      char temp[25];                                     // Throwaway label
+      sscanf_s(line.c_str(), "%s %lf", temp, 25, &data); // Parse value
+      break;                                             // Break out of loop
+    }
+  }
+
+  return data; // Return parsed data
+
+} // GetNextSetting()
+
+
+void FileReader::ReadDataFile(const char* fileName)
+{ // Reads the piece file that with the name that has been passed in storing
+  // piece info in the piece collection vector
+
+  if (OpenFile(fileName))
+  { // Checks to see if the file is open before proceeding with reading of the
+    // file
+
+    std::string line;                     // Stores current line to be parsed
+    int pData[5];                         // Holds parsed data from the line
 
     while (std::getline(theFile, line))
     { // While getline actually returns a line of data, proceed with parsing
       ParseData(line, pData);
       CreatePiece(pData);
-  
     } 
 
-    theFile.close(); // Close the file after use
+    theFile.close();                   // Close the file after use
+    printf("Loaded: %s \n", fileName); // Output success
   }
   else
   { // If the file was not open, output file not exist error
-    std::cout << "File does not exist" << std::endl;
+    printf("File does not exist.\n");
   }
 
 } // ReadPieceFile()
@@ -197,7 +255,7 @@ PieceType FileReader::CheckType(int* pData)
     break;
 
   default: // Output error string
-    std::cout << "Piece type check error" << std::endl;
+    printf("Piece type check error\n");
 
   }
 

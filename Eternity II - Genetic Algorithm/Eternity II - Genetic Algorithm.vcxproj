@@ -36,12 +36,7 @@
     <ClInclude Include="Mutation.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Puzzles\100.b" />
-    <None Include="Puzzles\100.d" />
-    <None Include="Puzzles\16.b" />
-    <None Include="Puzzles\256.e2" />
-    <None Include="Puzzles\FitTest.e2" />
-    <None Include="Puzzles\Template.e2" />
+    <None Include="settings.ini" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BEDC2A5B-A558-42C8-BFFF-7227ECC58B1F}</ProjectGuid>
