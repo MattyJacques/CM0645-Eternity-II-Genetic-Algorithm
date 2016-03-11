@@ -36,6 +36,13 @@
     <ClInclude Include="Mutation.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Puzzles\BoardSize 10 - Pattern Num 16.e2" />
+    <None Include="Puzzles\BoardSize 16 - Pattern Num 22.e2" />
+    <None Include="Puzzles\BoardSize 4 - Pattern Num 2.e2" />
+    <None Include="Puzzles\BoardSize 4 - Pattern Num 4.e2" />
+    <None Include="Puzzles\BoardSize 8 - Pattern Num 16.e2" />
+    <None Include="Puzzles\BoardSize 8 - Pattern Num 4.e2" />
+    <None Include="Puzzles\BoardSize 8 - Pattern Num 8.e2" />
     <None Include="settings.ini" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -10,10 +10,7 @@ void Initialise(GeneticAlgorithm* theGA)
 { // Calls to read all the data from the settings file and data files. Sets up
   // the algorithm with the loaded values
   
-  FileReader theReader;
-  theGA->Setup(theReader.ReadSettingsFile());
   
-  theReader.ReadDataFile("Puzzles/256 - 22.e2");
   
 } // Initialise()
 
@@ -24,7 +21,9 @@ void main()
   // algorithm loop
 
   GeneticAlgorithm theGA;    // Create algorithm object
-  Initialise(&theGA);        // Initialise object methods
+  FileReader theReader;
+  theGA.Setup(theReader.ReadSettingsFile());
+  theReader.ReadDataFile("Puzzles/BoardSize 4 - Pattern Num 2.e2");
   theGA.RunGA();               // Run the algorithm loop
 
 } // main()
