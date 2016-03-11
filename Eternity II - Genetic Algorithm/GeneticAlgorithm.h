@@ -33,8 +33,8 @@ class GeneticAlgorithm
 
 private:
   int popSize;                          // Holds the population size
-  int maxFitness;                       // Holds the maximum fitness reached
-  int maxFitnessOfGen;                  // Holds the max fitness of current gen
+  int maxFitness;                       // Fitness of 100% candidate
+  int maxFitnessReach;                  // Holds the max fitness of current gen
   int genCount;                         // Count of how many generations passed
   bool startPiece;                      // Switch for start piece constraint
   Crossover theCrossover;               // Object to handle crossover
@@ -44,6 +44,10 @@ private:
   // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
   void OutputSettings(Settings theSettings);
+
+  // Takes in the size of board and calculates what the fitness of a 100%
+  // solved candidate would be so the algorithm can quit when goal is achieved
+  void CalcMaxFitness(int boardSize);
 
 public:
   // Constructor that sets the elite, crossover and mutation rates, along with

@@ -22,8 +22,8 @@ void GeneticAlgorithm::Setup(Settings theSettings)
                     theSettings.popSize);
 
   popSize = theSettings.popSize; // Set the population for each generation
-  maxFitness = 0;                // Initialise maximum fitness GA has reached
-  maxFitnessOfGen = 0;           // Init maximum fitness of current generation
+  maxFitness = 0;                // Initialise maximum fitness of 100% candidate
+  maxFitnessReach = 0;           // Init maximum fitness GA has reached
   genCount = 0;                  // Init generation count
 
   // Set if the start piece constraint is active
@@ -31,6 +31,9 @@ void GeneticAlgorithm::Setup(Settings theSettings)
 
   // Output all settings to user
   OutputSettings(theSettings);
+
+  // Calculate the maximum fitness of a 100% solved candidate
+  CalcMaxFitness(theSettings.boardSize);
 
   // Initialise the board manager with the board size and number of patterns
   BoardManager::GetInstance()->InitialiseData(theSettings.boardSize, 
@@ -77,6 +80,28 @@ void GeneticAlgorithm::OutputSettings(Settings theSettings)
 } // OutputSettings()
 
 
+void GeneticAlgorithm::CalcMaxFitness(int boardSize)
+{ // Takes in the size of board and calculates what the fitness of a 100%
+  // solved candidate would be so the algorithm can quit when goal is achieved
+
+  // Calc max fitness of corners being on corner slots
+  maxFitness += 4 * 25;    
+  
+  // Calc max fitness of corner pattern matches
+  maxFitness += 4 * 20;    
+
+  // Calc max fitness of edge pieces being on edge slots
+  maxFitness += ((boardSize - 2) * 4) * 15;
+
+  // Calc max fitness of edge pieces pattern match
+  maxFitness += ((((boardSize - 2) * 2) - 1) * 4) * 5;
+
+  // Calc max fitness of inner pieces pattern match
+  maxFitness += (boardSize - 3) * (boardSize - 3) * 2;
+
+} // CalcMaxFitness()
+
+
 void GeneticAlgorithm::RunGA()
 { // Main function of the GA that continually runs
 
@@ -87,17 +112,17 @@ void GeneticAlgorithm::RunGA()
     BoardManager::GetInstance()->currBoards->push_back(newBoard);
   }
 
-  while (true)
+  while (maxFitnessReach != maxFitness)
   { // While the solution has not been found, continue working towards solution
 
     genCount++;            // Increment the count of generations
-    maxFitnessOfGen = 0;   // Set maximum fitness of this generation
+    maxFitnessReach = 0;   // Set maximum fitness of this generation
 
     for (int i = 0; i < popSize; i++)
     { // Loop through every boards of population checking the fitness
 
       if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i))
-                                  > maxFitnessOfGen)
+                                  > maxFitnessReach)
       { // If next maximum fitness of generation found, store new max fitness
         // and check for max fitness this run of algorithm
 
@@ -108,7 +133,7 @@ void GeneticAlgorithm::RunGA()
         }
 
         // Set the new maximum fitness of generation
-        maxFitnessOfGen = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+        maxFitnessReach = BoardManager::GetInstance()->currBoards->at(i).fitScore;
       }
     }
 
