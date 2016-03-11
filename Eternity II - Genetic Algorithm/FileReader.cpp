@@ -75,8 +75,11 @@ void FileReader::ScanFileDirectory()
         // Convert filename from wide string to standard string
         std::string filename(convertString.begin(), convertString.end());
 
+        // Add folder name to the path
+        std::string fullpath = "Puzzles/" + filename;
+
         // Push filename on to vector
-        filenames.push_back(filename);
+        filenames.push_back(fullpath);
       }
 
     } while (FindNextFile(find, &fileData)); // If another file found, do again
@@ -112,6 +115,7 @@ Settings FileReader::ReadSettingsFile()
     printf("Loaded: settings.ini\n\n");  // Output loading complete
   }
 
+  ReadDataFile(setData.boardSize, setData.patternNum);
   return setData;  // Return parsed data
 
 } // ReadSettingsFile()
@@ -139,11 +143,14 @@ double FileReader::GetNextSetting()
 } // GetNextSetting()
 
 
-void FileReader::ReadDataFile(const char* fileName)
-{ // Reads the piece file that with the name that has been passed in storing
-  // piece info in the piece collection vector
+void FileReader::ReadDataFile(int size, int pattern)
+{ // Reads the piece file with the file name that matches the information passed
+  // as parameter storing piece info in the piece collection vector
 
-  if (OpenFile(fileName))
+  // Get the index of the file name matching the data of the board size and
+  // number of patterns
+  int index = GetDataFilename(size, pattern);
+  if (OpenFile(filenames[index].c_str()))
   { // Checks to see if the file is open before proceeding with reading of the
     // file
 
@@ -156,8 +163,8 @@ void FileReader::ReadDataFile(const char* fileName)
       CreatePiece(pData);
     } 
 
-    theFile.close();                   // Close the file after use
-    printf("Loaded: %s\n\n", fileName); // Output success
+    theFile.close();                                    // Close the file after use
+    printf("Loaded: %s\n\n", filenames[index].c_str()); // Output success
   }
   else
   { // If the file was not open, output file not exist error
@@ -165,6 +172,37 @@ void FileReader::ReadDataFile(const char* fileName)
   }
 
 } // ReadPieceFile()
+
+
+int FileReader::GetDataFilename(int size, int pattern)
+{ // Find the correct filename from the vector of puzzle file names found
+  // during the directory scan
+
+  std::string name = "Puzzles/BoardSize ";
+  int result = 0;
+  char boardSize[3];
+  char patternNum[3];
+
+  _itoa_s(size, boardSize, 10);
+  _itoa_s(pattern, patternNum, 10);
+
+  name += boardSize;
+  name += " - Pattern ";
+  name += patternNum;
+  name += ".e2";
+
+  for (int i = 0; i < filenames.size(); i++)
+  {
+    if (filenames[i] == name)
+    {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+
+} // GetDataFilename()
 
 
 void FileReader::ParseData(std::string line, int pData[5])

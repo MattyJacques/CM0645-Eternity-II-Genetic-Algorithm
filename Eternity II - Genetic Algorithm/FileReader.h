@@ -18,7 +18,6 @@ class FileReader
 {
 
 private:
-  static FileReader* pInstance;       // Holds the current instance for the class
   std::ifstream theFile;              // File open to read from
   std::vector<std::string> filenames; // Holds all filenames held in directory
 
@@ -31,6 +30,10 @@ private:
   // Scans the directory for puzzle files, storing names in array for loading
   // if the user wants to use one of them
   void ScanFileDirectory();
+
+  // Find the correct filename from the vector of puzzle file names found
+  // during the directory scan
+  int GetDataFilename(int size, int pattern);
 
   // Takes string of data and parses into the array of integers to use to create		
   // the puzzle piece		
@@ -51,8 +54,8 @@ public:
   // setting the appropriate values that have been read in to the algorithm
   Settings ReadSettingsFile();
 
-  // Reads the piece file with the file name that has been passed in storing
-  // piece info in the piece collection vector
-  void ReadDataFile(const char* fileName);
+  // Reads the piece file with the file name that matches the information passed
+  // as parameter storing piece info in the piece collection vector
+  void ReadDataFile(int size, int pattern);
 };
 

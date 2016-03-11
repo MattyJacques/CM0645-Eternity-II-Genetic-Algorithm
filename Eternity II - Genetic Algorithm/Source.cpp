@@ -23,7 +23,6 @@ void main()
   GeneticAlgorithm theGA;    // Create algorithm object
   FileReader theReader;
   theGA.Setup(theReader.ReadSettingsFile());
-  theReader.ReadDataFile("Puzzles/BoardSize 4 - Pattern Num 2.e2");
   theGA.RunGA();               // Run the algorithm loop
 
 } // main()
