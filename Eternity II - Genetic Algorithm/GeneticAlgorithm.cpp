@@ -25,6 +25,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)
   maxFitness = 0;                // Initialise maximum fitness of 100% candidate
   maxFitnessReach = 0;           // Init maximum fitness GA has reached
   genCount = 0;                  // Init generation count
+  maxMatches = 0;                // Init maximum matches in candidate
 
   // Set if the start piece constraint is active
   startPiece = theSettings.startCons;
@@ -83,21 +84,19 @@ void GeneticAlgorithm::OutputSettings(Settings theSettings)
 void GeneticAlgorithm::CalcMaxFitness(int boardSize)
 { // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
-
-  // Calc max fitness of corners being on corner slots
-  maxFitness += 4 * 25;    
+  // along with calculating how many matches are in a 100% board 
   
-  // Calc max fitness of corner pattern matches
-  maxFitness += 4 * 20;    
+  // Calc max fitness & max pattern matches of corner pattern matches
+  maxFitness += 4 * 20;
+  maxMatches += 8;
 
-  // Calc max fitness of edge pieces being on edge slots
-  maxFitness += ((boardSize - 2) * 4) * 15;
-
-  // Calc max fitness of edge pieces pattern match
+  // Calc max fitness & max pattern matches of edge pieces pattern match
   maxFitness += ((((boardSize - 2) * 2) - 1) * 4) * 5;
+  maxMatches += (((boardSize - 2) * 2) - 1) * 4;
 
-  // Calc max fitness of inner pieces pattern match
+  // Calc max fitness & max pattern matches of inner pieces pattern match
   maxFitness += (boardSize - 3) * (boardSize - 3) * 2;
+  maxMatches += (boardSize - 3) * (boardSize - 3) * 2;
 
 } // CalcMaxFitness()
 
@@ -116,29 +115,18 @@ void GeneticAlgorithm::RunGA()
   { // While the solution has not been found, continue working towards solution
 
     genCount++;            // Increment the count of generations
-    maxFitnessReach = 0;   // Set maximum fitness of this generation
+    matchCount = 0;        // Reset max amount of matches found
+    maxFitnessReach = 0;   // Reset max fitness reached
 
-    for (int i = 0; i < popSize; i++)
-    { // Loop through every boards of population checking the fitness
-
-      if (theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i))
-                                  > maxFitnessReach)
-      { // If next maximum fitness of generation found, store new max fitness
-        // and check for max fitness this run of algorithm
-
-        if (maxFitness < BoardManager::GetInstance()->currBoards->at(i).fitScore)
-        { // Check to see if this fitness is the new maximum fitness of run if
-          // so, store new fitness record
-          maxFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
-        }
-
-        // Set the new maximum fitness of generation
-        maxFitnessReach = BoardManager::GetInstance()->currBoards->at(i).fitScore;
-      }
-    }
+    // Check fitness of the population
+    DoFitness();
 
     // Output summary of generation
-    std::cout << "Generation " << genCount << ": " << maxFitness << std::endl;
+    float fitPercent = ((float)maxFitnessReach / maxFitness) * 100.0f;
+    float matchPercent = ((float)matchCount / maxMatches) * 100.0f;
+    printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n", 
+            genCount, maxFitnessReach, maxFitness, fitPercent, matchCount, 
+            maxMatches, matchPercent);
 
     // Complete crossover of population
     theCrossover.DoCrossover(popSize);
@@ -148,21 +136,30 @@ void GeneticAlgorithm::RunGA()
 
   } // Main algorithm loop
 
-  /*
-  start
-  set generation
-  get population size
-  randomly create first generation
-  evaluate generation
-  sort generation by fitness
-  decide elites
-  crossover
-  mutation
-  end 
-  
-  */
-
 } // RunGA()
+
+
+void GeneticAlgorithm::DoFitness()
+{ // Checks the fitness of the population and checks to see if there is a new
+  // fitness or pattern match record
+
+  for (int i = 0; i < popSize; i++)
+  { // Loop through every boards of population checking the fitness
+    int matches = theFitness.CheckFitness(&BoardManager::GetInstance()->
+      currBoards->at(i));
+
+    // Check to see if new highest match count
+    if (matches > matchCount)
+      matchCount = matches;
+
+    if (BoardManager::GetInstance()->currBoards->at(i).fitScore >
+      maxFitnessReach)
+    { // If next maximum fitness of generation found, store new max fitness
+      maxFitnessReach = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+    }
+  }
+
+} // DoFitness()
 
 
 int GeneticAlgorithm::GenRandomNum(int min, int max)

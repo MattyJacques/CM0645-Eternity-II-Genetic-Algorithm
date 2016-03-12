@@ -27,42 +27,42 @@ private:
 
   // Checks the top left corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces
-  void CheckTopLeft();
+  int CheckTopLeft();
 
   // Checks the top right corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces
-  void CheckTopRight();
+  int CheckTopRight();
 
   // Checks the bottom left corner to see if the piece is the correct type and
   // if the edges of that piece match adjacent pieces
-  void CheckBottomLeft();
+  int CheckBottomLeft();
 
   // Checks the bottom right corner to see if the piece is the correct type and
   // if the edges of that piece match adjacent pieces
-  void CheckBottomRight();
+  int CheckBottomRight();
 
   // Checks the slots along the top edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckTopEdge();
+  int CheckTopEdge();
 
   // Checks the slots along the left edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckLeftEdge();
+  int CheckLeftEdge();
 
   // Checks the slots along the right edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckRightEdge();
+  int CheckRightEdge();
 
   // Checks the slots along the bottom edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckBottomEdge();
+  int CheckBottomEdge();
 
   // Checks the pieces in the inner slots of the board for matching connections
-  void CheckInnerPieces();
+  int CheckInnerPieces();
 
 public:
   // Initialse board and board manager pointers

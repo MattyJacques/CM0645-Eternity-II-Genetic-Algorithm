@@ -26,6 +26,13 @@ struct PuzzlePiece
   PieceType type;   // Holds the type of the puzzle piece, example corner, edge
   int orientation;  // Holds the rotation of the puzzle piece
   int segments[4];  // Holds the pattern for each segment of the piece
+
+  // Overrides the less than operator for sorting to sort by ID, debugging
+  bool operator < (const PuzzlePiece thePiece) const
+  {
+    // return if true fitness score is less than comparison
+    return (pieceID < thePiece.pieceID);
+  }
 };
 
 
@@ -80,16 +87,10 @@ private:
   void SwapStartPiece(Board* pBoard, int yIndex, int xIndex);
 
   // Rotates an edge piece so the edge pattern matches the edge of the board
-  // using the mode to determine what orientation value to set
-  void RotateEdge(PuzzlePiece* piece, int mode);
+  void RotateEdge(PuzzlePiece* piece, int xIndex, int yIndex);
 
   // Rotates an corner piece so the corner pattern matches the edge of the board
-  // using the mode to determine what orientation value to set
-  void RotateCorner(PuzzlePiece* piece, int mode);
-
-  // Returns an integer that corrospondes to which mode to send the rotate piece
-  // subroutines. Mode depends on which border or corner the piece is located
-  int GetMode(PuzzlePiece* piece, int yIndex, int xIndex);
+  void RotateCorner(PuzzlePiece* piece, int xIndex, int yIndex);
 
 public:
   int boardSize;                      // How many pieces per board

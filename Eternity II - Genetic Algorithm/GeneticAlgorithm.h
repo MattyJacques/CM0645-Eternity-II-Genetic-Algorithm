@@ -35,6 +35,8 @@ private:
   int popSize;                          // Holds the population size
   int maxFitness;                       // Fitness of 100% candidate
   int maxFitnessReach;                  // Holds the max fitness of current gen
+  int matchCount;                       // Max amount pattern matches reached
+  int maxMatches;                       // Max amount of pattern matches at 100%
   int genCount;                         // Count of how many generations passed
   bool startPiece;                      // Switch for start piece constraint
   Crossover theCrossover;               // Object to handle crossover
@@ -45,8 +47,13 @@ private:
   // used for solving attempt
   void OutputSettings(Settings theSettings);
 
+  // Checks the fitness of the population and checks to see if there is a new
+  // fitness or pattern match record
+  void DoFitness();
+
   // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
+  // along with calculating how many matches are in a 100% board
   void CalcMaxFitness(int boardSize);
 
 public:

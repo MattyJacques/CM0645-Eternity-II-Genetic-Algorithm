@@ -64,6 +64,27 @@ private:
   void GetDuplicates(Board* pBoard, std::vector<PuzzlePiece>* pieces, 
                      std::vector<std::vector<int>>* indexes);
 
+  void GetDuplicatesV2(Board* pBoard, std::vector<PuzzlePiece>* pieces, 
+                       std::vector<std::vector<int>>* indexes);
+
+  // Checks all corners to see if there are any duplicate pieces within the
+  // corner slots, if so store the piece and the index of the duplicate slot
+  void CheckCorners(Board* pBoard, std::vector<PuzzlePiece>* pieces, 
+                    std::vector<std::vector<int>>* indexes, int boardSize,
+                    std::vector<bool>* checkIDs);
+
+  // Checks all edges to see if there are any duplicate pieces within the
+  // edge slots, if so store the piece and the index of the duplicate slot
+  void CheckEdges(Board* pBoard, std::vector<PuzzlePiece>* pieces,
+                  std::vector<std::vector<int>>* indexes, int boardSize,
+                  std::vector<bool>* checkIDs);
+
+  // Checks all inner slots to see if there are any duplicate pieces within the
+  // inner slots, if so store the piece and the index of the duplicate slot
+  void CheckInners(Board* pBoard, std::vector<PuzzlePiece>* pieces,
+                   std::vector<std::vector<int>>* indexes, int boardSize,
+                   std::vector<bool>* checkIDs);
+
   // Uses the vector of pieces along with the vector of slot indexes to place
   // pieces that are needed to to have every unique puzzle piece with in the
   // candidate

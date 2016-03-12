@@ -1,18 +1,5 @@
-#include <iostream>
 #include "GeneticAlgorithm.h"     // To create and call the GA
-#include "FileReader.h"
-
-
-using namespace std;
-
-
-void Initialise(GeneticAlgorithm* theGA)
-{ // Calls to read all the data from the settings file and data files. Sets up
-  // the algorithm with the loaded values
-  
-  
-  
-} // Initialise()
+#include "FileReader.h"           // To read in settings
 
 
 void main()
@@ -20,9 +7,9 @@ void main()
   // of the genetic algorithm then call the main running of the genetic
   // algorithm loop
 
-  GeneticAlgorithm theGA;    // Create algorithm object
-  FileReader theReader;
-  theGA.Setup(theReader.ReadSettingsFile());
-  theGA.RunGA();               // Run the algorithm loop
+  GeneticAlgorithm theGA;                       // Create algorithm object
+  FileReader theReader;                         // Create file reader object
+  theGA.Setup(theReader.ReadSettingsFile());    // Read algorithms settings
+  theGA.RunGA();                                // Run the algorithm
 
 } // main()
