@@ -41,7 +41,7 @@ void Crossover::DoCrossover(int popSize)
       SelectParents(parents, popSize);
 
     Reproduce(parents);
-    CheckDuplication();
+    //CheckDuplication();
 
   }
 
@@ -220,22 +220,22 @@ void Crossover::OnePoint(int parents[2])
     { // If we are below the crossover point
 
       // Add the piece from parent 1 to offspring 1
-      offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+      offspring[0].boardVec[xIndex].push_back(BoardManager::GetInstance()->
         prevBoards->at(parents[0]).boardVec[xIndex][yIndex]);
 
       // Add the piece from parent 2 to offspring 2
-      offspring[1].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+      offspring[1].boardVec[xIndex].push_back(BoardManager::GetInstance()->
         prevBoards->at(parents[1]).boardVec[xIndex][yIndex]);
     }
     else if (i > crossPoint)
     { // If we are greater than crossover point
 
       // Add the piece from parent 1 to offspring 2
-      offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+      offspring[0].boardVec[xIndex].push_back(BoardManager::GetInstance()->
                           prevBoards->at(parents[1]).boardVec[xIndex][yIndex]);
 
       // Add the piece from parent 2 to offspring 1
-      offspring[1].boardVec[yIndex].push_back(BoardManager::GetInstance()->
+      offspring[1].boardVec[xIndex].push_back(BoardManager::GetInstance()->
                           prevBoards->at(parents[0]).boardVec[xIndex][yIndex]);
     }
 

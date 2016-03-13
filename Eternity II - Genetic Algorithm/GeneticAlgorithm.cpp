@@ -132,7 +132,7 @@ void GeneticAlgorithm::RunGA()
     theCrossover.DoCrossover(popSize);
 
     // Complete mutation of population
-    theMutation.DoMutation(startPiece);
+    //theMutation.DoMutation(startPiece);
 
   } // Main algorithm loop
 
