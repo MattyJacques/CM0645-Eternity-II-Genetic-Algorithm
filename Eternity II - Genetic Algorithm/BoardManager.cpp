@@ -67,9 +67,9 @@ void BoardManager::InitFullBoard(Board* pBoard, bool startPiece)
   // Add pieces to empty vectors
   AddPieces(pBoard);
 
-  // If starting piece constraint is active and piece 139 is not in slot [8][7]
-  // place piece 139 in slot [8][7]
-  if (startPiece && pBoard->boardVec[8][7].pieceID != 139)
+  // If starting piece constraint is active and piece 139 is not in slot [7][8]
+  // place piece 139 in slot [7][8]
+  if (startPiece && pBoard->boardVec[7][8].pieceID != 139)
     FixStartPiece(pBoard);
 
 } // CreateInitialBoard()
@@ -77,7 +77,7 @@ void BoardManager::InitFullBoard(Board* pBoard, bool startPiece)
 
 void BoardManager::FixStartPiece(Board* pBoard)
 { // If an official Eternity II solve attempt, make sure the start piece
-  // constraint is met by placing the piece with the ID 139 on slot [8][7]
+  // constraint is met by placing the piece with the ID 139 on slot [7][8]
 
   int xIndex = 1;     // X index for slot
   int yIndex = 1;     // Y index for slot
@@ -85,11 +85,11 @@ void BoardManager::FixStartPiece(Board* pBoard)
   for (int i = 0; i < pieceVec[INNER].size(); i++)
   { // Loop through for every inner piece within the board
 
-    if (pBoard->boardVec[yIndex][xIndex].pieceID == 139 && yIndex != 8 &&
-      xIndex != 7)
+    if (pBoard->boardVec[xIndex][yIndex].pieceID == 139 && xIndex != 7 &&
+      yIndex != 8)
     { // If the ID of piece is 139 call subroutine to place piece 139 in slot
-      // [8][7] then break out of loop as no further action is needed
-      SwapStartPiece(pBoard, yIndex, xIndex);
+      // [7][8] then break out of loop as no further action is needed
+      SwapStartPiece(pBoard, xIndex, yIndex);
       break;
     }
       
@@ -105,18 +105,18 @@ void BoardManager::FixStartPiece(Board* pBoard)
 } // FixStartPiece()
 
 
-void BoardManager::SwapStartPiece(Board* pBoard, int yIndex, int xIndex)
+void BoardManager::SwapStartPiece(Board* pBoard, int xIndex, int yIndex)
 { // Swap the piece with the given index with the piece in the starting piece
-  // slot according to the Eternity II rule book. (Slot [8][7])
+  // slot according to the Eternity II rule book. (Slot [7][8])
 
   // Store piece that is in the starting slot in temp storage
-  PuzzlePiece temp = pBoard->boardVec[8][7];
+  PuzzlePiece temp = pBoard->boardVec[7][8];
 
   // Place starting piece in the starting slot
-  pBoard->boardVec[8][7] = pBoard->boardVec[yIndex][xIndex];
+  pBoard->boardVec[7][8] = pBoard->boardVec[xIndex][yIndex];
 
   // Place piece back in to the slot that the starting piece was located
-  pBoard->boardVec[yIndex][xIndex] = temp;
+  pBoard->boardVec[xIndex][yIndex] = temp;
 
 } // SwapPiece()
 
@@ -217,14 +217,31 @@ void BoardManager::InitEmptyBoard(Board* pBoard)
 } // InitialiseBoard
 
 
-int BoardManager::GetPattern(Board* pBoard, int yIndex, int xIndex, 
+int BoardManager::GetPattern(Board* pBoard, int xIndex, int yIndex, 
                              segLocation segment)
 { // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
   
+  int index = (segment - pBoard->boardVec[xIndex][yIndex].orientation);
+
+  if (index < 0)
+  {
+    switch (index)
+    {
+      case -1:
+        index = 3;
+        break;
+      case -2:
+        index = 2;
+        break;
+      case -3:
+        index = 1;
+        break;
+    }
+  }
+
   // Modular of 4 to keep segment index 3 or below
-  return pBoard->boardVec[yIndex][xIndex].segments[
-                    (segment + pBoard->boardVec[yIndex][xIndex].orientation) % 4];
+  return pBoard->boardVec[xIndex][yIndex].segments[index];
 
 } // GetPattern()
 
@@ -268,19 +285,19 @@ void BoardManager::RotateEdge(PuzzlePiece* piece, int xIndex, int yIndex)
 void BoardManager::RotateCorner(PuzzlePiece* piece, int xIndex, int yIndex)
 { // Rotates an corner piece so the corner pattern matches the edge of the board
 
-  if (yIndex == 0 && xIndex == 0)
+  if (xIndex == 0 && yIndex == 0)
   { // If y = 0 and x = 0 set mode to top left corner
     piece->orientation = 1;
   }
-  else if (yIndex == 0 && xIndex == boardSize)
+  else if (xIndex == boardSize && yIndex == 0)
   { // If y = 0 and x = boardSize set mode to top right corner
     piece->orientation = 2;
   }
-  else if (yIndex == boardSize && xIndex == 0)
+  else if (xIndex == 0 && yIndex == boardSize)
   { // If y = boardSize and x = 0 set mode to bottom left corner
     piece->orientation = 0;
   }
-  else if (yIndex == boardSize && xIndex == boardSize)
+  else if (xIndex == boardSize && yIndex == boardSize)
   { // If y = boardSize and x = boardSize set mode to bottom right corner
     piece->orientation = 3;
   }

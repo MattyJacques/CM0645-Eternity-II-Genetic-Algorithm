@@ -95,8 +95,8 @@ void GeneticAlgorithm::CalcMaxFitness(int boardSize)
   maxMatches += (((boardSize - 2) * 2) - 1) * 4;
 
   // Calc max fitness & max pattern matches of inner pieces pattern match
-  maxFitness += (boardSize - 3) * (boardSize - 3) * 2;
-  maxMatches += (boardSize - 3) * (boardSize - 3) * 2;
+  maxFitness += (boardSize - 3) * (boardSize - 2) * 2;
+  maxMatches += (boardSize - 3) * (boardSize - 2) * 2;
 
 } // CalcMaxFitness()
 

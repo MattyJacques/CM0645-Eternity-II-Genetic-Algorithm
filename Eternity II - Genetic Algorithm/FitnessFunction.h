@@ -19,11 +19,11 @@ private:
 
   // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
-  bool IsMatchSide(int yIndex1, int xIndex1, int yIndex2, int xIndex2);
+  bool IsMatchSide(int xIndex1, int yIndex1, int xIndex2, int yIndex2);
 
   // Checks to see if the pattern located on bottom side of piece1 matches the
   // pattern located on the top of piece2
-  bool IsMatchBottom(int yIndex1, int xIndex1, int yIndex2, int xIndex2);
+  bool IsMatchBottom(int xIndex1, int yIndex1, int xIndex2, int yIndex2);
 
   // Checks the top left corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces

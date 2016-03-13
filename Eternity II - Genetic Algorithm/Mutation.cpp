@@ -62,29 +62,29 @@ void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
     int mode = GeneticAlgorithm::GenRandomNum(0, 3);
 
     if (mode == 0)
-    { // If mode is top edge set Y index to 0 and gen random index between
-      // 1 and boardSize - 1 for X index
+    { // If mode is top edge set X index to 0 and gen random index between
+      // 1 and boardSize - 1 for Y index
       index[0] = 0;
       index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
                                                 boardSize - 1);
     }
     else if (mode == 1)
-    { // If mode is left edge gen random Y index between 1 and boardsize -1
-      // and set X index to 0
+    { // If mode is left edge gen random X index between 1 and boardsize -1
+      // and set Y index to 0
       index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
                                                 boardSize - 1);
       index[1] = 0;
     }
     else if (mode == 2)
     { // If mode is right edge gen random number between 1 and boardSize - 1
-      // and set X index to boardSize
+      // and set Y index to boardSize
       index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
                                                 boardSize - 1);
       index[1] = BoardManager::GetInstance()->boardSize;
     }
     else
-    { // If mode is bottom edge set Y index to boardSize and gen random number
-      // between 1 and boardSize - 1 for X index
+    { // If mode is bottom edge set X index to boardSize and gen random number
+      // between 1 and boardSize - 1 for Y index
       index[0] = BoardManager::GetInstance()->boardSize;
       index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
                                                 boardSize - 1);

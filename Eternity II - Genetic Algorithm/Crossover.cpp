@@ -202,6 +202,9 @@ void Crossover::OnePoint(int parents[2])
   int numOfPieces = (BoardManager::GetInstance()->boardSize + 1) *
                     (BoardManager::GetInstance()->boardSize + 1);
 
+  // Get random crossover point to split the boards
+  int crossPoint = GeneticAlgorithm::GenRandomNum(1, numOfPieces);
+
   for (int i = 0; i < 2; i++)
   { // Initialise new empty boards and give the boards an ID
 
@@ -213,27 +216,27 @@ void Crossover::OnePoint(int parents[2])
   for (int i = 0; i < numOfPieces; i++)
   { // Loop for all pieces to copy over in to new board
 
-    if (i <= numOfPieces / 2)
-    { // If we are below 50% of pieces in board
+    if (i <= crossPoint)
+    { // If we are below the crossover point
 
       // Add the piece from parent 1 to offspring 1
       offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[0]).boardVec[yIndex][xIndex]);
+        prevBoards->at(parents[0]).boardVec[xIndex][yIndex]);
 
       // Add the piece from parent 2 to offspring 2
       offspring[1].boardVec[yIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[1]).boardVec[yIndex][xIndex]);
+        prevBoards->at(parents[1]).boardVec[xIndex][yIndex]);
     }
-    else if (i > numOfPieces / 2)
-    { // If we are greater than 50% pieces in board
+    else if (i > crossPoint)
+    { // If we are greater than crossover point
 
       // Add the piece from parent 1 to offspring 2
       offspring[0].boardVec[yIndex].push_back(BoardManager::GetInstance()->
-                          prevBoards->at(parents[1]).boardVec[yIndex][xIndex]);
+                          prevBoards->at(parents[1]).boardVec[xIndex][yIndex]);
 
       // Add the piece from parent 2 to offspring 1
       offspring[1].boardVec[yIndex].push_back(BoardManager::GetInstance()->
-                          prevBoards->at(parents[0]).boardVec[yIndex][xIndex]);
+                          prevBoards->at(parents[0]).boardVec[xIndex][yIndex]);
     }
 
     xIndex++;  // Increment the xIndex to move to next slot in row
@@ -279,7 +282,7 @@ void Crossover::CheckDuplication()
   // Call to find out which pieces are duplicates, storing in the pieces
   // and index vectors ready for fixing
   for (int i = 0; i < 2; i++)
-    GetDuplicatesV2(pOffspring[i], &pieces[i], &indexes[i]);
+    GetDuplicates(pOffspring[i], &pieces[i], &indexes[i]);
 
   // Calls to repair the boards after duplication was found, giving the pieces
   // and indexes of the duplicate slots, pieces vector switched to add pieces
@@ -290,48 +293,7 @@ void Crossover::CheckDuplication()
 } // CheckDuplication()
 
 
-void Crossover::GetDuplicates(Board* pBoard, std::vector<PuzzlePiece>* pieces,
-                              std::vector<std::vector<int>>* indexes)
-{ // Scans through the candidate board to see if there are any pieces that appear
-  // more than once within the candidate, uses vector to store puzzle pieces
-
-  // Create a vector of bools with an element for each puzzle piece.
-  // Initialised to false
-  std::vector<bool> checkIDs(pBoard->boardVec.size() * pBoard->boardVec.size(), 
-                             false);
-
-  int xIndex = 0;         // Holds current X index for slot checking
-  int yIndex = 0;         // Holds current Y index for slot checking
-
-  for (int i = 0; i < checkIDs.size(); i++)
-  { // Loop through for every puzzle piece changing the appropriate element
-    // to true if piece was found
-
-    if (!checkIDs[pBoard->boardVec[yIndex][xIndex].pieceID - 1])
-    { // If piece has not already been found, change element to true
-      checkIDs[pBoard->boardVec[yIndex][xIndex].pieceID - 1] = true;
-    }
-    else
-    { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(pBoard->boardVec[yIndex][xIndex]);
-      std::vector<int> index = { yIndex, xIndex };
-      indexes->push_back(index);
-    }
-
-    xIndex++;    // Increment X index to move to the slot on the right
-
-    if (xIndex == BoardManager::GetInstance()->boardSize + 1)
-    { // If we have reached the end of the line of the board, increment
-      // to next line
-      xIndex = 0;
-      yIndex++;
-    }
-  }
-
-} // GetDuplicates()
-
-
-void Crossover::GetDuplicatesV2(Board* pBoard, 
+void Crossover::GetDuplicates(Board* pBoard, 
                                 std::vector<PuzzlePiece>* pieces,
                                 std::vector<std::vector<int>>* indexes)
 {
@@ -482,14 +444,14 @@ void Crossover::CheckInners(Board* pBoard, std::vector<PuzzlePiece>* pieces,
   { // Loop through for every inner slot changing the appropriate element
     // to true if piece was found
 
-    if (!checkIDs->at(pBoard->boardVec[yIndex][xIndex].pieceID - 1))
+    if (!checkIDs->at(pBoard->boardVec[xIndex][yIndex].pieceID - 1))
     { // If piece has not already been found, change element to true
-      checkIDs->at(pBoard->boardVec[yIndex][xIndex].pieceID - 1) = true;
+      checkIDs->at(pBoard->boardVec[xIndex][yIndex].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(pBoard->boardVec[yIndex][xIndex]);
-      std::vector<int> index = { yIndex, xIndex };
+      pieces->push_back(pBoard->boardVec[xIndex][yIndex]);
+      std::vector<int> index = { xIndex, yIndex };
       indexes->push_back(index);
     }
 

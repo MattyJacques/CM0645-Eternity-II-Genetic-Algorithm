@@ -79,12 +79,12 @@ private:
   void AddPieces(Board* pBoard);
 
   // If an official Eternity II solve attempt, make sure the start piece
-  // constraint is met by placing the piece with the ID 139 on slot [8][7]
+  // constraint is met by placing the piece with the ID 139 on slot [7][8]
   void FixStartPiece(Board* pBoard);
 
   // Swap the piece with the given index with the piece in the starting piece
-  // slot according to the Eternity II rule book. (Slot [8][7])
-  void SwapStartPiece(Board* pBoard, int yIndex, int xIndex);
+  // slot according to the Eternity II rule book. (Slot [7][8])
+  void SwapStartPiece(Board* pBoard, int xIndex, int yIndex);
 
   // Rotates an edge piece so the edge pattern matches the edge of the board
   void RotateEdge(PuzzlePiece* piece, int xIndex, int yIndex);
@@ -118,7 +118,7 @@ public:
 
   // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
-  int GetPattern(Board* pBoard, int yIndex, int xIndex, segLocation segment);
+  int GetPattern(Board* pBoard, int xIndex, int yIndex, segLocation segment);
 
   // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 

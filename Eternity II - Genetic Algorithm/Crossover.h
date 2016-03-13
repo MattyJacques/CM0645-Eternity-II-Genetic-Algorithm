@@ -62,9 +62,6 @@ private:
   // Scans through the candidate board to see if there are any pieces that appear
   // more than once within the candidate, uses vector to store puzzle pieces
   void GetDuplicates(Board* pBoard, std::vector<PuzzlePiece>* pieces, 
-                     std::vector<std::vector<int>>* indexes);
-
-  void GetDuplicatesV2(Board* pBoard, std::vector<PuzzlePiece>* pieces, 
                        std::vector<std::vector<int>>* indexes);
 
   // Checks all corners to see if there are any duplicate pieces within the
