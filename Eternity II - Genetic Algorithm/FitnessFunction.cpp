@@ -53,14 +53,14 @@ int FitnessFunction::CheckTopLeft()
   if (IsMatchSide(0, 0, 1, 0))
   { // Check to see if the pattern on the right of the corner piece matches
     // the pattern on the left of the piece to the right
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
   if (IsMatchBottom(0, 0, 0, 1))
   { // Check to see if the pattern on the bottom of the corner piece matches
     // the pattern on the top of the piece below
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
@@ -79,14 +79,14 @@ int FitnessFunction::CheckTopRight()
   if (IsMatchSide(pBoardMan->boardSize - 1, 0, pBoardMan->boardSize, 0))
   { // Check to see if the pattern on the right side of the piece to left of
     // the corner, matches the pattern on the left of the corner piece
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
   if (IsMatchBottom(pBoardMan->boardSize, 0, pBoardMan->boardSize, 1))
   { // Check to see if the pattern on the bottom of the corner piece matches
     // the pattern on the top of the piece below
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
@@ -105,14 +105,14 @@ int FitnessFunction::CheckBottomLeft()
   if (IsMatchSide(0, pBoardMan->boardSize, 1, pBoardMan->boardSize))
   { // Check to see if the pattern on the right side of the corner piece 
     // matches the pattern located on the left side of the piece to the right
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
   if (IsMatchBottom(0, pBoardMan->boardSize - 1, 0, pBoardMan->boardSize))
   { // Check to see if the pattern on the bottom of the piece above the 
     // corner matches the pattern located on the top of the corner
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
@@ -132,7 +132,7 @@ int FitnessFunction::CheckBottomRight()
       pBoardMan->boardSize, pBoardMan->boardSize))
   { // Check to see if the pattern on the right side of the piece to the left
     // of the corner matches the pattern located on the left of the corner
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
@@ -140,7 +140,7 @@ int FitnessFunction::CheckBottomRight()
                     pBoardMan->boardSize, pBoardMan->boardSize))
   { // Check to see if the pattern located on the bottom of the piece located
     // above the corner matches the pattern located on the top of the corner
-    pBoard->fitScore += 10;
+    pBoard->fitScore += CORNERMATCH;
     matchCount++;
   }
 
@@ -162,13 +162,13 @@ int FitnessFunction::CheckTopEdge()
 
     if (IsMatchSide(i, 0, i + 1, 0))
     { // If edge pattern matches edge piece to the right add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
 
     if (IsMatchBottom(i, 0, i, 1))
     { // If edge pattern matches inner connection on bottom add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
  
@@ -177,7 +177,7 @@ int FitnessFunction::CheckTopEdge()
   if (IsMatchBottom(pBoardMan->boardSize - 1, 0, pBoardMan->boardSize - 1, 1))
   { // If piece left of the top right corner bottom pattern matches piece
     // underneath add score
-    pBoard->fitScore += 5;
+    pBoard->fitScore += EDGEMATCH;
     matchCount++;
   }
 
@@ -199,13 +199,13 @@ int FitnessFunction::CheckLeftEdge()
 
     if (IsMatchSide(0, i, 1, i))
     { // If edge piece right pattern matches inner connection add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
 
     if (IsMatchBottom(0, i, 0, i + 1))
     { // If edge piece bottom pattern matches top of piece underneath add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
   
@@ -214,7 +214,7 @@ int FitnessFunction::CheckLeftEdge()
   if (IsMatchSide(0, pBoardMan->boardSize - 1, 1, pBoardMan->boardSize - 1))
   { // If piece above bottom left corner right pattern matches inner 
     // connection add score
-    pBoard->fitScore += 5;
+    pBoard->fitScore += EDGEMATCH;
     matchCount++;
   }
 
@@ -236,13 +236,13 @@ int FitnessFunction::CheckRightEdge()
 
     if (IsMatchSide(pBoardMan->boardSize - 1, i, pBoardMan->boardSize, i))
     { // If edge piece matches inner connection to right add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
 
     if (IsMatchBottom(pBoardMan->boardSize, i, pBoardMan->boardSize, i + 1))
     { // If edge piece matches piece below add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
     
@@ -251,7 +251,7 @@ int FitnessFunction::CheckRightEdge()
   if (IsMatchSide(pBoardMan->boardSize - 1, pBoardMan->boardSize - 1, 
                   pBoardMan->boardSize, pBoardMan->boardSize - 1))
   { // If piece matches connection to the left add score
-    pBoard->fitScore += 5;
+    pBoard->fitScore += EDGEMATCH;
     matchCount++;
   }
 
@@ -273,13 +273,13 @@ int FitnessFunction::CheckBottomEdge()
 
     if (IsMatchSide(i, pBoardMan->boardSize, i + 1, pBoardMan->boardSize))
     { // If right pattern matches next piece left add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
 
     if (IsMatchBottom(i, pBoardMan->boardSize - 1, i, pBoardMan->boardSize))
     {  // If top matched piece above add score
-      pBoard->fitScore += 5;
+      pBoard->fitScore += EDGEMATCH;
       matchCount++;
     }
     
@@ -288,7 +288,7 @@ int FitnessFunction::CheckBottomEdge()
   if (IsMatchBottom(pBoardMan->boardSize - 1, pBoardMan->boardSize - 1, 
                     pBoardMan->boardSize - 1, pBoardMan->boardSize))
   { // If top pattern matched inner connection add score
-    pBoard->fitScore += 5;
+    pBoard->fitScore += EDGEMATCH;
     matchCount++;
   }
 
@@ -311,13 +311,13 @@ int FitnessFunction::CheckInnerPieces()
 
       if (IsMatchSide(i, j, i + 1, j))
       { // If right side matches piece to the right add score
-        pBoard->fitScore += 1;
+        pBoard->fitScore += INNERMATCH;
         matchCount++;
       }
 
       if (IsMatchBottom(i, j, i, j + 1))
       { // If bottom side matches piece below add score
-        pBoard->fitScore += 1;
+        pBoard->fitScore += INNERMATCH;
         matchCount++;
       }
     }
