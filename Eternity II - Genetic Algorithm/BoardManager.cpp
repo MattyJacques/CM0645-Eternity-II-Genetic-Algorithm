@@ -69,7 +69,7 @@ void BoardManager::InitFullBoard(Board* pBoard, bool startPiece)
 
   // If starting piece constraint is active and piece 139 is not in slot [7][8]
   // place piece 139 in slot [7][8]
-  if (startPiece && pBoard->boardVec[7][8].pieceID != 139)
+  if (startPiece && pBoard->boardVecs[7][8].pieceID != 139)
     FixStartPiece(pBoard);
 
 } // CreateInitialBoard()
@@ -85,7 +85,7 @@ void BoardManager::FixStartPiece(Board* pBoard)
   for (int i = 0; i < pieceVec[INNER].size(); i++)
   { // Loop through for every inner piece within the board
 
-    if (pBoard->boardVec[xIndex][yIndex].pieceID == 139 && xIndex != 7 &&
+    if (pBoard->boardVecs[xIndex][yIndex].pieceID == 139 && xIndex != 7 &&
       yIndex != 8)
     { // If the ID of piece is 139 call subroutine to place piece 139 in slot
       // [7][8] then break out of loop as no further action is needed
@@ -109,13 +109,13 @@ void BoardManager::SwapStartPiece(Board* pBoard, int xIndex, int yIndex)
   // slot according to the Eternity II rule book. (Slot [7][8])
 
   // Store piece that is in the starting slot in temp storage
-  PuzzlePiece temp = pBoard->boardVec[7][8];
+  PuzzlePiece temp = pBoard->boardVecs[7][8];
 
   // Place starting piece in the starting slot
-  pBoard->boardVec[7][8] = pBoard->boardVec[xIndex][yIndex];
+  pBoard->boardVecs[7][8] = pBoard->boardVecs[xIndex][yIndex];
 
   // Place piece back in to the slot that the starting piece was located
-  pBoard->boardVec[xIndex][yIndex] = temp;
+  pBoard->boardVecs[xIndex][yIndex] = temp;
 
 } // SwapPiece()
 
@@ -134,7 +134,7 @@ void BoardManager::AddPieces(Board* pBoard)
   { // Loop through the collection of pieces
 
     // Add piece to line on board and increment push count
-    pBoard->boardVec[index].push_back(piece);
+    pBoard->boardVecs[index].push_back(piece);
     count++;
 
     if (count == boardSize - 1)
@@ -159,7 +159,7 @@ void BoardManager::InitTopEdge(Board* pBoard)
   { // Add edge pieces to inner 13 vectors (so not left and right most vectors)
     // Rotate as needed
     FixOrientation(&pieceVec[EDGE][i], i + 1, 0);
-    pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i]);
+    pBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i]);
   }
 
 } // InitTopEdge()
@@ -172,17 +172,17 @@ void BoardManager::InitCornersSides(Board* pBoard)
   // Push the first two corner pieces on to the top left and right corners
   // of the board rotating as needed
   FixOrientation(&pieceVec[CORNER][0], 0, 0);
-  pBoard->boardVec[0].push_back(pieceVec[CORNER][0]);
+  pBoard->boardVecs[0].push_back(pieceVec[CORNER][0]);
   FixOrientation(&pieceVec[CORNER][1], boardSize, 0);
-  pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][1]);
+  pBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][1]);
 
   for (int i = 0; i < boardSize - 1; i++)
   { // Loops through and push edge pieces on to the left and right edges
     // of the board rotating as needed
     FixOrientation(&pieceVec[EDGE][i + boardSize - 1], 0, i + 1);
-    pBoard->boardVec[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
+    pBoard->boardVecs[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
     FixOrientation(&pieceVec[EDGE][i + (boardSize * 2) - 2], boardSize, i + 1);
-    pBoard->boardVec[boardSize].push_back(pieceVec[EDGE]
+    pBoard->boardVecs[boardSize].push_back(pieceVec[EDGE]
                                                   [i + (boardSize * 2) - 2]);
   }
 
@@ -190,15 +190,15 @@ void BoardManager::InitCornersSides(Board* pBoard)
   { // Loops through and adds an edge piece to each vector for the bottom edge
     // of the board rotating as needed
     FixOrientation(&pieceVec[EDGE][i + (boardSize * 3) - 3], i + 1, boardSize);
-    pBoard->boardVec[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
+    pBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
   }
 
   // Push the last two corner pieces on to the bottom left and bottom right
   // corners of the board rotating as needed
   FixOrientation(&pieceVec[CORNER][2], 0, boardSize);
-  pBoard->boardVec[0].push_back(pieceVec[CORNER][2]);
+  pBoard->boardVecs[0].push_back(pieceVec[CORNER][2]);
   FixOrientation(&pieceVec[CORNER][3], boardSize, boardSize);
-  pBoard->boardVec[boardSize].push_back(pieceVec[CORNER][3]);
+  pBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][3]);
 
 } // InitCornerSides()
 
@@ -209,7 +209,7 @@ void BoardManager::InitEmptyBoard(Board* pBoard)
   for (int i = 0; i <= boardSize; i++)
   { // Loop through and create vector of vector for the board
     std::vector<PuzzlePiece> newVec;
-    pBoard->boardVec.push_back(newVec);
+    pBoard->boardVecs.push_back(newVec);
   }
 
 } // InitialiseBoard
@@ -221,7 +221,7 @@ int BoardManager::GetPattern(Board* pBoard, int xIndex, int yIndex,
   // provided taking into consideration the orientation of the piece
   
   // Get the index of the segment taking into account orientation
-  int index = (segment - pBoard->boardVec[xIndex][yIndex].orientation);
+  int index = (segment - pBoard->boardVecs[xIndex][yIndex].orientation);
 
   if (index < 0)
   { // If index is below limit, cycle back around
@@ -240,7 +240,7 @@ int BoardManager::GetPattern(Board* pBoard, int xIndex, int yIndex,
   }
 
   // Modular of 4 to keep segment index 3 or below
-  return pBoard->boardVec[xIndex][yIndex].segments[index];
+  return pBoard->boardVecs[xIndex][yIndex].segments[index];
 
 } // GetPattern()
 

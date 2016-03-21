@@ -45,7 +45,7 @@ struct Board
   int boardID;        // Holds the ID of the board
   
   // Vector of all pieces within board
-  std::vector<std::vector<PuzzlePiece>> boardVec;
+  std::vector<std::vector<PuzzlePiece>> boardVecs;
 
   // Overrides the less than operator for sorting to sort by fitness
   bool operator < (const Board theBoard) const
