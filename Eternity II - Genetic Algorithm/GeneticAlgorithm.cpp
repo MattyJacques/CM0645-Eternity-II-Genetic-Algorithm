@@ -5,6 +5,7 @@
 
 
 #include "GeneticAlgorithm.h" // Include header for the class
+#include "FileReader.h"
 #include <iostream>           // DEBUG
 
 
@@ -132,11 +133,30 @@ void GeneticAlgorithm::RunGA()
     theCrossover.DoCrossover(popSize);
 
     // Complete mutation of population
-    //theMutation.DoMutation(startPiece);
+    theMutation.DoMutation(startPiece);
 
   } // Main algorithm loop
 
+  OutputSolved(); // Output the solved board
+
 } // RunGA()
+
+
+void GeneticAlgorithm::OutputSolved()
+{ // Output the solved bored along with how many generation it took to solve
+
+  for (int i = 0; i < popSize; i++)
+  { // Loop through the population, checking to see which candidate is solved
+
+    if (BoardManager::GetInstance()->currBoards->at(i).fitScore == maxFitness)
+    { // If board fitness is max fitness, call to output the board
+      FileReader fileMan;
+      fileMan.OutputBoard(&BoardManager::GetInstance()->currBoards->at(i), 
+                          genCount);
+    }
+  }
+
+} // OutputSolved
 
 
 void GeneticAlgorithm::DoFitness()

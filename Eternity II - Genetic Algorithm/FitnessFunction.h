@@ -6,8 +6,8 @@
 
 #pragma once
 
-#define CORNERMATCH 1
-#define EDGEMATCH   1
+#define CORNERMATCH 10
+#define EDGEMATCH   5
 #define INNERMATCH  1
 
 #include "BoardManager.h"       // For board size access

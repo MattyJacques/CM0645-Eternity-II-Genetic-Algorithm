@@ -24,11 +24,13 @@ void Crossover::DoCrossover(int popSize)
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
 
+  // Switch the current generation to the previous generation and create new
+  // vector for current generation
   std::vector<Board> newVec;
   BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->currBoards;
   BoardManager::GetInstance()->currBoards = std::make_shared<std::vector<Board>>(newVec);
 
-  DoElitism();
+  DoElitism(); // Transfer the elites over to new generation
 
   while (BoardManager::GetInstance()->currBoards->size() < popSize - 1)
   { // While the new vector is not filled with the right population size
@@ -40,9 +42,8 @@ void Crossover::DoCrossover(int popSize)
     while (parents[0] == parents[1])
       SelectParents(parents, popSize);
 
-    Reproduce(parents);
-    //CheckDuplication();
-
+    Reproduce(parents);  // Breed the parents together
+    CheckDuplication();  // Check for any duplicate pieces
   }
 
 } // DoCrossover()
@@ -481,7 +482,7 @@ void Crossover::FixDuplicates(Board* pBoard, std::vector<PuzzlePiece> pieces,
     
     if (pBoard->boardVec[indexes[i][0]][indexes[i][1]].type == CORNER ||
         pBoard->boardVec[indexes[i][0]][indexes[i][1]].type == EDGE)
-    {
+    { // If piece is an edge or corner piece, make sure piece is properly rotated
       BoardManager::GetInstance()->FixOrientation(&pBoard->boardVec[indexes[i][0]]
                                                   [indexes[i][1]], indexes[i][0],
                                                   indexes[i][1]);

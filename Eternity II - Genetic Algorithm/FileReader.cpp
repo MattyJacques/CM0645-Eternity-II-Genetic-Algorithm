@@ -40,6 +40,7 @@ bool FileReader::OpenFile(const char* fileName)
   // Open the file
   theFile.open(fileName);
 
+  // Check to see if file is open
   if (theFile.is_open())
     result = true;
 
@@ -178,29 +179,31 @@ int FileReader::GetDataFilename(int size, int pattern)
 { // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
 
-  std::string name = "Puzzles/BoardSize ";
-  int result = 0;
-  char boardSize[3];
-  char patternNum[3];
+  std::string name = "Puzzles/BoardSize ";      // Hold file name to open
+  int result = 0;                               // Hold index of filename
+  char boardSize[3];                            // Hold converted boardSize
+  char patternNum[3];                           // Hold converted pattern num
 
+  // Convert the pattern num and boardSize
   _itoa_s(size, boardSize, 10);
   _itoa_s(pattern, patternNum, 10);
 
+  // Construct the rest of the file name using the board size and pattern num
   name += boardSize;
   name += " - Pattern ";
   name += patternNum;
   name += ".e2";
 
   for (int i = 0; i < filenames.size(); i++)
-  {
+  { // Loop through all filenames, checking if filename needed
     if (filenames[i] == name)
-    {
+    { // If filename matches, store result
       result = i;
-      break;
+      break; // Break from loop if filename found
     }
   }
 
-  return result;
+  return result; // Return index found
 
 } // GetDataFilename()
 
@@ -302,3 +305,120 @@ PieceType FileReader::CheckType(int* pData)
   return type;
 
 } // CheckType()
+
+
+void FileReader::OutputBoard(Board* pBoard, int genCount)
+{ // Output the board to a file to show progress or solved board, file name is
+  // date generation and time ran.
+
+  std::string fileName = "Solutions/Generation ";  // Filename of output
+  char intBuf[10];             // Holds integer that has been converted to char
+  std::string topLine;         // Holds the first row of output
+  std::string midLine;         // Holds the middle row of output
+  std::string botLine;         // Holds the bottom row of output
+
+  // Convert the number of generations to a char
+  itoa(genCount, intBuf, 10);
+
+  // Add converted char to string then add file extension
+  fileName += intBuf;
+  fileName += ".txt";
+
+  // If the solution directory does not exist, create it
+  if (!DirExists("Solutions"))
+    CreateDir("Solutions");
+
+  // Create new file object with output permission. (New object needed due to
+  // constructor creating a new file)
+  std::ofstream output(fileName, std::ios::out);
+
+  if (output.is_open())
+  { // If file has been created and open successfully format the output
+
+    for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
+    { // Y index for pieces to output
+      for (int i = 0; i <= BoardManager::GetInstance()->boardSize; i++)
+      { // X index for pieces to ouput, parse a piece into three rows
+        // of output.
+
+        // Reset the char array for conversion and convert pattern ID to char
+        intBuf[0] = '/0';
+        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), 
+             intBuf, 10);
+
+        topLine += "  ";    // Add whitespace for formatting
+        topLine += intBuf;  // Add converted pattern ID to top line
+        topLine += "  ";    // Add more whitespace for formatting
+
+        // Reset the char array for conversion and convert pattern ID to char
+        intBuf[0] = '/0';
+        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), 
+             intBuf, 10);
+
+        midLine += intBuf;  // Add converted pattern ID to the middle line
+        midLine += "   ";   // Add whitespace for formatting
+
+        // Reset the char array for conversion and convert pattern ID to char
+        intBuf[0] = '/0';
+        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), 
+             intBuf, 10);
+
+        midLine += intBuf;  // Add right pattern ID to middle line
+
+        // Reset the char array for conversion and convert pattern ID to char
+        intBuf[0] = '/0';
+        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), 
+             intBuf, 10);
+
+        botLine += "  ";    // Add whitespace for formatting
+        botLine += intBuf;  // Add bottom pattern ID to bottom line
+        botLine += "  ";    // Ass whitepsace for formatting
+      } // for i < boardSize
+
+      output << topLine << std::endl;   // Output the top line to file
+      output << midLine << std::endl;   // Output the middle line to file
+      output << botLine << std::endl;   // Output the bottom line to file
+
+      topLine.clear();                  // Clear top string for next line
+      midLine.clear();                  // Clear middle string for next line
+      botLine.clear();                  // Clear bottom string for next line
+    } // for j < boardSize
+
+    // Close the file after use 
+    output.close();
+
+  } // if file is open
+
+} // OutputBoard()
+
+
+bool FileReader::CreateDir(const char* dirName)
+{ // Makes a directory in the application root folder using the name provided
+
+  bool result = false;    // Hold if successful or not
+  wchar_t wtext[50];      // Holds converted dirName
+
+  // Convert the dirName to wide char
+  mbstowcs(wtext, dirName, strlen(dirName + 1));
+
+  // If directory created successfully change result to true
+  if (CreateDirectory(wtext, NULL))
+    result = true;
+
+  return result;   // Return result
+
+} // CreateDir()
+
+
+bool FileReader::DirExists(const char* dirName)
+{ // Checks to see if the directory with the name provided exists in the 
+  // applications root folder
+
+  // Get the folder attributes with the given path
+  DWORD fileAtt = ::GetFileAttributesA(dirName);
+
+  // Return if a directory and if there is a fault with directory
+  return (fileAtt & FILE_ATTRIBUTE_DIRECTORY && 
+          fileAtt != INVALID_FILE_ATTRIBUTES);
+
+} // DirExists()

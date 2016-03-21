@@ -320,8 +320,22 @@ int FitnessFunction::CheckInnerPieces()
         pBoard->fitScore += INNERMATCH;
         matchCount++;
       }
-    }
-  }
+
+      if (IsMatchBottom(pBoardMan->boardSize - 1, i, pBoardMan->boardSize - 1,
+                        i + 1))
+      { // If the last inner in row i piece has a match at bottom, add score
+        pBoard->fitScore += INNERMATCH;
+        matchCount++;
+      }
+
+      if (IsMatchSide(i, pBoardMan->boardSize - 1, i + 1, 
+                      pBoardMan->boardSize - 1))
+      { // If the most bottom inner piece in col i has match at right, add score
+        pBoard->fitScore += INNERMATCH;
+        matchCount++;
+      }
+    } // for int i < boardSize
+  } // for int j < boardSize
 
   return matchCount; // Return how many pattern matched were achieved
 

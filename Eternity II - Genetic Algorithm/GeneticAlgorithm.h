@@ -56,6 +56,9 @@ private:
   // along with calculating how many matches are in a 100% board
   void CalcMaxFitness(int boardSize);
 
+  // Output the solved bored along with how many generation it took to solve
+  void OutputSolved();
+
 public:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and

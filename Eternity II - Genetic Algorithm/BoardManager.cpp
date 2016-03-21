@@ -99,7 +99,6 @@ void BoardManager::FixStartPiece(Board* pBoard)
       yIndex++;
       xIndex = 0;
     }
-
   }
 
 } // FixStartPiece()
@@ -144,7 +143,6 @@ void BoardManager::AddPieces(Board* pBoard)
       index++;
       count = 0;
     }
-  
   }
 
   // Add rest of border pieces
@@ -222,10 +220,11 @@ int BoardManager::GetPattern(Board* pBoard, int xIndex, int yIndex,
 { // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
   
+  // Get the index of the segment taking into account orientation
   int index = (segment - pBoard->boardVec[xIndex][yIndex].orientation);
 
   if (index < 0)
-  {
+  { // If index is below limit, cycle back around
     switch (index)
     {
       case -1:

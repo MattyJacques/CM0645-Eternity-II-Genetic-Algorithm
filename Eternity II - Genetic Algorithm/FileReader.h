@@ -46,6 +46,13 @@ private:
   // answer
   PieceType CheckType(int* pData);
 
+  // Makes a directory in the application root folder using the name provided
+  bool CreateDir(const char* dirName);
+
+  // Checks to see if the directory with the name provided exists in the 
+  // applications root folder
+  bool DirExists(const char* dirName);
+
 public:
   // Calls to scan the directory for piece data files
   FileReader();
@@ -57,5 +64,9 @@ public:
   // Reads the piece file with the file name that matches the information passed
   // as parameter storing piece info in the piece collection vector
   void ReadDataFile(int size, int pattern);
+
+  // Output the board to a file to show progress or solved board, file name is
+  // date, generation and time ran.
+  void OutputBoard(Board* pBoard, int genCount);
 };
 
