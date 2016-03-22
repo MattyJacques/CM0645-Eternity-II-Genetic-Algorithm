@@ -135,6 +135,13 @@ void GeneticAlgorithm::RunGA()
     // Complete mutation of population
     theMutation.DoMutation(startPiece);
 
+    if (genCount % 50 == 0)
+    {
+      FileReader theReader;
+      theReader.OutputBoard(&BoardManager::GetInstance()->currBoards->at(1), genCount);
+    }
+
+
   } // Main algorithm loop
 
   OutputSolved(); // Output the solved board

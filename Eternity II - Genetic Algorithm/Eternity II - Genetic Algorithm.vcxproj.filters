@@ -64,25 +64,25 @@
     <None Include="settings.ini">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 4 - Pattern Num 2.e2">
+    <None Include="Puzzles\BoardSize 4 - Pattern 2.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 4 - Pattern Num 4.e2">
+    <None Include="Puzzles\BoardSize 4 - Pattern 4.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 8 - Pattern Num 4.e2">
+    <None Include="Puzzles\BoardSize 8 - Pattern 4.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 8 - Pattern Num 8.e2">
+    <None Include="Puzzles\BoardSize 8 - Pattern 8.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 8 - Pattern Num 16.e2">
+    <None Include="Puzzles\BoardSize 8 - Pattern 16.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 10 - Pattern Num 16.e2">
+    <None Include="Puzzles\BoardSize 10 - Pattern 16.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 16 - Pattern Num 22.e2">
+    <None Include="Puzzles\BoardSize 16 - Pattern 22.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
   </ItemGroup>
