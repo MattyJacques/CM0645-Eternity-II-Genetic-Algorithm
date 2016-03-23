@@ -79,7 +79,7 @@ void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
     { // If mode is right edge gen random number between 1 and boardSize - 1
       // and set Y index to boardSize
       index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                                boardSize - 1);
+        boardSize - 1);
       index[1] = BoardManager::GetInstance()->boardSize;
     }
     else
@@ -87,7 +87,7 @@ void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
       // between 1 and boardSize - 1 for Y index
       index[0] = BoardManager::GetInstance()->boardSize;
       index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                                boardSize - 1);
+        boardSize - 1);
     }
   }
   else
@@ -123,15 +123,17 @@ void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
 void Mutation::Swap(int boardID, bool startPiece)
 { // Swaps two random pieces in the board that has the ID given as the parameter
 
-  int pieceIndex1[2];     // Holds index of the first piece
-  int pieceIndex2[2];     // Holds index of second piece
+  int pieceIndex1[2] = { -1, -1 };     // Holds index of the first piece
+  int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece
   PuzzlePiece temp;       // Temp puzzle piece to use during the swap
 
   // Create pointer to board to work with and initalise to point to board
   Board* pBoard = &BoardManager::GetInstance()->currBoards->at(boardID);
 
-  // Get random piece type for mutation, get a two random pieces of that type
+  // Get random piece type for mutation
   PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
+
+  // Get two random piece indexed of the generated type
   GetRandPiece(pieceIndex1, type, startPiece);
   GetRandPiece(pieceIndex2, type, startPiece);
 
@@ -151,16 +153,54 @@ void Mutation::Swap(int boardID, bool startPiece)
 
     // Rotate piece 1
     BoardManager::GetInstance()->FixOrientation(&pBoard->boardVecs[pieceIndex1[0]]
-                                                [pieceIndex1[1]],pieceIndex1[0],
-                                                pieceIndex1[1]);
+      [pieceIndex1[1]], pieceIndex1[0],
+      pieceIndex1[1]);
 
     // Rotate piece 2
     BoardManager::GetInstance()->FixOrientation(&pBoard->boardVecs[pieceIndex2[0]]
-                                                [pieceIndex2[1]], pieceIndex2[0],
-                                                pieceIndex2[1]);
+      [pieceIndex2[1]], pieceIndex2[0],
+      pieceIndex2[1]);
   }
 
 } // Swap()
+
+
+void Mutation::Rotate(int boardID)
+{ // Process the Rotate mutation method as described in chapter 3 of the report.
+  // Generates a random index of a puzzle piece and rotates the piece 
+  // orientation by 90 degrees clockwise.
+
+  int pieceIndex[2] = { -1, -1 };     // Holds the piece index to rotate
+
+  // Get a random piece index of type INNER without caring if the piece is the
+  // starting piece due to rotate not breaking the constraint. INNER not
+  // included due to border rotation already being managed
+  GetRandPiece(pieceIndex, INNER, false);
+
+  if (BoardManager::GetInstance()->currBoards->at(boardID).
+    boardVecs[pieceIndex[0]][pieceIndex[1]].orientation == 3)
+  { // If the orientation is 1 rotation away from full 360 degree rotation
+    // reset to original rotation
+    BoardManager::GetInstance()->currBoards->at(boardID).
+      boardVecs[pieceIndex[0]][pieceIndex[1]].orientation = 0;
+  }
+  else
+  { // If next rotation will not be original orientation, increment orientation
+    BoardManager::GetInstance()->currBoards->at(boardID).
+      boardVecs[pieceIndex[0]][pieceIndex[1]].orientation++;
+  }
+
+} // Rotate()
+
+
+void Mutation::RotateSwap(int boardID)
+{ // Process the Rotate & Swap mutation method as described in chapter 3 of the
+  // report. Generates two random indexes of pieces within the board, rotates
+  // clockwise 90 degress and swap the locations of the pieces
+
+
+
+} // RotateSwap()
 
 
 void Mutation::Setup(MutateType type, double rate, int popSize)
