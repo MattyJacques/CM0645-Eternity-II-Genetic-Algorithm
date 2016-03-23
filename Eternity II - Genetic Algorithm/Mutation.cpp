@@ -217,7 +217,21 @@ void Mutation::RotateSwap(int boardID)
   // report. Generates two random indexes of pieces within the board, rotates
   // clockwise 90 degress and swap the locations of the pieces
 
+  int pieceIndex1[2] = { -1, -1 };     // Holds index of first piece to mutate
+  int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece to mutate
 
+  // Get a random piece index of type INNER without caring if the piece is the
+  // starting piece due to rotate not breaking the constraint. INNER not
+  // included due to border rotation already being managed
+  GetRandPiece(pieceIndex1, INNER, false);
+  GetRandPiece(pieceIndex1, INNER, false);
+
+  // Call to rotate both pieces
+  RotatePiece(boardID, pieceIndex1);
+  RotatePiece(boardID, pieceIndex2);
+
+  // Call to swap the locations of the pieces
+  SwapPiece(boardID, pieceIndex1, pieceIndex2);
 
 } // RotateSwap()
 
