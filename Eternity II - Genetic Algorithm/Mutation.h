@@ -28,6 +28,14 @@ private:
   // as a parameter
   void GetRandPiece(int index[2], PieceType type, bool startPiece);
 
+  // Swaps two pieces within the board with the ID given. Pieces to swap
+  // also given as parameters
+  void SwapPiece(int boardID, int pieceIndex1[2], int pieceIndex2[2]);
+
+  // Rotates a piece 90 degrees clockwise, checks for orientation overflow.
+  // Board and piece index given as parameters
+  void RotatePiece(int boardID, int pieceIndex[2]);
+
   // Process the Swap mutation method as described in chapter 3 of the report.
   // Swaps two random pieces in the board that has the ID given as the parameter
   void Swap(int boardID, bool startPiece);

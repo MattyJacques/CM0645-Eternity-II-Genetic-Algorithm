@@ -120,25 +120,15 @@ void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
 } // GetRandPiece()
 
 
-void Mutation::Swap(int boardID, bool startPiece)
-{ // Swaps two random pieces in the board that has the ID given as the parameter
-
-  int pieceIndex1[2] = { -1, -1 };     // Holds index of the first piece
-  int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece
-  PuzzlePiece temp;       // Temp puzzle piece to use during the swap
+void Mutation::SwapPiece(int boardID, int pieceIndex1[2], int pieceIndex2[2])
+{ // Swaps two pieces within the board with the ID given. Pieces to swap
+  // also given as parameters
 
   // Create pointer to board to work with and initalise to point to board
   Board* pBoard = &BoardManager::GetInstance()->currBoards->at(boardID);
 
-  // Get random piece type for mutation
-  PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
-
-  // Get two random piece indexed of the generated type
-  GetRandPiece(pieceIndex1, type, startPiece);
-  GetRandPiece(pieceIndex2, type, startPiece);
-
-  // Move puzzle piece to temp storage
-  temp = pBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
+  // Temp puzzle piece to use during the swap
+  PuzzlePiece temp = pBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
 
   // Place the second puzzle piece where first puzzle piece was located
   pBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]] =
@@ -147,9 +137,9 @@ void Mutation::Swap(int boardID, bool startPiece)
   // Place first puzzle piece back in second puzzle piece slot
   pBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]] = temp;
 
-  if (type == EDGE || type == CORNER)
-  { // Make sure the pieces are roatetd correctly if mutation occured on a corner 
-    // or edge piece
+  if (temp.type == EDGE || temp.type == CORNER)
+  { // Make sure the pieces are roatetd correctly if mutation occured on a 
+    // corner or edge piece
 
     // Rotate piece 1
     BoardManager::GetInstance()->FixOrientation(&pBoard->boardVecs[pieceIndex1[0]]
@@ -161,6 +151,45 @@ void Mutation::Swap(int boardID, bool startPiece)
       [pieceIndex2[1]], pieceIndex2[0],
       pieceIndex2[1]);
   }
+
+} // SwapPiece()
+
+
+void Mutation::RotatePiece(int boardID, int pieceIndex[2])
+{ // Rotates a piece 90 degrees clockwise, checks for orientation overflow.
+  // Board and piece index given as parameters
+
+  if (BoardManager::GetInstance()->currBoards->at(boardID).
+    boardVecs[pieceIndex[0]][pieceIndex[1]].orientation == 3)
+  { // If the orientation is 1 rotation away from full 360 degree rotation
+    // reset to original rotation
+    BoardManager::GetInstance()->currBoards->at(boardID).
+      boardVecs[pieceIndex[0]][pieceIndex[1]].orientation = 0;
+  }
+  else
+  { // If next rotation will not be original orientation, increment orientation
+    BoardManager::GetInstance()->currBoards->at(boardID).
+      boardVecs[pieceIndex[0]][pieceIndex[1]].orientation++;
+  }
+
+} // RotatePiece()
+
+
+void Mutation::Swap(int boardID, bool startPiece)
+{ // Swaps two random pieces in the board that has the ID given as the parameter
+
+  int pieceIndex1[2] = { -1, -1 };     // Holds index of the first piece
+  int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece
+
+  // Get random piece type for mutation
+  PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
+
+  // Get two random piece indexed of the generated type
+  GetRandPiece(pieceIndex1, type, startPiece);
+  GetRandPiece(pieceIndex2, type, startPiece);
+
+  // Call to swap the pieces with the index that have been generated
+  SwapPiece(boardID, pieceIndex1, pieceIndex2);
 
 } // Swap()
 
@@ -177,18 +206,8 @@ void Mutation::Rotate(int boardID)
   // included due to border rotation already being managed
   GetRandPiece(pieceIndex, INNER, false);
 
-  if (BoardManager::GetInstance()->currBoards->at(boardID).
-    boardVecs[pieceIndex[0]][pieceIndex[1]].orientation == 3)
-  { // If the orientation is 1 rotation away from full 360 degree rotation
-    // reset to original rotation
-    BoardManager::GetInstance()->currBoards->at(boardID).
-      boardVecs[pieceIndex[0]][pieceIndex[1]].orientation = 0;
-  }
-  else
-  { // If next rotation will not be original orientation, increment orientation
-    BoardManager::GetInstance()->currBoards->at(boardID).
-      boardVecs[pieceIndex[0]][pieceIndex[1]].orientation++;
-  }
+  // Rotate the piece with the generated index within the given board
+  RotatePiece(boardID, pieceIndex);
 
 } // Rotate()
 
