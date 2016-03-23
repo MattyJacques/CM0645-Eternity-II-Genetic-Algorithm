@@ -181,8 +181,7 @@ void Crossover::Reproduce(int parents[2])
   if (crossType == ONEPOINT)
     OnePoint(parents);
   else if (crossType == TWOPOINT)
-    //TwoPoint(parents);
-    int i = 0;
+    TwoPoint(parents);
   else
     std::cout << "Crossover method not recognised" << std::endl;
 
@@ -208,7 +207,6 @@ void Crossover::OnePoint(int parents[2])
 
   for (int i = 0; i < 2; i++)
   { // Initialise new empty boards and give the boards an ID
-
     BoardManager::GetInstance()->InitEmptyBoard(&offspring[i]);
     offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->
                                 size() + (i + 1);
@@ -258,6 +256,91 @@ void Crossover::OnePoint(int parents[2])
   }
 
 } // OnePoint()
+
+
+void Crossover::TwoPoint(int parents[2])
+{ // Takes two candidates, selects two points of the candidate to slice and
+  // exchanges the data after that point with the second parent, switching
+  // again after the second point. Explained fully in the report, chapter 3.
+
+  Board offspring[2];      // Holds the two new offspring boards
+  int xIndex = 0;          // xIndex of the current piece to copy over
+  int yIndex = 0;          // yIndex of the current piece to copy over
+
+  // Work out number of pieces to avoid calculations for each check below.
+  // + 1 to include the 0 index
+  int numOfPieces = (BoardManager::GetInstance()->boardSize + 1) *
+    (BoardManager::GetInstance()->boardSize + 1);
+
+  // Get random crossover points to split the boards, making sure the second
+  // generated number is after the first
+  int crossPoint[2] = { GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1),
+                        GeneticAlgorithm::GenRandomNum(crossPoint[0] + 1, 
+                        numOfPieces) };
+
+  for (int i = 0; i < 2; i++)
+  { // Initialise new empty boards and give the boards an ID
+    BoardManager::GetInstance()->InitEmptyBoard(&offspring[i]);
+    offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->
+      size() + (i + 1);
+  }
+
+  for (int i = 0; i < numOfPieces; i++)
+  { // Loop for all pieces to copy over in to new board
+
+    if (i <= crossPoint[0])
+    { // If i is less or equal than the first crossover point
+
+      // Add the piece from parent 1 to offspring 1
+      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
+
+      // Add the piece from parent 2 to offspring 2
+      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
+    }
+    else if (i > crossPoint[0] && i <= crossPoint[1])
+    { // If i is greater than first crossover point but not reached second
+      // crossover point
+
+      // Add the piece from parent 1 to offspring 2
+      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
+
+      // Add the piece from parent 2 to offspring 1
+      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
+    }
+    else if (i > crossPoint[1])
+    { // If i is greater than the second crossover point
+
+      // Add the piece from parent 1 to offspring 1
+      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
+
+      // Add the piece from parent 2 to offspring 2
+      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
+        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
+    }
+
+    xIndex++;  // Increment the xIndex to move to next slot in row
+
+    if (xIndex == BoardManager::GetInstance()->boardSize + 1)
+    { // If we have reached the end of the line of the board, increment row
+
+      xIndex = 0;
+      yIndex++;
+    }
+
+  } // for i < pieceVec.size()
+
+  for (int i = 0; i < 2; i++)
+  { // Push the new offspring on to the new population
+
+    BoardManager::GetInstance()->currBoards->push_back(offspring[i]);
+  }
+
+} // TwoPoint()
 
 
 void Crossover::CheckDuplication()

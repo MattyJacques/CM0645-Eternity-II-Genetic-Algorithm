@@ -54,6 +54,11 @@ private:
   // report, chapter 3
   void OnePoint(int parents[2]);
 
+  // Takes two candidates, selects two points of the candidate to slice and
+  // exchanges the data after that point with the second parent, switching
+  // again after the second point. Explained fully in the report, chapter 3.
+  void TwoPoint(int parents[2]);
+
   // Scans through candidate to check if puzzle pieces end up appearing twice
   // within the same candidate, taking the duplicate list from one candidate
   // to place pieces within the candidate that no longer has them
