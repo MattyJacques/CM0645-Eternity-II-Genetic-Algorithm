@@ -221,7 +221,7 @@ void Mutation::Rotate(int boardID)
 } // Rotate()
 
 
-void Mutation::RotateSwap(int boardID)
+void Mutation::RotateSwap(int boardID, bool startPiece)
 { // Process the Rotate & Swap mutation method as described in chapter 3 of the
   // report. Generates two random indexes of pieces within the board, rotates
   // clockwise 90 degress and swap the locations of the pieces
@@ -232,8 +232,8 @@ void Mutation::RotateSwap(int boardID)
   // Get a random piece index of type INNER without caring if the piece is the
   // starting piece due to rotate not breaking the constraint. INNER not
   // included due to border rotation already being managed
-  GetRandPiece(pieceIndex1, INNER, false, false);
-  GetRandPiece(pieceIndex1, INNER, false, false);
+  GetRandPiece(pieceIndex1, INNER, startPiece, false);
+  GetRandPiece(pieceIndex1, INNER, startPiece, false);
 
   // Call to rotate both pieces
   RotatePiece(boardID, pieceIndex1);
@@ -247,8 +247,9 @@ void Mutation::RotateSwap(int boardID)
 
 void Mutation::RegionRotate(int boardID)
 { // Process the Region Rotate mutation method as described in chapter 3 of
-  // report.  Generates two random indexes which will be used as the top left
-  // pieces of two 2 x 2 regions then swaps locations of regions 
+  // report. Generates a random index of a puzzle piece to use as the top left
+  // piece of a 2 x 2 region. Rotates the entire 2 x 2 region 90 degrees
+  // clockwise
 
   int regionIndex[2] = { -1, -1 };      // Holds top left index of region
 
@@ -273,6 +274,39 @@ void Mutation::RegionRotate(int boardID)
   RotatePiece(boardID, regionIndex);
 
 } // RegionRotate()
+
+
+void Mutation::RegionSwap(int boardID, bool startPiece)
+{ // Process the Region Swap mutation method as described in chapter 3 of the
+  // report. Generates two random indexes which will be used as the top left
+  // pieces of two 2 x 2 regions then swaps locations of regions 
+
+  int regionIndex1[2] = { -1, -1 };    // Holds top left index of first region
+  int regionIndex2[2] = { -1, -1 };    // Holds top left index of second region
+
+  // Generate the top left indexes of two regions
+  GetRandPiece(regionIndex1, INNER, startPiece, true);
+  GetRandPiece(regionIndex2, INNER, startPiece, true);
+
+  // Swap the top left region pieces
+  SwapPiece(boardID, regionIndex1, regionIndex2);
+
+  // Set region indexes to top right of regions and swap
+  regionIndex1[0]++;
+  regionIndex2[0]++;
+  SwapPiece(boardID, regionIndex1, regionIndex2);
+
+  // Set region indexes to bottom right of regions and swap
+  regionIndex1[1]++;
+  regionIndex2[1]++;
+  SwapPiece(boardID, regionIndex1, regionIndex2);
+
+  // Set region indexes to bottom left of regions and swap
+  regionIndex1[0]--;
+  regionIndex2[0]--;
+  SwapPiece(boardID, regionIndex1, regionIndex2);
+
+} // RegionSwap()
 
 
 void Mutation::Setup(MutateType type, double rate, int popSize)
@@ -300,14 +334,14 @@ void Mutation::DoMutation(bool startPiece)
 
     if (mutType == SWAP)   // If mutation method is swap, do swap
       Swap(boardID, startPiece);
-    //else if (mutType == ROTATE)
-    //  Rotate();
-    //else if (mutType == ROTATESWAP)
-    //  RotateSwap();
-    //else if (mutType == REGIONSWAP)
-    //  RegionSwap();
-    //else if (mutType == REGIONROTATE)
-    //  RegionRotate();
+    else if (mutType == ROTATE)
+      Rotate(boardID);
+    else if (mutType == ROTATESWAP)
+      RotateSwap(boardID, startPiece);
+    else if (mutType == REGIONSWAP)
+      RegionSwap(boardID, startPiece);
+    else if (mutType == REGIONROTATE)
+      RegionRotate(boardID);
     else                  // Mutation method not recognised, output error
       std::cout << "Mutation method not recognised" << std::endl;
 

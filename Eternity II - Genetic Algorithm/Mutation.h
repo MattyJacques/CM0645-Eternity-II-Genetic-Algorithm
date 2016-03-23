@@ -48,18 +48,18 @@ private:
   // Process the Rotate & Swap mutation method as described in chapter 3 of the
   // report. Generates two random indexes of pieces within the board, rotates
   // clockwise 90 degress and swap the locations of the pieces
-  void RotateSwap(int boardID);
+  void RotateSwap(int boardID, bool startPiece);
 
   // Process the Region Rotate mutation method as described in chapter 3 of
-  // report.  Generates two random indexes which will be used as the top left
-  // pieces of two 2 x 2 regions then swaps locations of regions 
-  void RegionRotate(int boardID);
-
-  // Process the Region Swap mutation method as described in chapter 3 of the
   // report. Generates a random index of a puzzle piece to use as the top left
   // piece of a 2 x 2 region. Rotates the entire 2 x 2 region 90 degrees
   // clockwise
-  void RegionSwap(int boardID);
+  void RegionRotate(int boardID);
+
+  // Process the Region Swap mutation method as described in chapter 3 of the
+  // report. Generates two random indexes which will be used as the top left
+  // pieces of two 2 x 2 regions then swaps locations of regions 
+  void RegionSwap(int boardID, bool startPiece);
 
   // Scrambles the entire population as an attampt to repair the algorithm
   // getting stuck in local maxima. Does this by creating new boards with
