@@ -26,7 +26,7 @@ private:
 
   // Sets the 2 dimensional index for a random piece with the type given
   // as a parameter
-  void GetRandPiece(int index[2], PieceType type, bool startPiece);
+  void GetRandPiece(int index[2], PieceType type, bool startPiece, bool region);
 
   // Swaps two pieces within the board with the ID given. Pieces to swap
   // also given as parameters

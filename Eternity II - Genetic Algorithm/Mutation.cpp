@@ -25,7 +25,8 @@ void Mutation::CalcMutRate(double rate, int popSize)
 } // CalcMutRate()
 
 
-void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
+void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece,
+                            bool region)
 { // Sets the 2 dimensional index for a random piece with the type given
   // as a parameter
 
@@ -108,6 +109,14 @@ void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece)
       } while (index[0] == 8 && index[1] == 7);
 
     }
+    else if (region)
+    { // If index is for region, generate index that does not include the right
+      // colum or bottom row of inner pieces
+      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+        boardSize - 2);
+      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+        boardSize - 2);
+    }
     else
     { // If start constraint is not active, just chose any random inner piece
       index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
@@ -185,8 +194,8 @@ void Mutation::Swap(int boardID, bool startPiece)
   PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
 
   // Get two random piece indexed of the generated type
-  GetRandPiece(pieceIndex1, type, startPiece);
-  GetRandPiece(pieceIndex2, type, startPiece);
+  GetRandPiece(pieceIndex1, type, startPiece, false);
+  GetRandPiece(pieceIndex2, type, startPiece, false);
 
   // Call to swap the pieces with the index that have been generated
   SwapPiece(boardID, pieceIndex1, pieceIndex2);
@@ -204,7 +213,7 @@ void Mutation::Rotate(int boardID)
   // Get a random piece index of type INNER without caring if the piece is the
   // starting piece due to rotate not breaking the constraint. INNER not
   // included due to border rotation already being managed
-  GetRandPiece(pieceIndex, INNER, false);
+  GetRandPiece(pieceIndex, INNER, false, false);
 
   // Rotate the piece with the generated index within the given board
   RotatePiece(boardID, pieceIndex);
@@ -223,8 +232,8 @@ void Mutation::RotateSwap(int boardID)
   // Get a random piece index of type INNER without caring if the piece is the
   // starting piece due to rotate not breaking the constraint. INNER not
   // included due to border rotation already being managed
-  GetRandPiece(pieceIndex1, INNER, false);
-  GetRandPiece(pieceIndex1, INNER, false);
+  GetRandPiece(pieceIndex1, INNER, false, false);
+  GetRandPiece(pieceIndex1, INNER, false, false);
 
   // Call to rotate both pieces
   RotatePiece(boardID, pieceIndex1);
@@ -234,6 +243,36 @@ void Mutation::RotateSwap(int boardID)
   SwapPiece(boardID, pieceIndex1, pieceIndex2);
 
 } // RotateSwap()
+
+
+void Mutation::RegionRotate(int boardID)
+{ // Process the Region Rotate mutation method as described in chapter 3 of
+  // report.  Generates two random indexes which will be used as the top left
+  // pieces of two 2 x 2 regions then swaps locations of regions 
+
+  int regionIndex[2] = { -1, -1 };      // Holds top left index of region
+
+  // Generate a random index for the top right of the region, making sure the
+  // index is not on the right coloum or bottom row of inner edges. Set region
+  // mode for generating index to true
+  GetRandPiece(regionIndex, INNER, false, true);
+
+  // Rotate top left piece of region
+  RotatePiece(boardID, regionIndex);
+
+  // Set region index to top right of region and rotate
+  regionIndex[0]++;
+  RotatePiece(boardID, regionIndex);
+
+  // Set region index to bottom right of region and rotate
+  regionIndex[1]++;
+  RotatePiece(boardID, regionIndex);
+
+  // Set region index to bottom left of region and rotate
+  regionIndex[0]--;
+  RotatePiece(boardID, regionIndex);
+
+} // RegionRotate()
 
 
 void Mutation::Setup(MutateType type, double rate, int popSize)
