@@ -307,7 +307,7 @@ int FitnessFunction::CheckInnerPieces()
   {  // Y index for checking slots, after line has completed, increment row
 
     for (int i = 1; i < pBoardMan->boardSize - 1; i++)
-    { // X index for checking slots, after line has completed, increment coloumn
+    { // X index for checking slots
 
       if (IsMatchSide(i, j, i + 1, j))
       { // If right side matches piece to the right add score
@@ -321,20 +321,22 @@ int FitnessFunction::CheckInnerPieces()
         matchCount++;
       }
 
-      if (IsMatchBottom(pBoardMan->boardSize - 1, i, pBoardMan->boardSize - 1,
-                        i + 1))
-      { // If the last inner in row i piece has a match at bottom, add score
-        pBoard->fitScore += INNERMATCH;
-        matchCount++;
-      }
-
-      if (IsMatchSide(i, pBoardMan->boardSize - 1, i + 1, 
-                      pBoardMan->boardSize - 1))
-      { // If the most bottom inner piece in col i has match at right, add score
-        pBoard->fitScore += INNERMATCH;
-        matchCount++;
-      }
     } // for int i < boardSize
+
+    if (IsMatchBottom(pBoardMan->boardSize - 1, j, pBoardMan->boardSize - 1,
+      j + 1))
+    { // If the last inner in row i piece has a match at bottom, add score
+      pBoard->fitScore += INNERMATCH;
+      matchCount++;
+    }
+
+    if (IsMatchSide(j, pBoardMan->boardSize - 1, j + 1,
+      pBoardMan->boardSize - 1))
+    { // If the most bottom inner piece in col i has match at right, add score
+      pBoard->fitScore += INNERMATCH;
+      matchCount++;
+    }
+
   } // for int j < boardSize
 
   return matchCount; // Return how many pattern matched were achieved
