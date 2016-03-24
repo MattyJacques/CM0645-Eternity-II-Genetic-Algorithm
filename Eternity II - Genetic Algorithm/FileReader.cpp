@@ -41,13 +41,14 @@ bool FileReader::OpenFile(const char* fileName)
   
   bool result = false;
 
-  // Open the file
-  theFile.open(fileName);
+  // Open the file with in out and append flags
+  theFile.open(fileName, std::ios::in | std::ios::out | std::ios::app);
 
   // Check to see if file is open
   if (theFile.is_open())
     result = true;
 
+  // Return whether seccuessful
   return result;
 
 } // OpenFile()
@@ -320,29 +321,19 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
 { // Output the board to a file to show progress or solved board, file name is
   // date generation and time ran.
 
-  std::string fileName = "Solutions/Generation ";  // Filename of output
   char intBuff[10];             // Holds integer that has been converted to char
   std::string topLine;         // Holds the first row of output
   std::string midLine;         // Holds the middle row of output
   std::string botLine;         // Holds the bottom row of output
 
-  // Convert the number of generations to a char
-  itoa(genCount, intBuff, 10);
-
-  // Add converted char to string then add file extension
-  fileName += intBuff;
-  fileName += ".txt";
-
   // If the solution directory does not exist, create it
   if (!DirExists("Solutions"))
     CreateDir("Solutions");
 
-  // Create new file object with output permission. (New object needed due to
-  // constructor creating a new file)
-  std::ofstream output(fileName, std::ios::out);
-
-  if (output.is_open())
+  if (OpenFile(outFilename.c_str()))
   { // If file has been created and open successfully format the output
+
+    theFile << std::endl << "Generation: " << genCount << std::endl;
 
     for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
     { // Y index for pieces to output
@@ -384,9 +375,9 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
         botLine += "  ";    // Ass whitepsace for formatting
       } // for i < boardSize
 
-      output << topLine << std::endl;   // Output the top line to file
-      output << midLine << std::endl;   // Output the middle line to file
-      output << botLine << std::endl;   // Output the bottom line to file
+      theFile << topLine << std::endl;   // Output the top line to file
+      theFile << midLine << std::endl;   // Output the middle line to file
+      theFile << botLine << std::endl;   // Output the bottom line to file
 
       topLine.clear();                  // Clear top string for next line
       midLine.clear();                  // Clear middle string for next line
@@ -394,7 +385,7 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
     } // for j < boardSize
 
     // Close the file after use 
-    output.close();
+    theFile.close();
 
   } // if file is open
 
@@ -436,19 +427,18 @@ bool FileReader::DirExists(const char* dirName)
 void FileReader::OutputFitness(int fitness)
 { // Appends the fitness to file for tracking of algorithm performance
 
-  std::ofstream output(outFilename.c_str(), std::ios::out | std::ios::app);
+  // If the solution directory does not exist, create it
+  if (!DirExists("Solutions"))
+    CreateDir("Solutions");
 
-  if (output.is_open())
+  if (OpenFile(outFilename.c_str()))
   { // If output file opened successfully output the fitness
 
-    char intBuff[10];  // For conversion of fitness int
-
     // Convert the fitness integer and output the line to the file
-    itoa(fitness, intBuff, 10);
-    output << intBuff << std::endl;
+    theFile << fitness << std::endl;
 
     // Close file after use
-    output.close();
+    theFile.close();
   }
 
 } // OutputFitness()

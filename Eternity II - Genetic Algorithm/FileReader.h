@@ -18,7 +18,7 @@ class FileReader
 {
 
 private:
-  std::ifstream theFile;              // File open to read from
+  std::fstream theFile;              // File open to read from
   std::vector<std::string> filenames; // Holds all filenames held in directory
   static std::string outFilename;     // Holds filename of output file
 
