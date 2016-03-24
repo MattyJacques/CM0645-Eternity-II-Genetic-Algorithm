@@ -48,7 +48,8 @@ private:
   PieceType CheckType(int* pData);
 
   // Calculate the output filename
-  void SetOutFilename(int boardSize, int pattern);
+  void SetOutFilename(int boardSize, int patternNum, int select, int crossover,
+                      int mutation);
 
   // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
@@ -57,6 +58,12 @@ private:
   // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution
   void OutputIDs(Board* pBoard, int genCount);
+
+  // Append the selection method and crossover method to filename
+  void AppendSelectCross(int select, int crossover);
+
+  // Append the mutation method to filename
+  void AppendMutation(int mutation);
 
 public:
   // Calls to scan the directory for piece data files

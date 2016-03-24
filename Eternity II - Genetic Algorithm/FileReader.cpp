@@ -125,7 +125,8 @@ Settings FileReader::ReadSettingsFile()
   ReadDataFile(setData.boardSize, setData.patternNum);
 
   // Calculate output filename
-  SetOutFilename(setData.boardSize, setData.patternNum);
+  SetOutFilename(setData.boardSize, setData.patternNum, setData.selectType,
+                 setData.crossType, setData.mutType);
 
   return setData;  // Return parsed data
 
@@ -434,7 +435,8 @@ void FileReader::OutputFitness(int fitness)
 } // OutputFitness()
 
 
-void FileReader::SetOutFilename(int boardSize, int patternNum)
+void FileReader::SetOutFilename(int boardSize, int patternNum, int select,
+                                int crossover, int mutation)
 { // Calculate the output filename
 
   char intBuff[10] = "/0";      // Holds result of itoa
@@ -454,6 +456,60 @@ void FileReader::SetOutFilename(int boardSize, int patternNum)
   itoa(patternNum, intBuff, 10);
   outFilename += intBuff;
 
+  AppendSelectCross(select, crossover);  // Append select and crossover methods
+  AppendMutation(mutation);              // Append mutation method
+
   outFilename += ".txt";  // Append file extension to filename
 
 } // SetOutFilename()
+
+
+void FileReader::AppendSelectCross(int select, int crossover)
+{ // Append the selection method and crossover method to filename
+
+  if (select == 0)
+  { // If selection method is Roulette, append roulette
+    outFilename += " Roulette ";
+  }
+  else if (select == 1)
+  { // If selection method is Tournament, append tournament
+    outFilename += " Tournament ";
+  }
+
+  if (crossover == 0)
+  { // If crossover method is one point, append one point
+    outFilename += " OnePoint ";
+  }
+  else
+  { // If crossover method is two point, append two point
+    outFilename += " TwoPoint ";
+  }
+
+} // AppendSelectCross()
+
+
+void FileReader::AppendMutation(int mutation)
+{ // Append the mutation method to filename
+
+  if (mutation == 0)
+  { // If mutation method is swap, append swap
+    outFilename += " Swap";
+  }
+  else if (mutation == 1)
+  { // If mutation method is rotate, append rotate
+    outFilename += " Rotate";
+  }
+  else if (mutation == 2)
+  { // If mutation method is rotate swap, append rotate swap
+    outFilename += " RotateSwap";
+  }
+  else if (mutation == 3)
+  { // If mutation method is region swap, append region swap
+    outFilename += " RegionSwap";
+  }
+  else if (mutation == 4)
+  { // If mutation method is region rotate, append region rotate
+    outFilename += " RegionRotate";
+  }
+
+} // AppendMutation()
