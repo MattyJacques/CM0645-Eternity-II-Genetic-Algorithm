@@ -47,15 +47,16 @@ private:
   // answer
   PieceType CheckType(int* pData);
 
-  // Makes a directory in the application root folder using the name provided
-  bool CreateDir(const char* dirName);
-
-  // Checks to see if the directory with the name provided exists in the 
-  // applications root folder
-  bool DirExists(const char* dirName);
-
   // Calculate the output filename
   void SetOutFilename(int boardSize, int pattern);
+
+  // Outputs the board to file using the pattern IDs so user can see the
+  // matches for themselves
+  void OutputMatches(Board* pBoard, int genCount);
+
+  // Output the board to file using the piece IDs and orientations so the user
+  // can see which piece does where with the current solution
+  void OutputIDs(Board* pBoard, int genCount);
 
 public:
   // Calls to scan the directory for piece data files

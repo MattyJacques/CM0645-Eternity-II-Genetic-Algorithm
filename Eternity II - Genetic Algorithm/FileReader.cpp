@@ -321,115 +321,105 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
 { // Output the board to a file to show progress or solved board, file name is
   // date generation and time ran.
 
-  char intBuff[10];             // Holds integer that has been converted to char
-  std::string topLine;         // Holds the first row of output
-  std::string midLine;         // Holds the middle row of output
-  std::string botLine;         // Holds the bottom row of output
-
-  // If the solution directory does not exist, create it
-  if (!DirExists("Solutions"))
-    CreateDir("Solutions");
-
   if (OpenFile(outFilename.c_str()))
-  { // If file has been created and open successfully format the output
-
-    theFile << std::endl << "Generation: " << genCount << std::endl;
-
-    for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
-    { // Y index for pieces to output
-      for (int i = 0; i <= BoardManager::GetInstance()->boardSize; i++)
-      { // X index for pieces to ouput, parse a piece into three rows
-        // of output.
-
-        // Reset the char array for conversion and convert pattern ID to char
-        intBuff[0] = '/0';
-        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), 
-             intBuff, 10);
-
-        topLine += "  ";    // Add whitespace for formatting
-        topLine += intBuff;  // Add converted pattern ID to top line
-        topLine += "  ";    // Add more whitespace for formatting
-
-        // Reset the char array for conversion and convert pattern ID to char
-        intBuff[0] = '/0';
-        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), 
-             intBuff, 10);
-
-        midLine += intBuff;  // Add converted pattern ID to the middle line
-        midLine += "   ";   // Add whitespace for formatting
-
-        // Reset the char array for conversion and convert pattern ID to char
-        intBuff[0] = '/0';
-        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), 
-             intBuff, 10);
-
-        midLine += intBuff;  // Add right pattern ID to middle line
-
-        // Reset the char array for conversion and convert pattern ID to char
-        intBuff[0] = '/0';
-        itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), 
-             intBuff, 10);
-
-        botLine += "  ";    // Add whitespace for formatting
-        botLine += intBuff;  // Add bottom pattern ID to bottom line
-        botLine += "  ";    // Ass whitepsace for formatting
-      } // for i < boardSize
-
-      theFile << topLine << std::endl;   // Output the top line to file
-      theFile << midLine << std::endl;   // Output the middle line to file
-      theFile << botLine << std::endl;   // Output the bottom line to file
-
-      topLine.clear();                  // Clear top string for next line
-      midLine.clear();                  // Clear middle string for next line
-      botLine.clear();                  // Clear bottom string for next line
-    } // for j < boardSize
-
-    // Close the file after use 
-    theFile.close();
-
-  } // if file is open
+  { // If file has been created and open successfully output the data
+    
+    OutputMatches(pBoard, genCount);   // Output board with pattern IDs
+    OutputIDs(pBoard, genCount);       // Output board with piece IDs 
+    theFile.close();                   // Close the file after use
+  }
 
 } // OutputBoard()
 
 
-bool FileReader::CreateDir(const char* dirName)
-{ // Makes a directory in the application root folder using the name provided
+void FileReader::OutputMatches(Board* pBoard, int genCount)
+{ // Outputs the board to file using the pattern IDs so user can see the
+  // matches for themselves
 
-  bool result = false;    // Hold if successful or not
-  wchar_t wtext[50];      // Holds converted dirName
+  char buff[10];              // Holds integer that has been converted to char
+  std::string output[3];      // Holds the three rows of output
 
-  // Convert the dirName to wide char
-  mbstowcs(wtext, dirName, strlen(dirName + 1));
+  theFile << std::endl << "Generation: " << genCount << std::endl;
 
-  // If directory created successfully change result to true
-  if (CreateDirectory(wtext, NULL))
-    result = true;
+  for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
+  { // Y index for pieces to output
+    for (int i = 0; i <= BoardManager::GetInstance()->boardSize; i++)
+    { // X index for pieces to ouput, parse a piece into three rows
+      // of output.
 
-  return result;   // Return result
+      // Reset the char array for conversion and convert pattern ID to char
+      buff[0] = '/0';
+      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), buff, 
+           10);
 
-} // CreateDir()
+      output[0] += "  ";      // Add whitespace for formatting
+      output[0] += buff;      // Add converted pattern ID to top line
+      output[0] += "  ";      // Add more whitespace for formatting
+
+      // Reset the char array for conversion and convert pattern ID to char
+      buff[0] = '/0';
+      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), buff, 
+           10);
+
+      output[1] += buff;     // Add converted pattern ID to the middle line
+      output[1] += "   ";    // Add whitespace for formatting
+
+      // Reset the char array for conversion and convert pattern ID to char
+      buff[0] = '/0';
+      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), buff,
+           10);
+
+      output[1] += buff;     // Add right pattern ID to middle line
+
+      // Reset the char array for conversion and convert pattern ID to char
+      buff[0] = '/0';
+      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), buff,
+           10);
+
+      output[2] += "  ";    // Add whitespace for formatting
+      output[2] += buff;    // Add bottom pattern ID to bottom line
+      output[2] += "  ";    // Ass whitepsace for formatting
+    } // for i < boardSize
+
+    theFile << output[0] << std::endl;   // Output the top line to file
+    theFile << output[1] << std::endl;   // Output the middle line to file
+    theFile << output[2] << std::endl;   // Output the bottom line to file
+
+    output[0].clear();                   // Clear top string for next line
+    output[1].clear();                   // Clear middle string for next line
+    output[2].clear();                   // Clear bottom string for next line
+  } // for j < boardSize
+
+} // OutputMatches()
 
 
-bool FileReader::DirExists(const char* dirName)
-{ // Checks to see if the directory with the name provided exists in the 
-  // applications root folder
+void FileReader::OutputIDs(Board* pBoard, int genCount)
+{ // Output the board to file using the piece IDs and orientations so the user
+  // can see which piece does where with the current solution
 
-  // Get the folder attributes with the given path
-  DWORD fileAtt = ::GetFileAttributesA(dirName);
+  theFile << std::endl;   // Add whitepsace between two boards
 
-  // Return if a directory and if there is a fault with directory
-  return (fileAtt & FILE_ATTRIBUTE_DIRECTORY && 
-          fileAtt != INVALID_FILE_ATTRIBUTES);
+  for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
+  { // Y index for pieces to output
+    for (int i = 0; i <= BoardManager::GetInstance()->boardSize; i++)
+    { // X index for pieces to output
 
-} // DirExists()
+      // Output piece ID and add comma for separator
+      theFile << pBoard->boardVecs[i][j].pieceID << ",";
+
+      // Output the piece orientation and add some whitespace to seperate
+      // piece data
+      theFile << pBoard->boardVecs[i][j].orientation << "  ";
+    }
+
+    theFile << std::endl; // Add whitespace for next row
+  }
+
+} // OutputIDs()
 
 
 void FileReader::OutputFitness(int fitness)
 { // Appends the fitness to file for tracking of algorithm performance
-
-  // If the solution directory does not exist, create it
-  if (!DirExists("Solutions"))
-    CreateDir("Solutions");
 
   if (OpenFile(outFilename.c_str()))
   { // If output file opened successfully output the fitness
