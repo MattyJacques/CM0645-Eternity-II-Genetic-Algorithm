@@ -13,7 +13,7 @@
 Crossover::Crossover()
 { // Sets tournament size, initalise methods to default
 
-  tournamentSize = 20;
+  tournamentSize = 10;
   crossType = ONEPOINT;
   selectType = ROULETTE;
 
