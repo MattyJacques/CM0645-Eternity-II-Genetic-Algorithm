@@ -178,11 +178,22 @@ void GeneticAlgorithm::RunGA()
       stuckCounter = 200;
     }
 
+    OutputFitness();
+
   } // Main algorithm loop
 
   OutputSolved(); // Output the solved board
 
 } // RunGA()
+
+
+void GeneticAlgorithm::OutputFitness()
+{ // Calls to ouput the current fitness to the file for record of performance
+
+  FileReader fileMan;                       // Create object for output
+  fileMan.OutputFitness(currentFitness);    // Call to output the fitness
+
+} // OutputFitness()
 
 
 void GeneticAlgorithm::OutputSolved()

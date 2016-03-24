@@ -20,6 +20,7 @@ class FileReader
 private:
   std::ifstream theFile;              // File open to read from
   std::vector<std::string> filenames; // Holds all filenames held in directory
+  static std::string outFilename;     // Holds filename of output file
 
   // Opens the file using the filename provided return whether successful
   bool OpenFile(const char* fileName);
@@ -53,6 +54,9 @@ private:
   // applications root folder
   bool DirExists(const char* dirName);
 
+  // Calculate the output filename
+  void SetOutFilename(int boardSize, int pattern);
+
 public:
   // Calls to scan the directory for piece data files
   FileReader();
@@ -68,5 +72,8 @@ public:
   // Output the board to a file to show progress or solved board, file name is
   // date, generation and time ran.
   void OutputBoard(Board* pBoard, int genCount);
+
+  // Calculate the output filename
+  void OutputFitness(int fitness);
 };
 

@@ -59,6 +59,9 @@ private:
   // Output the solved bored along with how many generation it took to solve
   void OutputSolved();
 
+  // Calls to ouput the current fitness to the file for record of performance
+  void OutputFitness();
+
   // Initialise random population of candidates. Used at the start of the 
   // algorithm to get the initial population and also used for the scramble
   // repair method if fitness has not increased within a period of generations

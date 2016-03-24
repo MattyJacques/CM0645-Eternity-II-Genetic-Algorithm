@@ -11,6 +11,9 @@
 #include <windows.h>        // Include file directory functions
 
 
+std::string FileReader::outFilename = "/0";
+
+
 FileReader::FileReader()
 { // Calls to the file directory for available piece data files, make sure
   // puzzle piece vector is initialised
@@ -116,7 +119,12 @@ Settings FileReader::ReadSettingsFile()
     printf("Loaded: settings.ini\n\n");  // Output loading complete
   }
 
+  // Read in puzzle pieces
   ReadDataFile(setData.boardSize, setData.patternNum);
+
+  // Calculate output filename
+  SetOutFilename(setData.boardSize, setData.patternNum);
+
   return setData;  // Return parsed data
 
 } // ReadSettingsFile()
@@ -312,16 +320,16 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
   // date generation and time ran.
 
   std::string fileName = "Solutions/Generation ";  // Filename of output
-  char intBuf[10];             // Holds integer that has been converted to char
+  char intBuff[10];             // Holds integer that has been converted to char
   std::string topLine;         // Holds the first row of output
   std::string midLine;         // Holds the middle row of output
   std::string botLine;         // Holds the bottom row of output
 
   // Convert the number of generations to a char
-  itoa(genCount, intBuf, 10);
+  itoa(genCount, intBuff, 10);
 
   // Add converted char to string then add file extension
-  fileName += intBuf;
+  fileName += intBuff;
   fileName += ".txt";
 
   // If the solution directory does not exist, create it
@@ -342,36 +350,36 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
         // of output.
 
         // Reset the char array for conversion and convert pattern ID to char
-        intBuf[0] = '/0';
+        intBuff[0] = '/0';
         itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), 
-             intBuf, 10);
+             intBuff, 10);
 
         topLine += "  ";    // Add whitespace for formatting
-        topLine += intBuf;  // Add converted pattern ID to top line
+        topLine += intBuff;  // Add converted pattern ID to top line
         topLine += "  ";    // Add more whitespace for formatting
 
         // Reset the char array for conversion and convert pattern ID to char
-        intBuf[0] = '/0';
+        intBuff[0] = '/0';
         itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), 
-             intBuf, 10);
+             intBuff, 10);
 
-        midLine += intBuf;  // Add converted pattern ID to the middle line
+        midLine += intBuff;  // Add converted pattern ID to the middle line
         midLine += "   ";   // Add whitespace for formatting
 
         // Reset the char array for conversion and convert pattern ID to char
-        intBuf[0] = '/0';
+        intBuff[0] = '/0';
         itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), 
-             intBuf, 10);
+             intBuff, 10);
 
-        midLine += intBuf;  // Add right pattern ID to middle line
+        midLine += intBuff;  // Add right pattern ID to middle line
 
         // Reset the char array for conversion and convert pattern ID to char
-        intBuf[0] = '/0';
+        intBuff[0] = '/0';
         itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), 
-             intBuf, 10);
+             intBuff, 10);
 
         botLine += "  ";    // Add whitespace for formatting
-        botLine += intBuf;  // Add bottom pattern ID to bottom line
+        botLine += intBuff;  // Add bottom pattern ID to bottom line
         botLine += "  ";    // Ass whitepsace for formatting
       } // for i < boardSize
 
@@ -422,3 +430,44 @@ bool FileReader::DirExists(const char* dirName)
           fileAtt != INVALID_FILE_ATTRIBUTES);
 
 } // DirExists()
+
+
+void FileReader::OutputFitness(int fitness)
+{ // Appends the fitness to file for tracking of algorithm performance
+
+  std::ofstream output(outFilename.c_str(), std::ios::out | std::ios::app);
+
+  if (output.is_open())
+  { // If output file opened successfully output the fitness
+
+    char intBuff[10];  // For conversion of fitness int
+
+    // Convert the fitness integer and output the line to the file
+    itoa(fitness, intBuff, 10);
+    output << intBuff << std::endl;
+
+    // Close file after use
+    output.close();
+  }
+
+} // OutputFitness()
+
+
+void FileReader::SetOutFilename(int boardSize, int patternNum)
+{ // Calculate the output filename
+
+  outFilename = "Solutions/BoardSize ";
+  char intBuff[10];
+
+  itoa(boardSize, intBuff, 10);
+  outFilename += intBuff;
+
+  outFilename += " Pattern ";
+
+  intBuff[0] = '/0';
+  itoa(patternNum, intBuff, 10);
+  outFilename += intBuff;
+
+  outFilename += ".txt";
+
+} // SetOutFilename()
