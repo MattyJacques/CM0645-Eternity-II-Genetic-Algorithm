@@ -11,6 +11,7 @@
 #include <windows.h>        // Include file directory functions
 
 
+// Initialise output file string
 std::string FileReader::outFilename = "/0";
 
 
@@ -456,18 +457,23 @@ void FileReader::OutputFitness(int fitness)
 void FileReader::SetOutFilename(int boardSize, int patternNum)
 { // Calculate the output filename
 
-  outFilename = "Solutions/BoardSize ";
-  char intBuff[10];
+  char intBuff[10] = "/0";      // Holds result of itoa
 
+  // Set directory and board size label
+  outFilename = "Solutions/BoardSize ";
+
+  // Convert board size to char and append to filename
   itoa(boardSize, intBuff, 10);
   outFilename += intBuff;
 
-  outFilename += " Pattern ";
+  outFilename += " Pattern ";   // Append pattern label
+  
+  intBuff[0] = '/0';            // Reset int conversion buffer
 
-  intBuff[0] = '/0';
+  // Convert the pattern number to char and append to filename
   itoa(patternNum, intBuff, 10);
   outFilename += intBuff;
 
-  outFilename += ".txt";
+  outFilename += ".txt";  // Append file extension to filename
 
 } // SetOutFilename()
