@@ -24,7 +24,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)
 
   popSize = theSettings.popSize; // Set the population for each generation
   maxFitness = 0;                // Initialise maximum fitness of 100% candidate
-  maxFitnessReach = 0;           // Init maximum fitness GA has reached
+  currentFitness = 0;           // Init maximum fitness GA has reached
   genCount = 0;                  // Init generation count
   maxMatches = 0;                // Init maximum matches in candidate
 
@@ -102,8 +102,17 @@ void GeneticAlgorithm::CalcMaxFitness(int boardSize)
 } // CalcMaxFitness()
 
 
-void GeneticAlgorithm::RunGA()
-{ // Main function of the GA that continually runs
+void GeneticAlgorithm::InitRandomPopulation()
+{ // Initialise random population of candidates. Used at the start of the 
+  // algorithm to get the initial population and also used for the scramble
+  // repair method if fitness has not increased within a period of generations
+
+  // Create a new vector for new population
+  std::vector<Board> newVec;
+
+  // Set the current population pointer to new population vector
+  BoardManager::GetInstance()->currBoards = 
+                                  std::make_shared<std::vector<Board>>(newVec);
 
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
@@ -112,28 +121,62 @@ void GeneticAlgorithm::RunGA()
     BoardManager::GetInstance()->currBoards->push_back(newBoard);
   }
 
-  while (maxFitnessReach != maxFitness)
+} // InitRandomPopulation()
+
+
+void GeneticAlgorithm::RunGA()
+{ // Main function of the GA that continually runs
+
+  int stuckCounter = 200;    // Counts down from 200 for test if stuck
+  int prevFitness = 0;       // Holds the previous fitness to check if stuck
+
+  // Initialise the first population
+  InitRandomPopulation();
+
+  while (currentFitness != maxFitness)
   { // While the solution has not been found, continue working towards solution
+
+    if (prevFitness < currentFitness)
+    { // If fitness has improved, reset the stuck counter and set new high
+      // score for fitness
+      prevFitness = currentFitness;
+      stuckCounter = 200;
+    }
+    else
+    { // If fitness has no improved, decrememnt to stuck counter
+      stuckCounter--;
+    }
 
     genCount++;            // Increment the count of generations
     matchCount = 0;        // Reset max amount of matches found
-    maxFitnessReach = 0;   // Reset max fitness reached
+    currentFitness = 0;    // Reset max fitness reached
 
     // Check fitness of the population
     DoFitness();
 
     // Output summary of generation
-    float fitPercent = ((float)maxFitnessReach / maxFitness) * 100.0f;
+    float fitPercent = ((float)currentFitness / maxFitness) * 100.0f;
     float matchPercent = ((float)matchCount / maxMatches) * 100.0f;
     printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n", 
-            genCount, maxFitnessReach, maxFitness, fitPercent, matchCount, 
+            genCount, currentFitness, maxFitness, fitPercent, matchCount, 
             maxMatches, matchPercent);
 
-    // Complete crossover of population
-    theCrossover.DoCrossover(popSize);
+    if (stuckCounter > 0)
+    { // If fitness improvement has been made in past 200 generations, keep
+      // trying to solve
 
-    // Complete mutation of population
-    theMutation.DoMutation(startPiece);
+      // Complete crossover of population
+      theCrossover.DoCrossover(popSize);
+
+      // Complete mutation of population
+      theMutation.DoMutation(startPiece);
+    }
+    else
+    { // If 200 generations have passed without immproved fitness, reset 
+      // population and try again
+      InitRandomPopulation();
+      stuckCounter = 200;
+    }
 
   } // Main algorithm loop
 
@@ -173,9 +216,9 @@ void GeneticAlgorithm::DoFitness()
       matchCount = matches;
 
     if (BoardManager::GetInstance()->currBoards->at(i).fitScore >
-      maxFitnessReach)
+        currentFitness)
     { // If next maximum fitness of generation found, store new max fitness
-      maxFitnessReach = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+      currentFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
     }
   }
 

@@ -23,7 +23,6 @@ BoardManager::BoardManager()
   std::vector<Board> newVec;
   currBoards = std::make_shared<std::vector<Board>>(newVec);
 
-
 } // BoardManager()
 
 

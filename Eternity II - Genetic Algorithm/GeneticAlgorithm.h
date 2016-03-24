@@ -34,7 +34,7 @@ class GeneticAlgorithm
 private:
   int popSize;                          // Holds the population size
   int maxFitness;                       // Fitness of 100% candidate
-  int maxFitnessReach;                  // Holds the max fitness of current gen
+  int currentFitness;                  // Holds the max fitness of current gen
   int matchCount;                       // Max amount pattern matches reached
   int maxMatches;                       // Max amount of pattern matches at 100%
   int genCount;                         // Count of how many generations passed
@@ -58,6 +58,11 @@ private:
 
   // Output the solved bored along with how many generation it took to solve
   void OutputSolved();
+
+  // Initialise random population of candidates. Used at the start of the 
+  // algorithm to get the initial population and also used for the scramble
+  // repair method if fitness has not increased within a period of generations
+  void InitRandomPopulation();
 
 public:
   // Constructor that sets the elite, crossover and mutation rates, along with
