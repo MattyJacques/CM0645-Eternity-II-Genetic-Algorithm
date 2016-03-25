@@ -193,9 +193,12 @@ void Mutation::Swap(int boardID, bool startPiece)
   // Get random piece type for mutation
   PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
 
-  // Get two random piece indexed of the generated type
-  GetRandPiece(pieceIndex1, type, startPiece, false);
-  GetRandPiece(pieceIndex2, type, startPiece, false);
+  while (pieceIndex1[0] == pieceIndex2[0] && pieceIndex1[1] == pieceIndex2[1])
+  { // Get two random piece indexed of the generated type, making sure the
+    // indexes are not the same
+    GetRandPiece(pieceIndex1, type, startPiece, false);
+    GetRandPiece(pieceIndex2, type, startPiece, false);
+  } 
 
   // Call to swap the pieces with the index that have been generated
   SwapPiece(boardID, pieceIndex1, pieceIndex2);
@@ -229,11 +232,14 @@ void Mutation::RotateSwap(int boardID, bool startPiece)
   int pieceIndex1[2] = { -1, -1 };     // Holds index of first piece to mutate
   int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece to mutate
 
-  // Get a random piece index of type INNER without caring if the piece is the
-  // starting piece due to rotate not breaking the constraint. INNER not
-  // included due to border rotation already being managed
-  GetRandPiece(pieceIndex1, INNER, startPiece, false);
-  GetRandPiece(pieceIndex1, INNER, startPiece, false);
+  while (pieceIndex1[0] == pieceIndex2[0] && pieceIndex1[1] == pieceIndex2[1])
+  { // Get a random piece index of type INNER without caring if the piece is the
+    // starting piece due to rotate not breaking the constraint. INNER not
+    // included due to border rotation already being managed. Makes sure pieces
+    // are not the same
+    GetRandPiece(pieceIndex1, INNER, startPiece, false);
+    GetRandPiece(pieceIndex1, INNER, startPiece, false);
+  } 
 
   // Call to rotate both pieces
   RotatePiece(boardID, pieceIndex1);
@@ -284,9 +290,12 @@ void Mutation::RegionSwap(int boardID, bool startPiece)
   int regionIndex1[2] = { -1, -1 };    // Holds top left index of first region
   int regionIndex2[2] = { -1, -1 };    // Holds top left index of second region
 
-  // Generate the top left indexes of two regions
-  GetRandPiece(regionIndex1, INNER, startPiece, true);
-  GetRandPiece(regionIndex2, INNER, startPiece, true);
+  while (regionIndex1[0] == regionIndex2[0] && 
+         regionIndex1[1] == regionIndex2[1])
+  { // Generate the top left indexes of two regions
+    GetRandPiece(regionIndex1, INNER, startPiece, true);
+    GetRandPiece(regionIndex2, INNER, startPiece, true);
+  }
 
   // Swap the top left region pieces
   SwapPiece(boardID, regionIndex1, regionIndex2);
