@@ -206,10 +206,12 @@ void Mutation::Swap(int boardID, bool startPiece)
 } // Swap()
 
 
-void Mutation::Rotate(int boardID)
+void Mutation::Rotate(int boardID, bool startPiece)
 { // Process the Rotate mutation method as described in chapter 3 of the report.
   // Generates a random index of a puzzle piece and rotates the piece 
-  // orientation by 90 degrees clockwise.
+  // orientation by 90 degrees clockwise. Calls to swap a different piece
+  // as rotate by itself would not solve a puzzle Different to rotate and swap 
+  // as different pieces recieve the swap to the rotate
 
   int pieceIndex[2] = { -1, -1 };     // Holds the piece index to rotate
 
@@ -221,13 +223,19 @@ void Mutation::Rotate(int boardID)
   // Rotate the piece with the generated index within the given board
   RotatePiece(boardID, pieceIndex);
 
+  // Call to swap a piece as rotate alone will not be enough to avoid a local
+  // maxima or solve the puzzle
+  Swap(boardID, startPiece);
+
 } // Rotate()
 
 
 void Mutation::RotateSwap(int boardID, bool startPiece)
 { // Process the Rotate & Swap mutation method as described in chapter 3 of the
   // report. Generates two random indexes of pieces within the board, rotates
-  // clockwise 90 degress and swap the locations of the pieces
+  // clockwise 90 degress and swap the locations of the pieces Due to not being
+  // able to rotate the border, swapping a different piece is called to let
+  // the border be mutated.
 
   int pieceIndex1[2] = { -1, -1 };     // Holds index of first piece to mutate
   int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece to mutate
@@ -248,14 +256,19 @@ void Mutation::RotateSwap(int boardID, bool startPiece)
   // Call to swap the locations of the pieces
   SwapPiece(boardID, pieceIndex1, pieceIndex2);
 
+  // Call to swap a piece as rotate alone will not be enough to avoid a local
+  // maxima or solve the puzzle
+  Swap(boardID, startPiece);
+
 } // RotateSwap()
 
 
-void Mutation::RegionRotate(int boardID)
+void Mutation::RegionRotate(int boardID, bool startPiece)
 { // Process the Region Rotate mutation method as described in chapter 3 of
   // report. Generates a random index of a puzzle piece to use as the top left
   // piece of a 2 x 2 region. Rotates the entire 2 x 2 region 90 degrees
-  // clockwise
+  // clockwise. Swap is also called as rotating alone will not solve. Different
+  // to rotate and swap as different pieces recieve the swap to the rotate
 
   int regionIndex[2] = { -1, -1 };      // Holds top left index of region
 
@@ -279,13 +292,18 @@ void Mutation::RegionRotate(int boardID)
   regionIndex[0]--;
   RotatePiece(boardID, regionIndex);
 
+  // Call to swap a piece as rotate alone will not be enough to avoid a local
+  // maxima or solve the puzzle
+  Swap(boardID, startPiece);
+
 } // RegionRotate()
 
 
 void Mutation::RegionSwap(int boardID, bool startPiece)
 { // Process the Region Swap mutation method as described in chapter 3 of the
   // report. Generates two random indexes which will be used as the top left
-  // pieces of two 2 x 2 regions then swaps locations of regions 
+  // pieces of two 2 x 2 regions then swaps locations of regions. 1 piece swap
+  // is also called so that the border has a chance of mutation
 
   int regionIndex1[2] = { -1, -1 };    // Holds top left index of first region
   int regionIndex2[2] = { -1, -1 };    // Holds top left index of second region
@@ -314,6 +332,10 @@ void Mutation::RegionSwap(int boardID, bool startPiece)
   regionIndex1[0]--;
   regionIndex2[0]--;
   SwapPiece(boardID, regionIndex1, regionIndex2);
+
+  // Call to swap a piece as rotate alone will not be enough to avoid a local
+  // maxima or solve the puzzle
+  Swap(boardID, startPiece);
 
 } // RegionSwap()
 

@@ -42,29 +42,30 @@ private:
 
   // Process the Rotate mutation method as described in chapter 3 of the report.
   // Generates a random index of a puzzle piece and rotates the piece 
-  // orientation by 90 degrees clockwise.
-  void Rotate(int boardID);
+  // orientation by 90 degrees clockwise. Calls to swap a different piece
+  // as rotate by itself would not solve a puzzle Different to rotate and swap 
+  // as different pieces recieve the swap to the rotate
+  void Rotate(int boardID, bool startPiece);
 
   // Process the Rotate & Swap mutation method as described in chapter 3 of the
   // report. Generates two random indexes of pieces within the board, rotates
-  // clockwise 90 degress and swap the locations of the pieces
+  // clockwise 90 degress and swap the locations of the pieces Due to not being
+  // able to rotate the border, swapping a different piece is called to let
+  // the border be mutated. 
   void RotateSwap(int boardID, bool startPiece);
 
   // Process the Region Rotate mutation method as described in chapter 3 of
   // report. Generates a random index of a puzzle piece to use as the top left
   // piece of a 2 x 2 region. Rotates the entire 2 x 2 region 90 degrees
-  // clockwise
-  void RegionRotate(int boardID);
+  // clockwise. Swap is also called as rotating alone will not solve. Different
+  // to rotate and swap as different pieces recieve the swap to the rotate
+  void RegionRotate(int boardID, bool startPiece);
 
   // Process the Region Swap mutation method as described in chapter 3 of the
   // report. Generates two random indexes which will be used as the top left
-  // pieces of two 2 x 2 regions then swaps locations of regions 
+  // pieces of two 2 x 2 regions then swaps locations of regions. 1 piece swap
+  // is also called so that the border has a chance of mutation
   void RegionSwap(int boardID, bool startPiece);
-
-  // Scrambles the entire population as an attampt to repair the algorithm
-  // getting stuck in local maxima. Does this by creating new boards with
-  // randomised piece order by calling the process ran on application start
-  void Scramble();
 
 public:
   // Initialise mutation method
