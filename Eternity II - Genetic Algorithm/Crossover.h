@@ -34,11 +34,11 @@ private:
 
   // Selects with candidates to use for reproduction with the selection method  
   // chosen when the application was started
-  void SelectParents(int parents[2], int popSize);
+  void SelectParents(int parents[2], int popSize, int totalFitness);
 
   // Selects candidates via the roulette wheel method mentioned within the report
   // in chapter 3
-  void RouletteSelect(int parents[2]);
+  void RouletteSelect(int parents[2], int fitness);
 
   // Selects candidates via the tournament selection method mentioned within the
   // report in chapter 3. Does not remove candidate from selection

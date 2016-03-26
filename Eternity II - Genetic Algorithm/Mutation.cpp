@@ -366,13 +366,13 @@ void Mutation::DoMutation(bool startPiece)
     if (mutType == SWAP)   // If mutation method is swap, do swap
       Swap(boardID, startPiece);
     else if (mutType == ROTATE)
-      Rotate(boardID);
+      Rotate(boardID, startPiece);
     else if (mutType == ROTATESWAP)
       RotateSwap(boardID, startPiece);
     else if (mutType == REGIONSWAP)
       RegionSwap(boardID, startPiece);
     else if (mutType == REGIONROTATE)
-      RegionRotate(boardID);
+      RegionRotate(boardID, startPiece);
     else                  // Mutation method not recognised, output error
       std::cout << "Mutation method not recognised" << std::endl;
 

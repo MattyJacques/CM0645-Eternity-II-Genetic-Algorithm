@@ -24,15 +24,26 @@ void Crossover::DoCrossover(int popSize)
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
 
-  // Switch the current generation to the previous generation and create new
-  // vector for current generation
-  std::vector<Board> newVec;
-  BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->currBoards;
-  BoardManager::GetInstance()->currBoards = std::make_shared<std::vector<Board>>(newVec);
+  int totalFitness = 0;   // Holds the combined fitness of all boards
+  std::vector<Board> newVec; // Create vector for new population
 
-  DoElitism(); // Transfer the elites over to new generation
+  // Switch the current generation to the previous generation
+  BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->
+                                            currBoards;
+  BoardManager::GetInstance()->currBoards = std::make_shared
+                                            <std::vector<Board>>(newVec);
 
-  while (BoardManager::GetInstance()->currBoards->size() < popSize - 1)
+  if (selectType == ROULETTE)
+  { // If using roulette method, work out the total fitness now so not working
+    // out the total fitness every select
+    for (Board i : *BoardManager::GetInstance()->prevBoards)
+    { // Loops through all boards and total up all fitness scores from boards
+      totalFitness += i.fitScore;
+    }
+  }
+
+  while (BoardManager::GetInstance()->currBoards->size() < popSize - 
+         (eliteRate * 2) - 1)
   { // While the new vector is not filled with the right population size
     // make more candidates
 
@@ -40,11 +51,17 @@ void Crossover::DoCrossover(int popSize)
 
     // Loop to make sure both selected parents are not the same candidate
     while (parents[0] == parents[1])
-      SelectParents(parents, popSize);
+    {
+      SelectParents(parents, popSize, totalFitness);
+    }
+
+    //std::cout << parents[0] << " " << parents[1] << std::endl;
 
     Reproduce(parents);  // Breed the parents together
     CheckDuplication();  // Check for any duplicate pieces
   }
+
+  DoElitism(); // Transfer the elites over to new generation
 
 } // DoCrossover()
 
@@ -84,56 +101,63 @@ void Crossover::SetMethod(CrossoverType cross, SelectionType select, int elite)
 } // SetMethod()
 
 
-void Crossover::SelectParents(int parents[2], int popSize)
+void Crossover::SelectParents(int parents[2], int popSize, int totalFitness)
 { // Selects with candidates to use for reproduction with the selection method  
   // chosen when the application was started
 
-  if (selectType == ROULETTE) // If roulette method was chosen
-    RouletteSelect(parents);
+  if (selectType == ROULETTE) 
+  { // If roulette method was chosen, work out the total fitness and do
+    // roulette selection
+    RouletteSelect(parents, totalFitness);
+  }
   else if (selectType == TOURNAMENT) // If tournament method was chosen
+  {
     TournamentSelect(parents, popSize);
+  }
   else // Output error, method not recognised
+  {
     std::cout << "Selection method not recognised" << std::endl;
+  }
 
 
 } // SelectParents()
 
 
-void Crossover::RouletteSelect(int parents[2])
+void Crossover::RouletteSelect(int parents[2], int totalFitness)
 { // Selects candidates via the roulette wheel method mentioned within the report
   // in chapter 3
 
-  int totalFitness = 0;   // Holds the combined fitness of all boards
   int oldFitness = 0;     // Holds the older combined fitness score
 
-  for (Board i : *BoardManager::GetInstance()->currBoards)
-  { // Loops through all boards and total up all fitness scores from boards
-    totalFitness += i.fitScore;
-  }
+  // Index to hold which parent the iteration relates to
+  int boardIndex = BoardManager::GetInstance()->prevBoards->size() - 1;
 
-  // Seeds time and gets two random numbers to use to pick from wheel
-  //srand((unsigned int)time(NULL));
-  parents[0] = GeneticAlgorithm::GenRandomNum(0, totalFitness);
-  parents[1] = GeneticAlgorithm::GenRandomNum(0, totalFitness);
+  // Generate two indexes to find the parents
+  int randomIndex[2] = { GeneticAlgorithm::GenRandomNum(0, totalFitness),
+                         GeneticAlgorithm::GenRandomNum(0, totalFitness) };
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
-
-  for (unsigned int i = 0; i < BoardManager::GetInstance()->currBoards->size(); i++)
+  
+  for (unsigned int i = 0; i < BoardManager::GetInstance()->prevBoards->size(); i++)
   { // Loops through all boards accumulating the fitness scores, if random number
     // is between total fitness and the previous total fitness, set the ID of
     // the parent
 
     // Set the previous fitness and add on the fitness score of the next board
     oldFitness = totalFitness;
-    totalFitness += BoardManager::GetInstance()->currBoards->at(i).fitScore;
+    totalFitness += BoardManager::GetInstance()->prevBoards->at(i).fitScore;
 
     // If section has been found for first parent, set ID
-    if (totalFitness >= parents[0] && parents[0] >= oldFitness)
+    if (totalFitness >= randomIndex[0] && randomIndex[0] >= oldFitness)
+    {
       parents[0] = i;
+    }
 
     // If section has been found for first parent, set ID
-    if (totalFitness >= parents[1] && parents[1] >= oldFitness)
+    if (totalFitness >= randomIndex[1] && randomIndex[1] >= oldFitness)
+    {
       parents[1] = i;
+    }
 
   }
 
@@ -203,7 +227,7 @@ void Crossover::OnePoint(int parents[2])
                     (BoardManager::GetInstance()->boardSize + 1);
 
   // Get random crossover point to split the boards
-  int crossPoint = GeneticAlgorithm::GenRandomNum(1, numOfPieces);
+  int crossPoint = GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1);
 
   for (int i = 0; i < 2; i++)
   { // Initialise new empty boards and give the boards an ID
