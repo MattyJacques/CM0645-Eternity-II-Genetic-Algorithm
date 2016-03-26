@@ -207,6 +207,7 @@ void GeneticAlgorithm::OutputSolved()
       FileReader fileMan;
       fileMan.OutputBoard(&BoardManager::GetInstance()->currBoards->at(i), 
                           genCount);
+      break;
     }
   }
 
