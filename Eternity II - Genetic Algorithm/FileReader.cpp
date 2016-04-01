@@ -466,20 +466,20 @@ void FileReader::AppendSelectCross(int select, int crossover)
 
   if (select == 0)
   { // If selection method is Roulette, append roulette
-    outFilename += " Roulette ";
+    outFilename += " Roulette";
   }
   else if (select == 1)
   { // If selection method is Tournament, append tournament
-    outFilename += " Tournament ";
+    outFilename += " Tournament";
   }
 
   if (crossover == 0)
   { // If crossover method is one point, append one point
-    outFilename += " OnePoint ";
+    outFilename += " OnePoint";
   }
   else
   { // If crossover method is two point, append two point
-    outFilename += " TwoPoint ";
+    outFilename += " TwoPoint";
   }
 
 } // AppendSelectCross()
