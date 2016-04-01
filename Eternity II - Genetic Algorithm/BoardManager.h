@@ -92,6 +92,26 @@ private:
   // Rotates an corner piece so the corner pattern matches the edge of the board
   void RotateCorner(PuzzlePiece* piece, int xIndex, int yIndex);
 
+  // Generate a random corner piece, two parameters so that the corner can
+  // match up to two other pieces. If no match is needed parameter equals -1.
+  // pattern1 is segment[0], pattern2 is segment[1]
+  PuzzlePiece GenCorner(int pattern1, int pattern2);
+
+  // Generate a random edge piece, two parameters so that the edge piece can
+  // match the pattern on up to two other pieces. If no match is needed
+  // parameter equals -1. pattern1 sets segment[0], pattern2 is placed on the
+  // segment given as the location parameter
+  PuzzlePiece GenEdge(int pattern1, int pattern2, segLocation location);
+
+  // Generates a random inner piece, two parameters so that the piece can match
+  // up to two other pieces. If no match needed, parameter equals -1. pattern1
+  // equals segment[0] and pattern2 equals segments[3]
+  PuzzlePiece GenInner(int pattern1, int pattern2);
+
+  // Fill the piece vectors with the pieces located within the board given as
+  // the parameter
+  void PopulatePieces(Board* pBoard);
+
 public:
   int boardSize;                      // How many pieces per board
 
@@ -122,7 +142,11 @@ public:
 
   // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
-  void FixOrientation(PuzzlePiece* piece, int y, int x);
+  void FixOrientation(PuzzlePiece* piece, int yIndex, int xIndex);
+
+  // Generates a new board with random pieces placing all the pieces within
+  // the pieces vectors
+  void GenerateBoard(int size, int pattern);
 
   // Destructor to delete the instance of the class
   ~BoardManager();

@@ -156,31 +156,34 @@ double FileReader::GetNextSetting()
 
 
 void FileReader::ReadDataFile(int size, int pattern)
-{ // Reads the piece file with the file name that matches the information passed
-  // as parameter storing piece info in the piece collection vector
+{ // Reads the piece file with the file name that matches the information
+  // passed as parameter storing piece info in the piece collection vector
 
   // Get the index of the file name matching the data of the board size and
   // number of patterns
   int index = GetDataFilename(size, pattern);
-  if (OpenFile(filenames[index].c_str()))
-  { // Checks to see if the file is open before proceeding with reading of the
-    // file
+  if (index > 0)
+  {
+    if (OpenFile(filenames[index].c_str()))
+    { // Checks to see if the file is open before proceeding with reading of
+      // the file
 
-    std::string line;                     // Stores current line to be parsed
-    int pData[5];                         // Holds parsed data from the line
+      std::string line;                     // Stores current line to be parsed
+      int pData[5];                         // Holds parsed data from the line
 
-    while (std::getline(theFile, line))
-    { // While getline actually returns a line of data, proceed with parsing
-      ParseData(line, pData);
-      CreatePiece(pData);
-    } 
+      while (std::getline(theFile, line))
+      { // While getline actually returns a line of data, proceed with parsing
+        ParseData(line, pData);
+        CreatePiece(pData);
+      }
 
-    theFile.close();                                    // Close the file after use
-    printf("Loaded: %s\n\n", filenames[index].c_str()); // Output success
+      theFile.close();                             // Close the file after use
+      printf("Loaded: %s\n\n", filenames[index].c_str()); // Output success
+    }
   }
   else
-  { // If the file was not open, output file not exist error
-    printf("File does not exist.\n");
+  { // If the file was not opened, create a new file
+    MakeDataFile(size, pattern);
   }
 
 } // ReadPieceFile()
@@ -191,9 +194,9 @@ int FileReader::GetDataFilename(int size, int pattern)
   // during the directory scan
 
   std::string name = "Puzzles/BoardSize ";      // Hold file name to open
-  int result = 0;                               // Hold index of filename
-  char boardSize[3];                            // Hold converted boardSize
-  char patternNum[3];                           // Hold converted pattern num
+  int result = -1;                              // Hold index of filename
+  char boardSize[3] = "/0";                     // Hold converted boardSize
+  char patternNum[3] = "/0";                    // Hold converted pattern num
 
   // Convert the pattern num and boardSize
   _itoa_s(size, boardSize, 10);
@@ -337,7 +340,7 @@ void FileReader::OutputMatches(Board* pBoard, int genCount)
 { // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
 
-  char buff[10];              // Holds integer that has been converted to char
+  char buff[10] = "/0";       // Holds integer that has been converted to char
   std::string output[3];      // Holds the three rows of output
 
   theFile << std::endl << "Generation: " << genCount << std::endl;
@@ -348,8 +351,7 @@ void FileReader::OutputMatches(Board* pBoard, int genCount)
     { // X index for pieces to ouput, parse a piece into three rows
       // of output.
 
-      // Reset the char array for conversion and convert pattern ID to char
-      buff[0] = '/0';
+      // Convert pattern ID to char
       itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), buff, 
            10);
 
@@ -357,23 +359,20 @@ void FileReader::OutputMatches(Board* pBoard, int genCount)
       output[0] += buff;      // Add converted pattern ID to top line
       output[0] += "  ";      // Add more whitespace for formatting
 
-      // Reset the char array for conversion and convert pattern ID to char
-      buff[0] = '/0';
+      // Convert pattern ID to char
       itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), buff, 
            10);
 
       output[1] += buff;     // Add converted pattern ID to the middle line
       output[1] += "   ";    // Add whitespace for formatting
 
-      // Reset the char array for conversion and convert pattern ID to char
-      buff[0] = '/0';
+      // Convert pattern ID to char
       itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), buff,
            10);
 
       output[1] += buff;     // Add right pattern ID to middle line
 
-      // Reset the char array for conversion and convert pattern ID to char
-      buff[0] = '/0';
+      // Convert pattern ID to char
       itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), buff,
            10);
 
@@ -450,8 +449,6 @@ void FileReader::SetOutFilename(int boardSize, int patternNum, int select,
 
   outFilename += " Pattern ";   // Append pattern label
   
-  intBuff[0] = '/0';            // Reset int conversion buffer
-
   // Convert the pattern number to char and append to filename
   itoa(patternNum, intBuff, 10);
   outFilename += intBuff;
@@ -513,3 +510,76 @@ void FileReader::AppendMutation(int mutation)
   }
 
 } // AppendMutation()
+
+
+void FileReader::MakeDataFile(int size, int pattern)
+{ // If no data file was found, generate a new random board and make the data
+  // file that corrosponds to that board
+
+  std::string filename = "Puzzles/BoardSize ";      // Hold file name to open
+  char boardSize[3];                         // Hold converted boardSize
+  char patternNum[3];                        // Hold converted pattern num
+
+
+  // Convert the pattern num and boardSize
+  _itoa_s(size, boardSize, 10);
+  _itoa_s(pattern, patternNum, 10);
+
+  // Construct the rest of the file name using the board size and pattern num
+  filename += boardSize;
+  filename += " - Pattern ";
+  filename += patternNum;
+  filename += ".e2";
+
+  BoardManager::GetInstance()->GenerateBoard(size, pattern);
+
+  OutputDataFile(filename);
+
+} // MakeDataFile()
+
+
+void FileReader::OutputDataFile(std::string filename)
+{ // Creates the data file by outputting the pieces to the file one piece per
+  // line
+  
+  if (OpenFile(filename.c_str()))
+  {
+    for (int i = 0; i < BoardManager::GetInstance()->pieceVec[0].size(); i++)
+    { // Output corners to data file
+      theFile << BoardManager::GetInstance()->pieceVec[0][i].pieceID << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[0] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[1] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[2] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[3];
+      theFile << std::endl;
+    }
+
+    for (int i = 0; i < BoardManager::GetInstance()->pieceVec[1].size(); i++)
+    { // Output edge pieces to data file
+      theFile << BoardManager::GetInstance()->pieceVec[1][i].pieceID << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[0] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[1] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[2] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[3];
+      theFile << std::endl;
+    }
+
+    for (int i = 0; i < BoardManager::GetInstance()->pieceVec[2].size(); i++)
+    { // Output the inner pieces to data file
+      theFile << BoardManager::GetInstance()->pieceVec[2][i].pieceID << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[0] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[1] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[2] << " ";
+      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[3];
+      theFile << std::endl;
+    }
+
+    theFile.close();
+  }
+  else
+  { 
+    char buffer[200];
+    perror(buffer);
+  }
+
+} // OutputDataFile()

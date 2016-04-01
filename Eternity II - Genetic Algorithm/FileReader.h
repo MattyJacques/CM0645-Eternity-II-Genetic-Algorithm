@@ -65,6 +65,14 @@ private:
   // Append the mutation method to filename
   void AppendMutation(int mutation);
 
+  // If no data file was found, generate a new random board and make the data
+  // file that corrosponds to that board
+  void MakeDataFile(int size, int pattern);
+
+  // Creates the data file by outputting the pieces to the file one piece per
+  // line
+  void OutputDataFile(std::string filename);
+
 public:
   // Calls to scan the directory for piece data files
   FileReader();

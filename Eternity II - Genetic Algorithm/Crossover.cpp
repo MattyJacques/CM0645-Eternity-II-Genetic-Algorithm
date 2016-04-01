@@ -55,8 +55,6 @@ void Crossover::DoCrossover(int popSize)
       SelectParents(parents, popSize, totalFitness);
     }
 
-    //std::cout << parents[0] << " " << parents[1] << std::endl;
-
     Reproduce(parents);  // Breed the parents together
     CheckDuplication();  // Check for any duplicate pieces
   }

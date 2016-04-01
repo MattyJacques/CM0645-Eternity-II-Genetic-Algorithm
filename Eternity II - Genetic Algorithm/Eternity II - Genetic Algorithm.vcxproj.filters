@@ -67,9 +67,6 @@
     <None Include="Puzzles\BoardSize 4 - Pattern 2.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
-    <None Include="Puzzles\BoardSize 4 - Pattern 4.e2">
-      <Filter>Resource Files\Puzzles</Filter>
-    </None>
     <None Include="Puzzles\BoardSize 8 - Pattern 4.e2">
       <Filter>Resource Files\Puzzles</Filter>
     </None>
