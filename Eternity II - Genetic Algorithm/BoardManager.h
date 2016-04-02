@@ -26,13 +26,6 @@ struct PuzzlePiece
   PieceType type;   // Holds the type of the puzzle piece, example corner, edge
   int orientation;  // Holds the rotation of the puzzle piece
   int segments[4];  // Holds the pattern for each segment of the piece
-
-  // Overrides the less than operator for sorting to sort by ID, debugging
-  bool operator < (const PuzzlePiece thePiece) const
-  {
-    // return if true fitness score is less than comparison
-    return (pieceID < thePiece.pieceID);
-  }
 };
 
 

@@ -176,6 +176,7 @@ void GeneticAlgorithm::RunGA()
       // population and try again
       InitRandomPopulation();
       stuckCounter = 200;
+      prevFitness = 0;
     }
 
     OutputFitness();
