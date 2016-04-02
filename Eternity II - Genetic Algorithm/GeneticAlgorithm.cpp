@@ -173,10 +173,11 @@ void GeneticAlgorithm::RunGA()
     }
     else
     { // If 200 generations have passed without immproved fitness, reset 
-      // population and try again
+      // population and fitness to try again
       InitRandomPopulation();
       stuckCounter = 200;
       prevFitness = 0;
+      currentFitness = 0;
     }
 
     OutputFitness();
