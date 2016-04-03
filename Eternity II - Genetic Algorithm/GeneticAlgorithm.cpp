@@ -24,7 +24,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)
 
   popSize = theSettings.popSize; // Set the population for each generation
   maxFitness = 0;                // Initialise maximum fitness of 100% candidate
-  currentFitness = 0;           // Init maximum fitness GA has reached
+  currFitness = 0;           // Init maximum fitness GA has reached
   genCount = 0;                  // Init generation count
   maxMatches = 0;                // Init maximum matches in candidate
 
@@ -133,13 +133,13 @@ void GeneticAlgorithm::RunGA()
   // Initialise the first population
   InitRandomPopulation();
 
-  while (currentFitness != maxFitness)
+  while (currFitness != maxFitness)
   { // While the solution has not been found, continue working towards solution
 
-    if (prevFitness < currentFitness)
+    if (prevFitness < currFitness)
     { // If fitness has improved, reset the stuck counter and set new high
       // score for fitness
-      prevFitness = currentFitness;
+      prevFitness = currFitness;
       stuckCounter = 200;
     }
     else
@@ -148,17 +148,17 @@ void GeneticAlgorithm::RunGA()
     }
 
     genCount++;            // Increment the count of generations
-    matchCount = 0;        // Reset max amount of matches found
-    currentFitness = 0;    // Reset max fitness reached
+    currMatches = 0;       // Reset max amount of matches found
+    currFitness = 0;       // Reset max fitness reached
 
     // Check fitness of the population
     DoFitness();
 
     // Output summary of generation
-    float fitPercent = ((float)currentFitness / maxFitness) * 100.0f;
-    float matchPercent = ((float)matchCount / maxMatches) * 100.0f;
+    float fitPercent = ((float)currFitness / maxFitness) * 100.0f;
+    float matchPercent = ((float)currMatches / maxMatches) * 100.0f;
     printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n", 
-            genCount, currentFitness, maxFitness, fitPercent, matchCount, 
+            genCount, currFitness, maxFitness, fitPercent, currMatches,
             maxMatches, matchPercent);
 
     if (stuckCounter > 0)
@@ -177,7 +177,7 @@ void GeneticAlgorithm::RunGA()
       InitRandomPopulation();
       stuckCounter = 200;
       prevFitness = 0;
-      currentFitness = 0;
+      currFitness = 0;
     }
 
     OutputFitness();
@@ -193,7 +193,7 @@ void GeneticAlgorithm::OutputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
   FileReader fileMan;                       // Create object for output
-  fileMan.OutputFitness(currentFitness);    // Call to output the fitness
+  fileMan.OutputFitness(currFitness);    // Call to output the fitness
 
 } // OutputFitness()
 
@@ -222,17 +222,17 @@ void GeneticAlgorithm::DoFitness()
 
   for (int i = 0; i < popSize; i++)
   { // Loop through every boards of population checking the fitness
-    int matches = theFitness.CheckFitness(&BoardManager::GetInstance()->
-      currBoards->at(i));
+    theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
 
-    // Check to see if new highest match count
-    if (matches > matchCount)
-      matchCount = matches;
+    if (BoardManager::GetInstance()->currBoards->at(i).matchCount > 
+        currMatches)
+    { // Check to see if new highest match count
+      currMatches = BoardManager::GetInstance()->currBoards->at(i).matchCount;
+    }
 
-    if (BoardManager::GetInstance()->currBoards->at(i).fitScore >
-        currentFitness)
+    if (BoardManager::GetInstance()->currBoards->at(i).fitScore > currFitness)
     { // If next maximum fitness of generation found, store new max fitness
-      currentFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+      currFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
     }
   }
 

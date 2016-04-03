@@ -35,6 +35,7 @@ struct Board
   // board
 
   int fitScore;       // Holds fitness score for the board
+  int matchCount;     // Holds how many pattern matches are in board
   int boardID;        // Holds the ID of the board
   
   // Vector of all pieces within board

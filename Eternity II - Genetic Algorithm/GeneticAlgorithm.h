@@ -34,8 +34,8 @@ class GeneticAlgorithm
 private:
   int popSize;                          // Holds the population size
   int maxFitness;                       // Fitness of 100% candidate
-  int currentFitness;                  // Holds the max fitness of current gen
-  int matchCount;                       // Max amount pattern matches reached
+  int currFitness;                  // Holds the max fitness of current gen
+  int currMatches;                       // Max amount pattern matches reached
   int maxMatches;                       // Max amount of pattern matches at 100%
   int genCount;                         // Count of how many generations passed
   bool startPiece;                      // Switch for start piece constraint
