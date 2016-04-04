@@ -302,8 +302,9 @@ void FitnessFunction::CheckInnerPieces()
 void FitnessFunction::CheckFitness(Board* theBoard)
 { // Checks the fitness of the candidate provided by the GA
 
-  pBoard = theBoard;    // Defines the board pointer to the current board
-  pBoard->fitScore = 0; // Sets the score to 0 to begin calculation
+  pBoard = theBoard;      // Defines the board pointer to the current board
+  pBoard->fitScore = 0;   // Sets the score to 0 to begin calculation
+  pBoard->matchCount = 0; // Sets the matches to 0 to begin calculation
 
   // Runs through and checks all the connections and piece locations of the
   // candidate solutions adding up the score for each correct placement & match

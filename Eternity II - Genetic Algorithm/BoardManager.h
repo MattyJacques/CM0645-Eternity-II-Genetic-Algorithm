@@ -44,8 +44,20 @@ struct Board
   // Overrides the less than operator for sorting to sort by fitness
   bool operator < (const Board theBoard) const
   {
-    // return if true fitness score is less than comparison
-    return (fitScore < theBoard.fitScore);
+    
+    bool result = false;
+
+    if (fitScore < theBoard.fitScore)
+    { // If fitness score is less than other board, set result to true
+      result = true;
+    }
+    else if (fitScore == theBoard.fitScore && matchCount < theBoard.matchCount)
+    { // If the fitness scores are the same, test to see if the second board
+      // has more matches, if both are true, set result to true
+      result = true;
+    }
+
+    return result;  // Return result
   }
 };
 
