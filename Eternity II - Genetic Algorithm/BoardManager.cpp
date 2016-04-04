@@ -61,7 +61,7 @@ void BoardManager::InitFullBoard(Board* pBoard, bool startPiece)
   { // Loop to shuffle all piece types
 
     // Shuffle order of puzzle pieces
-    //std::random_shuffle(pieceVec[i].begin(), pieceVec[i].end());
+    std::random_shuffle(pieceVec[i].begin(), pieceVec[i].end());
   }
 
   // Add pieces to empty vectors
