@@ -111,18 +111,6 @@ void GeneticAlgorithm::InitRandomPopulation()
   // Create a new vector for new population
   std::vector<Board> newVec;
 
-  if (BoardManager::GetInstance()->currBoards->size() != 0)
-  { // If already have a population keep the best to aid in reaching higher
-    // fitness quickly
-
-    // Sort population in order of fitness
-    std::sort(BoardManager::GetInstance()->currBoards->begin(),
-              BoardManager::GetInstance()->currBoards->end());
-
-    // Push back the candidate with the higher fitness to new population
-    newVec.push_back(BoardManager::GetInstance()->currBoards->back());
-  }
-
   // Set the current population pointer to new population vector
   BoardManager::GetInstance()->currBoards = 
                                   std::make_shared<std::vector<Board>>(newVec);
