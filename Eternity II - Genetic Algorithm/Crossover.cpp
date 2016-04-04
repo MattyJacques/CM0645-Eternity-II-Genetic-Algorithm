@@ -77,8 +77,8 @@ void Crossover::DoElitism()
     // and push to the new generation vector
 
     // Push worst on to new population
-    //BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
-    //                                                    ->prevBoards->begin()[i]);
+    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
+                                                        ->prevBoards->begin()[i]);
 
     // Push best on to new population
     BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()

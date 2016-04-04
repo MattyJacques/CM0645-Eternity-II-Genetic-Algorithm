@@ -5,7 +5,8 @@
 
 
 #include "GeneticAlgorithm.h" // Include header for the class
-#include "FileReader.h"
+#include "FileReader.h"       // Ability for input and output
+#include <algorithm>          // Sorting
 #include <iostream>           // DEBUG
 
 
@@ -109,6 +110,18 @@ void GeneticAlgorithm::InitRandomPopulation()
 
   // Create a new vector for new population
   std::vector<Board> newVec;
+
+  if (BoardManager::GetInstance()->currBoards != nullptr)
+  { // If already have a population keep the best to aid in reaching higher
+    // fitness quickly
+
+    // Sort population in order of fitness
+    std::sort(BoardManager::GetInstance()->currBoards->begin(),
+              BoardManager::GetInstance()->currBoards->end());
+
+    // Push back the candidate with the higher fitness to new population
+    newVec.push_back(BoardManager::GetInstance()->currBoards->back());
+  }
 
   // Set the current population pointer to new population vector
   BoardManager::GetInstance()->currBoards = 
