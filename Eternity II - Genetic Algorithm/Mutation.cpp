@@ -246,7 +246,7 @@ void Mutation::RotateSwap(int boardID, bool startPiece)
     // included due to border rotation already being managed. Makes sure pieces
     // are not the same
     GetRandPiece(pieceIndex1, INNER, startPiece, false);
-    GetRandPiece(pieceIndex1, INNER, startPiece, false);
+    GetRandPiece(pieceIndex2, INNER, startPiece, false);
   } 
 
   // Call to rotate both pieces
