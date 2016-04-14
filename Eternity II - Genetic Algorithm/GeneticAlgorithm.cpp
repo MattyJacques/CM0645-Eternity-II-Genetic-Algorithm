@@ -134,7 +134,7 @@ void GeneticAlgorithm::RunGA()
   // Initialise the first population
   InitRandomPopulation();
 
-  while (currFitness != maxFitness && genCount != 10000)
+  while (currFitness != maxFitness)
   { // While the solution has not been found, continue working towards solution
 
     if (prevFitness < currFitness)
