@@ -47,13 +47,13 @@ void Crossover::DoCrossover(int popSize)
   { // While the new vector is not filled with the right population size
     // make more candidates
 
-    int parents[2] = { -1, -1 };    // Board ID of the parents
+    Board* parents[2];    // Two boards that have been selected as parents
 
     // Loop to make sure both selected parents are not the same candidate
-    while (parents[0] == parents[1])
+    do
     {
       SelectParents(parents, popSize, totalFitness);
-    }
+    } while (parents[0]->boardID == parents[1]->boardID);
 
     Reproduce(parents);  // Breed the parents together
     CheckDuplication();  // Check for any duplicate pieces
@@ -99,7 +99,7 @@ void Crossover::SetMethod(CrossoverType cross, SelectionType select, int elite)
 } // SetMethod()
 
 
-void Crossover::SelectParents(int parents[2], int popSize, int totalFitness)
+void Crossover::SelectParents(Board* parents[2], int popSize, int totalFitness)
 { // Selects with candidates to use for reproduction with the selection method  
   // chosen when the application was started
 
@@ -121,7 +121,7 @@ void Crossover::SelectParents(int parents[2], int popSize, int totalFitness)
 } // SelectParents()
 
 
-void Crossover::RouletteSelect(int parents[2], int totalFitness)
+void Crossover::RouletteSelect(Board* parents[2], int totalFitness)
 { // Selects candidates via the roulette wheel method mentioned within the report
   // in chapter 3
 
@@ -148,13 +148,13 @@ void Crossover::RouletteSelect(int parents[2], int totalFitness)
     // If section has been found for first parent, set ID
     if (totalFitness >= randomIndex[0] && randomIndex[0] >= oldFitness)
     {
-      parents[0] = i;
+      parents[0] = &BoardManager::GetInstance()->prevBoards->at(i);
     }
 
     // If section has been found for first parent, set ID
     if (totalFitness >= randomIndex[1] && randomIndex[1] >= oldFitness)
     {
-      parents[1] = i;
+      parents[1] = &BoardManager::GetInstance()->prevBoards->at(i);
     }
 
   }
@@ -162,7 +162,7 @@ void Crossover::RouletteSelect(int parents[2], int totalFitness)
 } // RouletteSelect()
 
 
-void Crossover::TournamentSelect(int parents[2], int popSize)
+void Crossover::TournamentSelect(Board* parents[2], int popSize)
 { // Selects candidates via the tournament selection method mentioned within the
   // report in chapter 3. Does not remove candidate from selection
   // after being selected so candidate can be in tournament multiple times.
@@ -185,8 +185,8 @@ void Crossover::TournamentSelect(int parents[2], int popSize)
       index = GeneticAlgorithm::GenRandomNum(0, popSize - 1);
       if ((BoardManager::GetInstance()->prevBoards->at(index).fitScore) > highfitness)
       {
-        parents[i] = index;
-        highfitness = BoardManager::GetInstance()->prevBoards->at(index).fitScore;
+        parents[i] = &BoardManager::GetInstance()->prevBoards->at(index);
+        highfitness = parents[i]->fitScore;
       }
 
     } // for j < tournamentSize
@@ -196,7 +196,7 @@ void Crossover::TournamentSelect(int parents[2], int popSize)
 } // TournamentSelect()
 
 
-void Crossover::Reproduce(int parents[2])
+void Crossover::Reproduce(Board* parents[2])
 { // Calls whichever crossover method that has been selected during the start of
   // the application
 
@@ -210,14 +210,43 @@ void Crossover::Reproduce(int parents[2])
 } // Reproduce()
 
 
-void Crossover::OnePoint(int parents[2])
+void Crossover::CopyPieces(int numOfPieces, int index[2], Board* parent1, 
+                          Board* parent2, Board* offspring1, Board* offspring2)
+{ // Adds multiple pieces from the parent to appropriate offspring (parent1 
+  // into offpsing1, parent2 into offspring2). Number of pieces is passed in
+  // as a parameter
+
+  for (int i = 0; i < numOfPieces; i++)
+  { // Copy pieces from the parent to the corrosponding offspring
+
+    // Copy piece from parent1 into offspring1
+    offspring1->boardVecs[index[0]].push_back(parent1->
+                                              boardVecs[index[0]][index[1]]);
+
+    // Copy piece from parent2 into offspring2
+    offspring2->boardVecs[index[0]].push_back(parent2->
+                                              boardVecs[index[0]][index[1]]);
+
+    index[0]++;  // Increment the xIndex to move to next slot in row
+
+    if (index[0] == BoardManager::GetInstance()->boardSize + 1)
+    { // If we have reached the end of the line of the board, increment row
+
+      index[0] = 0;
+      index[1]++;
+    }
+  }
+
+} // CopyPiece()
+
+
+void Crossover::OnePoint(Board* parents[2])
 { // Takes two candidates, selects a point of the candidate to slice and exchanges
   // the data after that point with the second parent, explained fully in the
   // report, chapter 3
 
   Board offspring[2];      // Holds the two new offspring boards
-  int xIndex = 0;          // xIndex of the current piece to copy over
-  int yIndex = 0;          // yIndex of the current piece to copy over
+  int index[2] = { 0, 0 }; // Index of the current piece to copy over
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
@@ -227,67 +256,41 @@ void Crossover::OnePoint(int parents[2])
   // Get random crossover point to split the boards
   int crossPoint = GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1);
 
-  for (int i = 0; i < 2; i++)
-  { // Initialise new empty boards and give the boards an ID
-    BoardManager::GetInstance()->InitEmptyBoard(&offspring[i]);
-    offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->
-                                size() + (i + 1);
-  }
+  // Initialise new empty boards
+  BoardManager::GetInstance()->InitEmptyBoard(&offspring[0]);
+  BoardManager::GetInstance()->InitEmptyBoard(&offspring[1]);
 
-  for (int i = 0; i < numOfPieces; i++)
-  { // Loop for all pieces to copy over in to new board
+  // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
+  // the crossover point has been reached
+  CopyPieces(crossPoint, index, parents[0], parents[1], &offspring[0], 
+              &offspring[1]);
 
-    if (i <= crossPoint)
-    { // If we are below the crossover point
-
-      // Add the piece from parent 1 to offspring 1
-      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
-
-      // Add the piece from parent 2 to offspring 2
-      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
-    }
-    else if (i > crossPoint)
-    { // If we are greater than crossover point
-
-      // Add the piece from parent 1 to offspring 2
-      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-                          prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
-
-      // Add the piece from parent 2 to offspring 1
-      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-                          prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
-    }
-
-    xIndex++;  // Increment the xIndex to move to next slot in row
-
-    if (xIndex == BoardManager::GetInstance()->boardSize + 1)
-    { // If we have reached the end of the line of the board, increment row
-
-      xIndex = 0;
-      yIndex++;
-    }
-
-  } // for i < pieceVec.size()
+  // Copy pieces from parent1 to offspring2 and parent2 to offspring1 until
+  // the end of the board
+  CopyPieces((numOfPieces - crossPoint), index, parents[0], parents[1], 
+              &offspring[1], &offspring[0]);
   
   for (int i = 0; i < 2; i++)
-  { // Push the new offspring on to the new population
+  { // Set boardID and push the new offspring on to the new population
 
+    // Set boardID
+    offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->
+      size() + 1;
+
+    // Push on to board vector
     BoardManager::GetInstance()->currBoards->push_back(offspring[i]);
   }
 
 } // OnePoint()
 
 
-void Crossover::TwoPoint(int parents[2])
+void Crossover::TwoPoint(Board* parents[2])
 { // Takes two candidates, selects two points of the candidate to slice and
   // exchanges the data after that point with the second parent, switching
   // again after the second point. Explained fully in the report, chapter 3.
 
   Board offspring[2];      // Holds the two new offspring boards
-  int xIndex = 0;          // xIndex of the current piece to copy over
-  int yIndex = 0;          // yIndex of the current piece to copy over
+  int index[2] = { 0, 0 }; // xIndex of the current piece to copy over
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
@@ -300,65 +303,33 @@ void Crossover::TwoPoint(int parents[2])
                         GeneticAlgorithm::GenRandomNum(crossPoint[0] + 1, 
                         numOfPieces) };
 
+  // Initialise new empty boards and give the boards an ID
+  BoardManager::GetInstance()->InitEmptyBoard(&offspring[0]);
+  BoardManager::GetInstance()->InitEmptyBoard(&offspring[1]);
+
+  // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
+  // the crossover point has been reached
+  CopyPieces(crossPoint[0], index, parents[0], parents[1], &offspring[0],
+             &offspring[1]);
+
+  // Copy pieces from parent1 to offspring2 and parent2 to offspring1 until
+  // the end of the board
+  CopyPieces((crossPoint[1] - crossPoint[0]), index, parents[0], parents[1],
+             &offspring[1], &offspring[0]);
+
+  // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
+  // the crossover point has been reached
+  CopyPieces((numOfPieces - crossPoint[1]), index, parents[0], parents[1], 
+             &offspring[0], &offspring[1]);
+
   for (int i = 0; i < 2; i++)
-  { // Initialise new empty boards and give the boards an ID
-    BoardManager::GetInstance()->InitEmptyBoard(&offspring[i]);
+  { // Set boardID and push the new offspring on to the new population
+
+    // Set boardID
     offspring[i].boardID = (int)BoardManager::GetInstance()->currBoards->
-      size() + (i + 1);
-  }
+      size() + 1;
 
-  for (int i = 0; i < numOfPieces; i++)
-  { // Loop for all pieces to copy over in to new board
-
-    if (i <= crossPoint[0])
-    { // If i is less or equal than the first crossover point
-
-      // Add the piece from parent 1 to offspring 1
-      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
-
-      // Add the piece from parent 2 to offspring 2
-      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
-    }
-    else if (i > crossPoint[0] && i <= crossPoint[1])
-    { // If i is greater than first crossover point but not reached second
-      // crossover point
-
-      // Add the piece from parent 1 to offspring 2
-      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
-
-      // Add the piece from parent 2 to offspring 1
-      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
-    }
-    else if (i > crossPoint[1])
-    { // If i is greater than the second crossover point
-
-      // Add the piece from parent 1 to offspring 1
-      offspring[0].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[0]).boardVecs[xIndex][yIndex]);
-
-      // Add the piece from parent 2 to offspring 2
-      offspring[1].boardVecs[xIndex].push_back(BoardManager::GetInstance()->
-        prevBoards->at(parents[1]).boardVecs[xIndex][yIndex]);
-    }
-
-    xIndex++;  // Increment the xIndex to move to next slot in row
-
-    if (xIndex == BoardManager::GetInstance()->boardSize + 1)
-    { // If we have reached the end of the line of the board, increment row
-
-      xIndex = 0;
-      yIndex++;
-    }
-
-  } // for i < pieceVec.size()
-
-  for (int i = 0; i < 2; i++)
-  { // Push the new offspring on to the new population
-
+    // Push on to board vector
     BoardManager::GetInstance()->currBoards->push_back(offspring[i]);
   }
 

@@ -34,30 +34,36 @@ private:
 
   // Selects with candidates to use for reproduction with the selection method  
   // chosen when the application was started
-  void SelectParents(int parents[2], int popSize, int totalFitness);
+  void SelectParents(Board* parents[2], int popSize, int totalFitness);
 
   // Selects candidates via the roulette wheel method mentioned within the report
   // in chapter 3
-  void RouletteSelect(int parents[2], int fitness);
+  void RouletteSelect(Board* parents[2], int fitness);
 
   // Selects candidates via the tournament selection method mentioned within the
   // report in chapter 3. Does not remove candidate from selection
   // after being selected so candidate can be in tournament multiple times.
-  void TournamentSelect(int parents[2], int popSize);
+  void TournamentSelect(Board* parents[2], int popSize);
 
   // Calls whichever crossover method that has been selected during the start of
   // the application
-  void Reproduce(int parents[2]);
+  void Reproduce(Board* parents[2]);
+
+  // Adds multiple pieces from the parent to appropriate offspring (parent1 
+  // into offpsing1, parent2 into offspring2). Number of pieces is passed in
+  // as a parameter
+  void CopyPieces(int numOfPieces, int index[2], Board* parent1, Board* parent2, 
+                  Board* offspring1, Board* offspring2);
 
   // Takes two candidates, selects a point of the candidate to slice and exchanges
   // the data after that point with the second parent, explained fully in the
   // report, chapter 3
-  void OnePoint(int parents[2]);
+  void OnePoint(Board* parents[2]);
 
   // Takes two candidates, selects two points of the candidate to slice and
   // exchanges the data after that point with the second parent, switching
   // again after the second point. Explained fully in the report, chapter 3.
-  void TwoPoint(int parents[2]);
+  void TwoPoint(Board* parents[2]);
 
   // Scans through candidate to check if puzzle pieces end up appearing twice
   // within the same candidate, taking the duplicate list from one candidate
