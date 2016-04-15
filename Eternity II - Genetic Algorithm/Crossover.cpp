@@ -128,7 +128,7 @@ void Crossover::RouletteSelect(int parents[2], int totalFitness)
   int oldFitness = 0;     // Holds the older combined fitness score
 
   // Index to hold which parent the iteration relates to
-  int boardIndex = BoardManager::GetInstance()->prevBoards->size() - 1;
+  int boardIndex = (int)BoardManager::GetInstance()->prevBoards->size() - 1;
 
   // Generate two indexes to find the parents
   int randomIndex[2] = { GeneticAlgorithm::GenRandomNum(0, totalFitness),

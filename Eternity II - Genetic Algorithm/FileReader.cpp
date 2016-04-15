@@ -352,7 +352,7 @@ void FileReader::OutputMatches(Board* pBoard, int genCount)
       // of output.
 
       // Convert pattern ID to char
-      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), buff, 
+      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), buff, 
            10);
 
       output[0] += "  ";      // Add whitespace for formatting
@@ -360,20 +360,20 @@ void FileReader::OutputMatches(Board* pBoard, int genCount)
       output[0] += "  ";      // Add more whitespace for formatting
 
       // Convert pattern ID to char
-      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), buff, 
+      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), buff,
            10);
 
       output[1] += buff;     // Add converted pattern ID to the middle line
       output[1] += "   ";    // Add whitespace for formatting
 
       // Convert pattern ID to char
-      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), buff,
+      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), buff,
            10);
 
       output[1] += buff;     // Add right pattern ID to middle line
 
       // Convert pattern ID to char
-      itoa(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), buff,
+      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), buff,
            10);
 
       output[2] += "  ";    // Add whitespace for formatting
@@ -444,13 +444,13 @@ void FileReader::SetOutFilename(int boardSize, int patternNum, int select,
   outFilename = "Solutions/BoardSize ";
 
   // Convert board size to char and append to filename
-  itoa(boardSize, intBuff, 10);
+  _itoa_s(boardSize, intBuff, 10);
   outFilename += intBuff;
 
   outFilename += " Pattern ";   // Append pattern label
   
   // Convert the pattern number to char and append to filename
-  itoa(patternNum, intBuff, 10);
+  _itoa_s(patternNum, intBuff, 10);
   outFilename += intBuff;
 
   AppendSelectCross(select, crossover);  // Append select and crossover methods
