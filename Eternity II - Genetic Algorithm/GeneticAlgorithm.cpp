@@ -58,27 +58,45 @@ void GeneticAlgorithm::OutputSettings(Settings theSettings)
 
   // Print out the enum value as a string for selection
   if (theSettings.selectType == ROULETTE)
+  {
     printf("Selection: Roulette\n");
+  }
   else if (theSettings.selectType == TOURNAMENT)
+  {
     printf("Selection: Tournament\n");
+  }
 
   // Print out the enum value as a string for crossover
   if (theSettings.crossType == ONEPOINT)
+  {
     printf("Crossover: One-Point\n");
+  }
   else if (theSettings.crossType == TWOPOINT)
+  {
     printf("Crossover: Two-Point\n");
+  }
 
   // Print out the enum value as a string for mutation
   if (theSettings.mutType == SWAP)
+  {
     printf("Mutation: Swap\n\n");
+  }
   else if (theSettings.mutType == ROTATE)
+  {
     printf("Mutation: Rotate\n\n");
+  }
   else if (theSettings.mutType == ROTATESWAP)
+  {
     printf("Mutation: Rotate & Swap\n\n");
+  }
   else if (theSettings.mutType == REGIONROTATE)
+  {
     printf("Mutation: Region Rotate\n\n");
+  }
   else if (theSettings.mutType == REGIONSWAP)
+  {
     printf("Mutation: Region Swap\n\n");
+  }
 
 } // OutputSettings()
 
