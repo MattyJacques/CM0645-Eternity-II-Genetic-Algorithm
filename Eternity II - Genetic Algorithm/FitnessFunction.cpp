@@ -20,11 +20,9 @@ bool FitnessFunction::IsMatchSide(int xIndex1, int yIndex1, int xIndex2,
                                   int yIndex2)
 { // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
-  int rightSide = BoardManager::GetInstance()->GetPattern(pBoard, xIndex1, yIndex1, RIGHT);
-  int leftSide = BoardManager::GetInstance()->GetPattern(pBoard, xIndex2, yIndex2, LEFT);
-
+  
   return (BoardManager::GetInstance()->GetPattern(pBoard, xIndex1, yIndex1, RIGHT)
-    == BoardManager::GetInstance()->GetPattern(pBoard, xIndex2, yIndex2, LEFT));
+          == BoardManager::GetInstance()->GetPattern(pBoard, xIndex2, yIndex2, LEFT));
 
 } // IsMatchSide()
 
@@ -34,11 +32,8 @@ bool FitnessFunction::IsMatchBottom(int xIndex1, int yIndex1, int xIndex2,
 { // Checks to see if the pattern located on bottom side of piece1 matches the
   // pattern located on the top of piece2
 
-  int bottom = BoardManager::GetInstance()->GetPattern(pBoard, xIndex1, yIndex1, BOTTOM);
-  int top = BoardManager::GetInstance()->GetPattern(pBoard, xIndex2, yIndex2, TOP);
-
   return (BoardManager::GetInstance()->GetPattern(pBoard, xIndex1, yIndex1, BOTTOM)
-    == BoardManager::GetInstance()->GetPattern(pBoard, xIndex2, yIndex2, TOP));
+          == BoardManager::GetInstance()->GetPattern(pBoard, xIndex2, yIndex2, TOP));
 
 } // IsMatchBottom()
 

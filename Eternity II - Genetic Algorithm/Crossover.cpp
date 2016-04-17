@@ -130,9 +130,12 @@ void Crossover::RouletteSelect(Board* parents[2], int totalFitness)
   // Index to hold which parent the iteration relates to
   int boardIndex = (int)BoardManager::GetInstance()->prevBoards->size() - 1;
 
-  // Generate two indexes to find the parents
-  int randomIndex[2] = { GeneticAlgorithm::GenRandomNum(0, totalFitness),
-                         GeneticAlgorithm::GenRandomNum(0, totalFitness) };
+  // Holds two random indexes to use as indexes in total fitness
+  int randomIndex[2] = { -1, -1 };
+    
+  // Generate two random indexes to use in total fitness
+  GeneticAlgorithm::GenRandomNum(0, totalFitness, &randomIndex[0]);
+  GeneticAlgorithm::GenRandomNum(0, totalFitness, &randomIndex[1]);
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
   
@@ -168,24 +171,26 @@ void Crossover::TournamentSelect(Board* parents[2], int popSize)
   // after being selected so candidate can be in tournament multiple times.
 
   int highfitness;          // Holds the current highest fitness found
-  int index;                // Holds random index to compare fitness
+  int boardID;              // Holds random index to compare fitness
 
   for (int i = 0; i < 2; i++)
   { // Loop to find both parents
 
     // Initialise to -1 ready for next tournament
     highfitness = -1;
-    index = -1;
+    boardID = -1;
 
     for (int j = 0; j < tournamentSize; j++)
     { // Test 20 random candidates storing highest fitness and ID
 
-      // Generate a random index then test to see if the fitness score of that
-      // candidate is highest than the current stored fitness
-      index = GeneticAlgorithm::GenRandomNum(0, popSize - 1);
-      if ((BoardManager::GetInstance()->prevBoards->at(index).fitScore) > highfitness)
+      // Generate a random boardID then 
+      GeneticAlgorithm::GenRandomNum(0, popSize - 1, &boardID);
+
+      // Test to see if the fitness score of that candidate is highest than the
+      // current stored fitness
+      if ((BoardManager::GetInstance()->prevBoards->at(boardID).fitScore) > highfitness)
       {
-        parents[i] = &BoardManager::GetInstance()->prevBoards->at(index);
+        parents[i] = &BoardManager::GetInstance()->prevBoards->at(boardID);
         highfitness = parents[i]->fitScore;
       }
 
@@ -253,8 +258,10 @@ void Crossover::OnePoint(Board* parents[2])
   int numOfPieces = (BoardManager::GetInstance()->boardSize + 1) *
                     (BoardManager::GetInstance()->boardSize + 1);
 
+  int crossPoint = -1;     // Holds the crossover point
+
   // Get random crossover point to split the boards
-  int crossPoint = GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1);
+  GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1, &crossPoint);
 
   // Initialise new empty boards
   BoardManager::GetInstance()->InitEmptyBoard(&offspring[0]);
@@ -289,8 +296,9 @@ void Crossover::TwoPoint(Board* parents[2])
   // exchanges the data after that point with the second parent, switching
   // again after the second point. Explained fully in the report, chapter 3.
 
-  Board offspring[2];      // Holds the two new offspring boards
-  int index[2] = { 0, 0 }; // xIndex of the current piece to copy over
+  Board offspring[2];             // Holds the two new offspring boards
+  int index[2] = { 0, 0 };        // xIndex of the current piece to copy over
+  int crossPoint[2] = { -1, -1 }; // Holds the two crossover points
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
@@ -299,9 +307,9 @@ void Crossover::TwoPoint(Board* parents[2])
 
   // Get random crossover points to split the boards, making sure the second
   // generated number is after the first
-  int crossPoint[2] = { GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1),
-                        GeneticAlgorithm::GenRandomNum(crossPoint[0] + 1, 
-                        numOfPieces) };
+  GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1, &crossPoint[0]);
+  GeneticAlgorithm::GenRandomNum(crossPoint[0] + 1, numOfPieces, 
+                                 &crossPoint[1]);
 
   // Initialise new empty boards and give the boards an ID
   BoardManager::GetInstance()->InitEmptyBoard(&offspring[0]);

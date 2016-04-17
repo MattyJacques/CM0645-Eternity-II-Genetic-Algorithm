@@ -25,8 +25,12 @@ private:
   // Opens the file using the filename provided return whether successful
   bool OpenFile(const char* fileName);
  
-  // Returns the next number from the settings file to be loaded
-  double GetNextSetting();
+  // Parse int from next line of file placing value in int passed as parameter
+  void ParseInt(int* setting);
+
+  // Parse double from next line of file placing value in double passed as
+  // parameter
+  void ParseDouble(double* setting);
 
   // Parses the methods of selection, crossover and mutation from the int in
   // file into the enum values

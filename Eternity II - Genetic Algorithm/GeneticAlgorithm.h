@@ -76,7 +76,7 @@ public:
   // Main function of the GA that continually runs
   void RunGA();
 
-  // Generates a random number between min and max
-  static int GenRandomNum(int min, int max);
+  // Generates a random number between min and max in randNum parameter
+  static void GenRandomNum(int min, int max, int* randNum);
 };
 

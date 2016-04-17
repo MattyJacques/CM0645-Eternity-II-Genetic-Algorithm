@@ -15,7 +15,7 @@
 enum segLocation { TOP, RIGHT, BOTTOM, LEFT };
 
 // Ease of use for the type of puzzle piece
-enum PieceType { CORNER, EDGE, INNER };
+enum PieceType { CORNER, EDGE, INNER, DEFAULT };
 
 
 struct PuzzlePiece

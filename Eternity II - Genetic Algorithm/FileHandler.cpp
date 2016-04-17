@@ -100,28 +100,34 @@ Settings FileHandler::ReadSettingsFile()
   // setting the appropriate values that have been read in to the algorithm
 
   Settings setData;    // Holds all of the loaded settings data
+  int startPiece = -1; // Holds parsed int for start piece constraint
 
   if (OpenFile("settings.ini"))
   { // Checks to see if the file is open before proceeding with reading of the
     // file
     
-    // Parse the board data from the settings file using GetNextSetting(), 
-    // setting value to appropriate fields in settings stuct
-    setData.boardSize  = (int)GetNextSetting();
-    setData.patternNum = (int)GetNextSetting();
-    setData.popSize    = (int)GetNextSetting();
+    ParseInt(&setData.boardSize);        // Parse the board size
+    ParseInt(&setData.patternNum);       // Parse the number of patterns
+    ParseInt(&setData.popSize);          // Parse the population size
 
     // Parse the selection, crossover and mutation methods into the appropriate
     // enums
     ParseMethods(&setData); 
 
-    // Parse the rates and the if the start piece constraint is active
-    setData.mutRate    = GetNextSetting();
-    setData.eliteRate  = (int)GetNextSetting();
-    setData.startCons  = GetNextSetting() == 1;
+    ParseDouble(&setData.mutRate);       // Parse the mutation rate
+    ParseInt(&setData.eliteRate);        // Parse the elitism rate
+    ParseInt(&startPiece);               // Parse if start constraint is active
+
+    if (startPiece == 1)
+    { // If value from file equals 1, set start piece constraint to true
+      setData.startCons = true;
+    }
+    else if (startPiece == 0)
+    { // If value from file equals 0, set start piece constraint to false
+      setData.startCons = false;
+    }
 
     theFile.close();                     // Close file after use
-    printf("Loaded: settings.ini\n\n");  // Output loading complete
   }
 
   // Read in puzzle pieces
@@ -140,7 +146,8 @@ void FileHandler::ParseMethods(Settings* setData)
 { // Parses the methods of selection, crossover and mutation from the int in
   // file into the enum values
 
-  int setting = (int)GetNextSetting();    // Read in select method
+  int setting = -1;          // Holds value read from file
+  ParseInt(&setting);        // Read in selection method
 
   if (setting == 0)
   { // If int is 0, set select method to roulette
@@ -151,7 +158,7 @@ void FileHandler::ParseMethods(Settings* setData)
     setData->selectType = TOURNAMENT;
   }
 
-  setting = (int)GetNextSetting();        // Read in crossover method
+  ParseInt(&setting);        // Read in crossover method
 
   if (setting == 0)
   { // If int is 0, set crossover method to one-point
@@ -162,7 +169,7 @@ void FileHandler::ParseMethods(Settings* setData)
     setData->crossType = TWOPOINT;
   }
 
-  setting = (int)GetNextSetting();        // Read in mutation method
+  ParseInt(&setting);        // Read in mutation method
 
   if (setting == 0)
   { // If int is 0, set mutation method to swap
@@ -188,26 +195,43 @@ void FileHandler::ParseMethods(Settings* setData)
 } // ParseMethods()
 
 
-double FileHandler::GetNextSetting()
-{ // Returns the next number from the settings file to be loaded
+void FileHandler::ParseInt(int* setting)
+{ // Parse int from next line of file placing in int passed as parameter
 
   std::string line;         // Stores current line to be parsed
-  double data = -1;         // Holds the data that has been parsed
 
   while (std::getline(theFile, line))
   { // Read in the next line
     if (!line.empty() && line[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
 
-      char temp[25];                                     // Throwaway label
-      sscanf_s(line.c_str(), "%s %lf", temp, 25, &data); // Parse value
-      break;                                             // Break out of loop
+      char temp[25];                                       // Throwaway label
+      sscanf_s(line.c_str(), "%s %i", temp, 25, setting);  // Parse value
+      break;                                               // Break out of loop
     }
   }
 
-  return data; // Return parsed data
+} // ParseInt()
 
-} // GetNextSetting()
+
+void FileHandler::ParseDouble(double* setting)
+{ // Parse double from next line of file placing value in double passed as
+  // parameter
+
+  std::string line;         // Stores current line to be parsed
+
+  while (std::getline(theFile, line))
+  { // Read in the next line
+    if (!line.empty() && line[0] != '*')
+    { // If line is not empty or comment line, parse the data in to data var
+
+      char temp[25];                                       // Throwaway label
+      sscanf_s(line.c_str(), "%s %lf", temp, 25, setting); // Parse value
+      break;                                               // Break out of loop
+    }
+  }
+
+} // ParseDouble()
 
 
 void FileHandler::ReadDataFile(int size, int pattern)
@@ -353,20 +377,20 @@ PieceType FileHandler::CheckType(int* pData)
   switch (count)
   { // Using how many edge patterns were counted, set the piece type
 
-  case 0: // If no edge patterns, piece is of the inner type
+  case 0:  // If no edge patterns, piece is of the inner type
     type = INNER;
     break;
 
-  case 1: // If one edge pattern, piece is of the edge type
+  case 1:  // If one edge pattern, piece is of the edge type
     type = EDGE;
     break;
 
-  case 2: // If two edge patterns, piece is of the corner type
+  case 2:  // If two edge patterns, piece is of the corner type
     type = CORNER;
     break;
 
-  default: // Output error string
-    printf("Piece type check error\n");
+  default: // Set to error value
+    type = DEFAULT;
 
   }
 

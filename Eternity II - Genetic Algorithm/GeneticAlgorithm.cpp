@@ -5,7 +5,7 @@
 
 
 #include "GeneticAlgorithm.h" // Include header for the class
-#include "FileReader.h"       // Ability for input and output
+#include "FileHandler.h"       // Ability for input and output
 #include <algorithm>          // Sorting
 #include <iostream>           // DEBUG
 
@@ -211,8 +211,8 @@ void GeneticAlgorithm::RunGA()
 void GeneticAlgorithm::OutputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
-  FileReader fileMan;                       // Create object for output
-  fileMan.OutputFitness(currFitness);    // Call to output the fitness
+  FileHandler outFile;                       // Create object for output
+  outFile.OutputFitness(currFitness);        // Call to output the fitness
 
 } // OutputFitness()
 
@@ -225,8 +225,8 @@ void GeneticAlgorithm::OutputSolved()
 
     if (BoardManager::GetInstance()->currBoards->at(i).fitScore == maxFitness)
     { // If board fitness is max fitness, call to output the board
-      FileReader fileMan;
-      fileMan.OutputBoard(&BoardManager::GetInstance()->currBoards->at(i), 
+      FileHandler outFile;
+      outFile.OutputBoard(&BoardManager::GetInstance()->currBoards->at(i), 
                           genCount);
       break;
     }
@@ -258,14 +258,14 @@ void GeneticAlgorithm::DoFitness()
 } // DoFitness()
 
 
-int GeneticAlgorithm::GenRandomNum(int min, int max)
-{ // Generates a random number between min and max
+void GeneticAlgorithm::GenRandomNum(int min, int max, int* randNum)
+{ // Generates a random number between min and max in randNum parameter
 
   // Work out range between min and max (+1 to include max afterwards)
   int range = (max - min) + 1;
 
   // Get random number between 0 and the range, then add min to get between min
   // and max
-  return (std::rand() % range) + min;
+  *randNum = (std::rand() % range) + min;
 
 } // GenerateRandomNum()

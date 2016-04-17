@@ -1,5 +1,5 @@
 #include "GeneticAlgorithm.h"     // To create and call the GA
-#include "FileReader.h"           // To read in settings
+#include "FileHandler.h"          // To read in settings
 
 
 void main()
@@ -8,8 +8,8 @@ void main()
   // algorithm loop
 
   GeneticAlgorithm theGA;                       // Create algorithm object
-  FileReader theReader;                         // Create file reader object
-  theGA.Setup(theReader.ReadSettingsFile());    // Read algorithms settings
+  FileHandler fileHandle;                       // Create file reader object
+  theGA.Setup(fileHandle.ReadSettingsFile());   // Read algorithms settings
   theGA.RunGA();                                // Run the algorithm
 
 } // main()
