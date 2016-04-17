@@ -321,8 +321,8 @@ void BoardManager::GenerateBoard(int size, int pattern)
 
   Board randBoard;              // Create new board
 
-  boardSize = size - 1;               // Set the board size
-  patternNum = pattern;           // Set the number of patterns
+  boardSize = size - 1;         // Set the board size
+  patternNum = pattern;         // Set the number of patterns
 
   InitEmptyBoard(&randBoard);   // Fill board vector with vectors
 
