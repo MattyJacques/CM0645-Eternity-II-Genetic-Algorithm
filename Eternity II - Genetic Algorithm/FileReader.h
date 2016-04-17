@@ -28,6 +28,10 @@ private:
   // Returns the next number from the settings file to be loaded
   double GetNextSetting();
 
+  // Parses the methods of selection, crossover and mutation from the int in
+  // file into the enum values
+  void ParseMethods(Settings* setData);
+
   // Scans the directory for puzzle files, storing names in array for loading
   // if the user wants to use one of them
   void ScanFileDirectory();

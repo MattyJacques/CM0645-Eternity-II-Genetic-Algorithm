@@ -105,14 +105,17 @@ Settings FileReader::ReadSettingsFile()
   { // Checks to see if the file is open before proceeding with reading of the
     // file
     
-    // Parse the data from the settings file using GetNextSetting(), setting 
-    // value to appropriate fields in settings stuct
+    // Parse the board data from the settings file using GetNextSetting(), 
+    // setting value to appropriate fields in settings stuct
     setData.boardSize  = (int)GetNextSetting();
     setData.patternNum = (int)GetNextSetting();
     setData.popSize    = (int)GetNextSetting();
-    setData.selectType = (SelectionType)(int)GetNextSetting();
-    setData.crossType  = (CrossoverType)(int)GetNextSetting();
-    setData.mutType    = (MutateType)(int)GetNextSetting();
+
+    // Parse the selection, crossover and mutation methods into the appropriate
+    // enums
+    ParseMethods(&setData); 
+
+    // Parse the rates and the if the start piece constraint is active
     setData.mutRate    = GetNextSetting();
     setData.eliteRate  = (int)GetNextSetting();
     setData.startCons  = GetNextSetting() == 1;
@@ -131,6 +134,58 @@ Settings FileReader::ReadSettingsFile()
   return setData;  // Return parsed data
 
 } // ReadSettingsFile()
+
+
+void FileReader::ParseMethods(Settings* setData)
+{ // Parses the methods of selection, crossover and mutation from the int in
+  // file into the enum values
+
+  int setting = (int)GetNextSetting();    // Read in select method
+
+  if (setting == 0)
+  { // If int is 0, set select method to roulette
+    setData->selectType = ROULETTE;
+  }
+  else if (setting == 1)
+  { // If int is 1, set select method to tournament
+    setData->selectType = TOURNAMENT;
+  }
+
+  setting = (int)GetNextSetting();        // Read in crossover method
+
+  if (setting == 0)
+  { // If int is 0, set crossover method to one-point
+    setData->crossType = ONEPOINT;
+  }
+  else if (setting == 1)
+  { // If int is 1, set crossover method to two-point
+    setData->crossType = TWOPOINT;
+  }
+
+  setting = (int)GetNextSetting();        // Read in mutation method
+
+  if (setting == 0)
+  { // If int is 0, set mutation method to swap
+    setData->mutType = SWAP;
+  }
+  else if (setting == 1)
+  { // If int is 0, set mutation method to rotate
+    setData->mutType = ROTATE;
+  }
+  else if (setting == 2)
+  { // If int is 0, set mutation method to rotate & swap
+    setData->mutType = ROTATESWAP;
+  }
+  else if (setting == 3)
+  { // If int is 0, set mutation method to region swap
+    setData->mutType = REGIONSWAP;
+  }
+  else if (setting == 4)
+  { // If int is 0, set mutation method to region rotate
+    setData->mutType = REGIONSWAP;
+  }
+
+} // ParseMethods()
 
 
 double FileReader::GetNextSetting()
