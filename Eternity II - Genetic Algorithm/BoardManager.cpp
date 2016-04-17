@@ -510,7 +510,7 @@ PuzzlePiece BoardManager::GenEdge(int pattern1, int pattern2,
     GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[3]);
   }
 
-  return newPiece;
+  return newPiece; // Return the new piece
 
 } // GenerateEdge()
 

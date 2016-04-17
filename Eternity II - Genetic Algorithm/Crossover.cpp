@@ -159,8 +159,7 @@ void Crossover::RouletteSelect(Board* parents[2], int totalFitness)
     {
       parents[1] = &BoardManager::GetInstance()->prevBoards->at(i);
     }
-
-  }
+  } // for (unsigned int i = 0)
 
 } // RouletteSelect()
 

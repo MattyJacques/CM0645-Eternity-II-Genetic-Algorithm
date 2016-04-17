@@ -24,7 +24,6 @@ FileHandler::FileHandler()
 
     for (int i = 0; i < 3; i++)
     { // Create new puzzle piece vector and push onto puzzle piece vector
-
       std::vector<PuzzlePiece> newVec;
       BoardManager::GetInstance()->pieceVec.push_back(newVec);
     }
@@ -241,7 +240,8 @@ void FileHandler::ReadDataFile(int size, int pattern)
   // Get the index of the file name matching the data of the board size and
   // number of patterns
   int index = GetDataFilename(size, pattern);
-  if (index > 0)
+
+  if (index >= 0)
   {
     if (OpenFile(filenames[index].c_str()))
     { // Checks to see if the file is open before proceeding with reading of
@@ -556,7 +556,7 @@ void FileHandler::AppendSelectCross(int select, int crossover)
   { // If crossover method is one point, append one point
     outFilename += " OnePoint";
   }
-  else
+  else if (crossover == 1)
   { // If crossover method is two point, append two point
     outFilename += " TwoPoint";
   }
