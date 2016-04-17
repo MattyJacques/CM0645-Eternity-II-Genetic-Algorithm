@@ -1,4 +1,4 @@
-// Title        : FileReader.h
+// Title        : FileHandler.h
 // Purpose      : Reads piece information from a e2 file, storing in Board.h
 // Author       : Matthew Jacques
 // Date         : 19/11/2015
@@ -14,7 +14,7 @@
 #include <vector>             // Include vectors for filenames
 
 
-class FileReader
+class FileHandler
 {
 
 private:
@@ -79,7 +79,7 @@ private:
 
 public:
   // Calls to scan the directory for piece data files
-  FileReader();
+  FileHandler();
 
   // Reads the settings file named "settings.ini" in the root directory, 
   // setting the appropriate values that have been read in to the algorithm

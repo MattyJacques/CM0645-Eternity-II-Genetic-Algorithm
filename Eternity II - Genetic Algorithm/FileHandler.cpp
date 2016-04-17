@@ -1,10 +1,10 @@
-// Title        : FileReader.cpp
+// Title        : FileHandler.cpp
 // Purpose      : Reads piece information from a e2 file, storing in Board.h
 // Author       : Matthew Jacques
 // Date         : 19/11/2015
 
 
-#include "FileReader.h"     // Include the header for the class
+#include "FileHandler.h"     // Include the header for the class
 #include "Crossover.h"      // Selection and Crossover type
 #include "Mutation.h"       // Mutation type
 #include <iostream>         // Include input and output library
@@ -12,10 +12,10 @@
 
 
 // Initialise output file string
-std::string FileReader::outFilename = "/0";
+std::string FileHandler::outFilename = "/0";
 
 
-FileReader::FileReader()
+FileHandler::FileHandler()
 { // Calls to the file directory for available piece data files, make sure
   // puzzle piece vector is initialised
 
@@ -36,7 +36,7 @@ FileReader::FileReader()
 } // FileReader()
 
 
-bool FileReader::OpenFile(const char* fileName)
+bool FileHandler::OpenFile(const char* fileName)
 { // Opens the file using the filename provided return whether successful
   
   bool result = false;
@@ -54,7 +54,7 @@ bool FileReader::OpenFile(const char* fileName)
 } // OpenFile()
 
 
-void FileReader::ScanFileDirectory()
+void FileHandler::ScanFileDirectory()
 { // Scans the directory for puzzle files, storing names in a vector for loading
   // if the user wants to use one of them
 
@@ -95,7 +95,7 @@ void FileReader::ScanFileDirectory()
 } // ScanFileDirectory()
 
 
-Settings FileReader::ReadSettingsFile()
+Settings FileHandler::ReadSettingsFile()
 { // Reads the settings file named "settings.ini" in the root directory, 
   // setting the appropriate values that have been read in to the algorithm
 
@@ -136,7 +136,7 @@ Settings FileReader::ReadSettingsFile()
 } // ReadSettingsFile()
 
 
-void FileReader::ParseMethods(Settings* setData)
+void FileHandler::ParseMethods(Settings* setData)
 { // Parses the methods of selection, crossover and mutation from the int in
   // file into the enum values
 
@@ -188,7 +188,7 @@ void FileReader::ParseMethods(Settings* setData)
 } // ParseMethods()
 
 
-double FileReader::GetNextSetting()
+double FileHandler::GetNextSetting()
 { // Returns the next number from the settings file to be loaded
 
   std::string line;         // Stores current line to be parsed
@@ -210,7 +210,7 @@ double FileReader::GetNextSetting()
 } // GetNextSetting()
 
 
-void FileReader::ReadDataFile(int size, int pattern)
+void FileHandler::ReadDataFile(int size, int pattern)
 { // Reads the piece file with the file name that matches the information
   // passed as parameter storing piece info in the piece collection vector
 
@@ -244,7 +244,7 @@ void FileReader::ReadDataFile(int size, int pattern)
 } // ReadPieceFile()
 
 
-int FileReader::GetDataFilename(int size, int pattern)
+int FileHandler::GetDataFilename(int size, int pattern)
 { // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
 
@@ -277,7 +277,7 @@ int FileReader::GetDataFilename(int size, int pattern)
 } // GetDataFilename()
 
 
-void FileReader::ParseData(std::string line, int pData[5])
+void FileHandler::ParseData(std::string line, int pData[5])
 { // Takes string of data and parses into the array of integers to use to create		
   // the puzzle piece		
     
@@ -309,7 +309,7 @@ void FileReader::ParseData(std::string line, int pData[5])
 } // ParseData()
 
 
-void FileReader::CreatePiece(int pData[5])
+void FileHandler::CreatePiece(int pData[5])
 { // Creates a new puzzle piece and stores in the puzzle piece vector
 
   // Set each element of the piece to the parsed section of data
@@ -334,7 +334,7 @@ void FileReader::CreatePiece(int pData[5])
 } // CreatePiece()
 
 
-PieceType FileReader::CheckType(int* pData)
+PieceType FileHandler::CheckType(int* pData)
 { // Checks to see what type of piece is currently being read, returning the
   // answer
 
@@ -376,7 +376,7 @@ PieceType FileReader::CheckType(int* pData)
 } // CheckType()
 
 
-void FileReader::OutputBoard(Board* pBoard, int genCount)
+void FileHandler::OutputBoard(Board* pBoard, int genCount)
 { // Output the board to a file to show progress or solved board, file name is
   // date generation and time ran.
 
@@ -391,7 +391,7 @@ void FileReader::OutputBoard(Board* pBoard, int genCount)
 } // OutputBoard()
 
 
-void FileReader::OutputMatches(Board* pBoard, int genCount)
+void FileHandler::OutputMatches(Board* pBoard, int genCount)
 { // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
 
@@ -448,7 +448,7 @@ void FileReader::OutputMatches(Board* pBoard, int genCount)
 } // OutputMatches()
 
 
-void FileReader::OutputIDs(Board* pBoard, int genCount)
+void FileHandler::OutputIDs(Board* pBoard, int genCount)
 { // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution
 
@@ -473,7 +473,7 @@ void FileReader::OutputIDs(Board* pBoard, int genCount)
 } // OutputIDs()
 
 
-void FileReader::OutputFitness(int fitness)
+void FileHandler::OutputFitness(int fitness)
 { // Appends the fitness to file for tracking of algorithm performance
 
   if (OpenFile(outFilename.c_str()))
@@ -489,7 +489,7 @@ void FileReader::OutputFitness(int fitness)
 } // OutputFitness()
 
 
-void FileReader::SetOutFilename(int boardSize, int patternNum, int select,
+void FileHandler::SetOutFilename(int boardSize, int patternNum, int select,
                                 int crossover, int mutation)
 { // Calculate the output filename
 
@@ -516,7 +516,7 @@ void FileReader::SetOutFilename(int boardSize, int patternNum, int select,
 } // SetOutFilename()
 
 
-void FileReader::AppendSelectCross(int select, int crossover)
+void FileHandler::AppendSelectCross(int select, int crossover)
 { // Append the selection method and crossover method to filename
 
   if (select == 0)
@@ -540,7 +540,7 @@ void FileReader::AppendSelectCross(int select, int crossover)
 } // AppendSelectCross()
 
 
-void FileReader::AppendMutation(int mutation)
+void FileHandler::AppendMutation(int mutation)
 { // Append the mutation method to filename
 
   if (mutation == 0)
@@ -567,7 +567,7 @@ void FileReader::AppendMutation(int mutation)
 } // AppendMutation()
 
 
-void FileReader::MakeDataFile(int size, int pattern)
+void FileHandler::MakeDataFile(int size, int pattern)
 { // If no data file was found, generate a new random board and make the data
   // file that corrosponds to that board
 
@@ -593,7 +593,7 @@ void FileReader::MakeDataFile(int size, int pattern)
 } // MakeDataFile()
 
 
-void FileReader::OutputDataFile(std::string filename)
+void FileHandler::OutputDataFile(std::string filename)
 { // Creates the data file by outputting the pieces to the file one piece per
   // line
   
