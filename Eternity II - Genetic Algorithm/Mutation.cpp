@@ -25,108 +25,133 @@ void Mutation::CalcMutRate(double rate, int popSize)
 } // CalcMutRate()
 
 
-void Mutation::GetRandPiece(int index[2], PieceType type, bool startPiece,
+void Mutation::GetRandPiece(int index[2], int type, bool startPiece,
                             bool region)
 { // Sets the 2 dimensional index for a random piece with the type given
-  // as a parameter
+  // as a parameter (0 = corner, 1 = edge, 2 = inner)
 
-  if (type == CORNER)
-  { // If the type of piece needs to be a corner, generation a random number
-    // between 0 and 3, to randomly select which corner
-    int cornerID = GeneticAlgorithm::GenRandomNum(0, 3);
-
-    if (cornerID == 0)
-    { // Set index to top left corner
-      index[0] = 0;
-      index[1] = 0;
-    }
-    else if (cornerID == 1)
-    { // Set index to top right corner
-      index[0] = 0;
-      index[1] = BoardManager::GetInstance()->boardSize;
-    }
-    else if (cornerID == 2)
-    { // Set index to bottom left corner
-      index[0] = BoardManager::GetInstance()->boardSize;
-      index[1] = 0;
-    }
-    else
-    { // Set index to bottom right corner
-      index[0] = BoardManager::GetInstance()->boardSize;
-      index[1] = BoardManager::GetInstance()->boardSize;
-    }
+  if (type == 0)
+  { // If type is inner, call to get a random corner index
+    GetRandCorner(index);
   }
   else if (type == EDGE)
-  { // Set the indexs in the array to two index taken from the top, right, left
-    // or bottom edges. The edge is randomly selected then select random piece
-    // from chosen edge
-    int mode = GeneticAlgorithm::GenRandomNum(0, 3);
-
-    if (mode == 0)
-    { // If mode is top edge set X index to 0 and gen random index between
-      // 1 and boardSize - 1 for Y index
-      index[0] = 0;
-      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                                boardSize - 1);
-    }
-    else if (mode == 1)
-    { // If mode is left edge gen random X index between 1 and boardsize -1
-      // and set Y index to 0
-      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                                boardSize - 1);
-      index[1] = 0;
-    }
-    else if (mode == 2)
-    { // If mode is right edge gen random number between 1 and boardSize - 1
-      // and set Y index to boardSize
-      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-        boardSize - 1);
-      index[1] = BoardManager::GetInstance()->boardSize;
-    }
-    else
-    { // If mode is bottom edge set X index to boardSize and gen random number
-      // between 1 and boardSize - 1 for Y index
-      index[0] = BoardManager::GetInstance()->boardSize;
-      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-        boardSize - 1);
-    }
+  { // If type is edge, call to get a random edge index
+    GetRandEdge(index);
   }
   else
-  { // Set the indexs in the array to two random number between 1 and the size
-    // of the board - 1 to get two inner type pieces
-
-    if (startPiece)
-    { // If starting piece constraint is active, make sure starting piece is not
-      // chosen as the random piece
-
-      do
-      { // Get a random piece index and loop while that index matches the start
-        // slot index
-        index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-          boardSize - 1);
-        index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-          boardSize - 1);
-      } while (index[0] == 8 && index[1] == 7);
-
-    }
-    else if (region)
-    { // If index is for region, generate index that does not include the right
-      // colum or bottom row of inner pieces
-      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-        boardSize - 2);
-      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-        boardSize - 2);
-    }
-    else
-    { // If start constraint is not active, just chose any random inner piece
-      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-        boardSize - 1);
-      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-        boardSize - 1);
-    }
+  { // If type is inner, call to get random edge index
+    GetRandInner(index, startPiece, region);
   }
 
 } // GetRandPiece()
+
+
+void Mutation::GetRandCorner(int index[2])
+{ // Sets the 2 dimensional index for a random corner piece
+
+  // If the type of piece needs to be a corner, generate a random number
+  // between 0 and 3 to randomly select which corner
+  int cornerID = GeneticAlgorithm::GenRandomNum(0, 3);
+
+  if (cornerID == 0)
+  { // Set index to top left corner
+    index[0] = 0;
+    index[1] = 0;
+  }
+  else if (cornerID == 1)
+  { // Set index to top right corner
+    index[0] = 0;
+    index[1] = BoardManager::GetInstance()->boardSize;
+  }
+  else if (cornerID == 2)
+  { // Set index to bottom left corner
+    index[0] = BoardManager::GetInstance()->boardSize;
+    index[1] = 0;
+  }
+  else
+  { // Set index to bottom right corner
+    index[0] = BoardManager::GetInstance()->boardSize;
+    index[1] = BoardManager::GetInstance()->boardSize;
+  }
+
+} // GetRandCorner()
+
+
+void Mutation::GetRandEdge(int index[2])
+{ // Set the indexs in the array to two index taken from the top, right, left
+  // or bottom edges. The edge is randomly selected then select random piece
+  // from chosen edge
+
+  // Generate a number to select which edge
+  int mode = GeneticAlgorithm::GenRandomNum(0, 3);
+
+  if (mode == 0)
+  { // If mode is top edge set X index to 0 and gen random index between
+    // 1 and boardSize - 1 for Y index
+    index[0] = 0;
+    index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 1);
+  }
+  else if (mode == 1)
+  { // If mode is left edge gen random X index between 1 and boardsize -1
+    // and set Y index to 0
+    index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 1);
+    index[1] = 0;
+  }
+  else if (mode == 2)
+  { // If mode is right edge gen random number between 1 and boardSize - 1
+    // and set Y index to boardSize
+    index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 1);
+    index[1] = BoardManager::GetInstance()->boardSize;
+  }
+  else
+  { // If mode is bottom edge set X index to boardSize and gen random number
+    // between 1 and boardSize - 1 for Y index
+    index[0] = BoardManager::GetInstance()->boardSize;
+    index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 1);
+  }
+
+} // GenRandEdge()
+
+
+void Mutation::GetRandInner(int index[2], bool startPiece, bool region)
+{ // Set the indexs in the array to two random number between 1 and the size
+    // of the board - 1 to get two inner type pieces
+
+  if (startPiece)
+  { // If starting piece constraint is active, make sure starting piece is not
+    // chosen as the random piece
+
+    do
+    { // Get a random piece index and loop while that index matches the start
+      // slot index
+      index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+        boardSize - 1);
+      index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+        boardSize - 1);
+    } while (index[0] == 8 && index[1] == 7);
+
+  }
+  else if (region)
+  { // If index is for region, generate index that does not include the right
+    // colum or bottom row of inner pieces
+    index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 2);
+    index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 2);
+  }
+  else
+  { // If start constraint is not active, just chose any random inner piece
+    index[0] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 1);
+    index[1] = GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
+      boardSize - 1);
+  }
+
+} // GenRandInner()
 
 
 void Mutation::SwapPiece(int boardID, int pieceIndex1[2], int pieceIndex2[2])
@@ -191,7 +216,7 @@ void Mutation::Swap(int boardID, bool startPiece)
   int pieceIndex2[2] = { -1, -1 };     // Holds index of second piece
 
   // Get random piece type for mutation
-  PieceType type = (PieceType)GeneticAlgorithm::GenRandomNum(0, 2);
+  int type = GeneticAlgorithm::GenRandomNum(0, 2);
 
   while (pieceIndex1[0] == pieceIndex2[0] && pieceIndex1[1] == pieceIndex2[1])
   { // Get two random piece indexed of the generated type, making sure the

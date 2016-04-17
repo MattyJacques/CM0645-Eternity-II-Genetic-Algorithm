@@ -25,8 +25,20 @@ private:
   void CalcMutRate(double rate, int popSize);
 
   // Sets the 2 dimensional index for a random piece with the type given
-  // as a parameter
-  void GetRandPiece(int index[2], PieceType type, bool startPiece, bool region);
+  // as a parameter (0 = corner, 1 = edge, 2 = inner)
+  void GetRandPiece(int index[2], int type, bool startPiece, bool region);
+
+  // Sets the 2 dimensional index for a random corner piece
+  void GetRandCorner(int index[2]);
+
+  // Set the indexs in the array to two index taken from the top, right, left
+  // or bottom edges. The edge is randomly selected then select random piece
+  // from chosen edge
+  void GetRandEdge(int index[2]);
+
+  // Set the indexs in the array to two random number between 1 and the size
+  // of the board - 1 to get two inner type pieces
+  void GetRandInner(int index[2], bool startPiece, bool region);
 
   // Swaps two pieces within the board with the ID given. Pieces to swap
   // also given as parameters
