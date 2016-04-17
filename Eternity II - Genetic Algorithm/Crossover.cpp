@@ -169,8 +169,8 @@ void Crossover::TournamentSelect(Board* parents[2], int popSize)
   // report in chapter 3. Does not remove candidate from selection
   // after being selected so candidate can be in tournament multiple times.
 
-  int highfitness;          // Holds the current highest fitness found
-  int boardID;              // Holds random index to compare fitness
+  int highfitness = -1;          // Holds the current highest fitness found
+  int boardID = -1;              // Holds random index to compare fitness
 
   for (int i = 0; i < 2; i++)
   { // Loop to find both parents

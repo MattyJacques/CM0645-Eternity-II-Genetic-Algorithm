@@ -38,17 +38,11 @@ FileHandler::FileHandler()
 bool FileHandler::OpenFile(const char* fileName)
 { // Opens the file using the filename provided return whether successful
   
-  bool result = false;
-
   // Open the file with in out and append flags
   theFile.open(fileName, std::ios::in | std::ios::out | std::ios::app);
 
-  // Check to see if file is open
-  if (theFile.is_open())
-    result = true;
-
-  // Return whether seccuessful
-  return result;
+  // Return whether succuessful
+  return theFile.is_open();
 
 } // OpenFile()
 
@@ -197,7 +191,7 @@ void FileHandler::ParseMethods(Settings* setData)
 void FileHandler::ParseInt(int* setting)
 { // Parse int from next line of file placing in int passed as parameter
 
-  std::string line;         // Stores current line to be parsed
+  std::string line = "/0";         // Stores current line to be parsed
 
   while (std::getline(theFile, line))
   { // Read in the next line
@@ -217,14 +211,14 @@ void FileHandler::ParseDouble(double* setting)
 { // Parse double from next line of file placing value in double passed as
   // parameter
 
-  std::string line;         // Stores current line to be parsed
+  std::string line = "/0";         // Stores current line to be parsed
 
   while (std::getline(theFile, line))
   { // Read in the next line
     if (!line.empty() && line[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
 
-      char temp[25];                                       // Throwaway label
+      char temp[25] = "/0";                                // Throwaway label
       sscanf_s(line.c_str(), "%s %lf", temp, 25, setting); // Parse value
       break;                                               // Break out of loop
     }
@@ -247,8 +241,8 @@ void FileHandler::ReadDataFile(int size, int pattern)
     { // Checks to see if the file is open before proceeding with reading of
       // the file
 
-      std::string line;                     // Stores current line to be parsed
-      int pData[5];                         // Holds parsed data from the line
+      std::string line = "/0";              // Stores current line to be parsed
+      int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
 
       while (std::getline(theFile, line))
       { // While getline actually returns a line of data, proceed with parsing
@@ -311,7 +305,7 @@ void FileHandler::ParseData(std::string line, int pData[5])
   { // For loop to loop through and get the 5 bits of data that are on each		
     // line in a e2 file		
       
-    std::string data; // Holds the data gathered from getline		
+    std::string data "/0"; // Holds the data gathered from getline		
     
     while (line[j] != ' ' && j != line.length())
     { // Loops though to check for whitespace in the file or it has reached		
@@ -362,8 +356,8 @@ PieceType FileHandler::CheckType(int* pData)
 { // Checks to see what type of piece is currently being read, returning the
   // answer
 
-  PieceType type;     // Object to return, holds types of piece
-  int count = 0;      // Count for how many times edge pattern occurs
+  PieceType type = DEFAULT;    // Object to return, holds types of piece
+  int count = 0;               // Count for how many times edge pattern occurs
 
   for (int i = 0; i <= 4; i++)
   { // Loop for each quadrant to check if the pattern ID matches the edge pattern
@@ -377,21 +371,20 @@ PieceType FileHandler::CheckType(int* pData)
   switch (count)
   { // Using how many edge patterns were counted, set the piece type
 
-  case 0:  // If no edge patterns, piece is of the inner type
-    type = INNER;
-    break;
+    case 0:  // If no edge patterns, piece is of the inner type
+      type = INNER;
+      break;
 
-  case 1:  // If one edge pattern, piece is of the edge type
-    type = EDGE;
-    break;
+    case 1:  // If one edge pattern, piece is of the edge type
+      type = EDGE;
+      break;
 
-  case 2:  // If two edge patterns, piece is of the corner type
-    type = CORNER;
-    break;
+    case 2:  // If two edge patterns, piece is of the corner type
+      type = CORNER;
+      break;
 
-  default: // Set to error value
-    type = DEFAULT;
-
+    default: // Make sure type is error type
+      type = DEFAULT;
   }
 
   // Return the type that has been found
@@ -420,7 +413,7 @@ void FileHandler::OutputMatches(Board* pBoard, int genCount)
   // matches for themselves
 
   char buff[10] = "/0";       // Holds integer that has been converted to char
-  std::string output[3];      // Holds the three rows of output
+  std::string output[3] = { "/0", "/0", "/0" }; // Holds three rows of output
 
   theFile << std::endl << "Generation: " << genCount << std::endl;
 
@@ -595,9 +588,9 @@ void FileHandler::MakeDataFile(int size, int pattern)
 { // If no data file was found, generate a new random board and make the data
   // file that corrosponds to that board
 
-  std::string filename = "Puzzles/BoardSize ";      // Hold file name to open
-  char boardSize[3];                         // Hold converted boardSize
-  char patternNum[3];                        // Hold converted pattern num
+  std::string filename = "Puzzles/BoardSize ";    // Hold file name to open
+  char boardSize[3] = { '/0', '/0', '/0' };       // Hold converted boardSize
+  char patternNum[3] = { '/0', '/0', '/0' };      // Hold converted pattern num
 
 
   // Convert the pattern num and boardSize

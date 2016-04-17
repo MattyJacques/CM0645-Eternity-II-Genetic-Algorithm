@@ -129,16 +129,16 @@ void GeneticAlgorithm::InitRandomPopulation()
   // Create a new vector for new population
   std::vector<Board> newVec;
 
-  // Set the current population pointer to new population vector
-  BoardManager::GetInstance()->currBoards = 
-                                  std::make_shared<std::vector<Board>>(newVec);
-
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
     Board newBoard;
     BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
-    BoardManager::GetInstance()->currBoards->push_back(newBoard);
+    newVec.push_back(newBoard);
   }
+
+  // Set the current population pointer to new population vector
+  BoardManager::GetInstance()->currBoards =
+    std::make_shared<std::vector<Board>>(newVec);
 
 } // InitRandomPopulation()
 
