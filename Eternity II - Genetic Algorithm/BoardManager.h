@@ -67,13 +67,11 @@ class BoardManager
 
 private:
   int patternNum;                     // Amount of patterns within board
-  //int boardSize;                      // Holds the size of the board
+  int boardSize;                      // Holds the size of the board
   static BoardManager* pInstance;     // Current instance of class
 
   // Seeds rand() with time and initalises currBoards
   BoardManager();
-
-
 
   // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted
@@ -122,7 +120,7 @@ private:
   void PopulatePieces(Board* pBoard);
 
 public:
-  int boardSize;                      // How many pieces per board
+  //int boardSize;                      // How many pieces per board
 
   // Collection of all pieces to be used split into corner, edge and inner types
   std::vector<std::vector<PuzzlePiece>> pieceVec;    
@@ -135,6 +133,9 @@ public:
 
   // Returns the instance to the class, if none currently exists, creates one
   static BoardManager* GetInstance();
+
+  // Returns the board size
+  int GetSize();
 
   // Sets how many patterns to be used and how many pieces there are per board
   void InitialiseData(int size, int patNum);

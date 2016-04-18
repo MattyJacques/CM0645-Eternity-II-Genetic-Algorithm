@@ -208,7 +208,7 @@ void Crossover::CopyPieces(int numOfPieces, int index[2], Board* parent1,
 
     index[0]++;  // Increment the xIndex to move to next slot in row
 
-    if (index[0] == BoardManager::GetInstance()->boardSize + 1)
+    if (index[0] == BoardManager::GetInstance()->GetSize() + 1)
     { // If we have reached the end of the line of the board, increment row
 
       index[0] = 0;
@@ -229,8 +229,8 @@ void Crossover::OnePoint(Board* parents[2])
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
-  int numOfPieces = (BoardManager::GetInstance()->boardSize + 1) *
-                    (BoardManager::GetInstance()->boardSize + 1);
+  int numOfPieces = (BoardManager::GetInstance()->GetSize() + 1) *
+                    (BoardManager::GetInstance()->GetSize() + 1);
 
   int crossPoint = -1;     // Holds the crossover point
 
@@ -276,8 +276,8 @@ void Crossover::TwoPoint(Board* parents[2])
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
-  int numOfPieces = (BoardManager::GetInstance()->boardSize + 1) *
-    (BoardManager::GetInstance()->boardSize + 1);
+  int numOfPieces = (BoardManager::GetInstance()->GetSize() + 1) *
+    (BoardManager::GetInstance()->GetSize() + 1);
 
   // Get random crossover points to split the boards, making sure the second
   // generated number is after the first
@@ -357,7 +357,7 @@ void Crossover::GetDuplicates(Board* pBoard,
                                 std::vector<std::vector<int>>* indexes)
 {
   // Store the boardSize for easier code readability and quicker access
-  int boardSize = BoardManager::GetInstance()->boardSize;
+  int boardSize = BoardManager::GetInstance()->GetSize();
 
   // Vector to check IDs against
   std::vector<bool> checkIDs(BoardManager::GetInstance()->pieceVec[CORNER].size() +
@@ -516,7 +516,7 @@ void Crossover::CheckInners(Board* pBoard, std::vector<PuzzlePiece>* pieces,
 
     xIndex++;    // Increment X index to move to the slot on the right
 
-    if (xIndex == BoardManager::GetInstance()->boardSize)
+    if (xIndex == BoardManager::GetInstance()->GetSize())
     { // If we have reached the end of the line of the board, increment
       // to next line
       xIndex = 1;

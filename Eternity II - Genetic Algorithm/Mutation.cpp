@@ -103,17 +103,17 @@ void Mutation::GetRandCorner(int index[2])
   else if (cornerID == 1)
   { // Set index to top right corner
     index[0] = 0;
-    index[1] = BoardManager::GetInstance()->boardSize;
+    index[1] = BoardManager::GetInstance()->GetSize();
   }
   else if (cornerID == 2)
   { // Set index to bottom left corner
-    index[0] = BoardManager::GetInstance()->boardSize;
+    index[0] = BoardManager::GetInstance()->GetSize();
     index[1] = 0;
   }
   else
   { // Set index to bottom right corner
-    index[0] = BoardManager::GetInstance()->boardSize;
-    index[1] = BoardManager::GetInstance()->boardSize;
+    index[0] = BoardManager::GetInstance()->GetSize();
+    index[1] = BoardManager::GetInstance()->GetSize();
   }
 
 } // GetRandCorner()
@@ -134,28 +134,28 @@ void Mutation::GetRandEdge(int index[2])
     // 1 and boardSize - 1 for Y index
     index[0] = 0;
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 1, &index[1]);
+                                   GetSize() - 1, &index[1]);
   }
   else if (edgeID == 1)
   { // If mode is left edge gen random X index between 1 and boardsize -1
     // and set Y index to 0
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 1, &index[0]);
+                                   GetSize() - 1, &index[0]);
     index[1] = 0;
   }
   else if (edgeID == 2)
   { // If mode is right edge gen random number between 1 and boardSize - 1
     // and set Y index to boardSize
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 1, &index[0]);
-    index[1] = BoardManager::GetInstance()->boardSize;
+                                   GetSize() - 1, &index[0]);
+    index[1] = BoardManager::GetInstance()->GetSize();
   }
   else if (edgeID == 3)
   { // If mode is bottom edge set X index to boardSize and gen random number
     // between 1 and boardSize - 1 for Y index
-    index[0] = BoardManager::GetInstance()->boardSize;
+    index[0] = BoardManager::GetInstance()->GetSize();
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 1, &index[1]);
+                                   GetSize() - 1, &index[1]);
   }
 
 } // GenRandEdge()
@@ -173,9 +173,9 @@ void Mutation::GetRandInner(int index[2], bool startPiece, bool region)
     { // Get a random piece index and loop while that index matches the start
       // slot index
       GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                     boardSize - 1, &index[0]);
+                                     GetSize() - 1, &index[0]);
       GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                     boardSize - 1, &index[1]);
+                                     GetSize() - 1, &index[1]);
     } while (index[0] == 8 && index[1] == 7);
 
   }
@@ -183,16 +183,16 @@ void Mutation::GetRandInner(int index[2], bool startPiece, bool region)
   { // If index is for region, generate index that does not include the right
     // colum or bottom row of inner pieces
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 2, &index[0]);
+                                   GetSize() - 2, &index[0]);
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 2, &index[1]);
+                                   GetSize() - 2, &index[1]);
   }
   else
   { // If start constraint is not active, just chose any random inner piece
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 1, &index[0]);
+                                   GetSize() - 1, &index[0]);
     GeneticAlgorithm::GenRandomNum(1, BoardManager::GetInstance()->
-                                   boardSize - 1, &index[1]);
+                                   GetSize() - 1, &index[1]);
   }
 
 } // GenRandInner()

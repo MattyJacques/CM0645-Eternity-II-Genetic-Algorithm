@@ -39,6 +39,14 @@ BoardManager* BoardManager::GetInstance()
 } // GetInstance()
 
 
+int BoardManager::GetSize()
+{ // Returns the board size
+
+  return boardSize; // Return the size of the board
+
+} // GetSize()
+
+
 void BoardManager::InitialiseData(int size, int patNum)
 { // Sets how many patterns to be used and how many pieces there are per board
 

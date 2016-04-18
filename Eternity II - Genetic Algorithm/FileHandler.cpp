@@ -461,9 +461,9 @@ void FileHandler::OutputMatches(Board* pBoard, int genCount)
 
   theFile << std::endl << "Generation: " << genCount << std::endl;
 
-  for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
+  for (int j = 0; j <= BoardManager::GetInstance()->GetSize(); j++)
   { // Y index for pieces to output
-    for (int i = 0; i <= BoardManager::GetInstance()->boardSize; i++)
+    for (int i = 0; i <= BoardManager::GetInstance()->GetSize(); i++)
     { // X index for pieces to ouput, parse a piece into three rows
       // of output.
 
@@ -515,9 +515,9 @@ void FileHandler::OutputIDs(Board* pBoard, int genCount)
 
   theFile << std::endl;   // Add whitepsace between two boards
 
-  for (int j = 0; j <= BoardManager::GetInstance()->boardSize; j++)
+  for (int j = 0; j <= BoardManager::GetInstance()->GetSize(); j++)
   { // Y index for pieces to output
-    for (int i = 0; i <= BoardManager::GetInstance()->boardSize; i++)
+    for (int i = 0; i <= BoardManager::GetInstance()->GetSize(); i++)
     { // X index for pieces to output
 
       // Output piece ID and add comma for separator
@@ -590,8 +590,8 @@ void FileHandler::MakeDataFile(int size, int pattern)
   // file that corrosponds to that board
 
   std::string filename = "Puzzles/BoardSize ";    // Hold file name to open
-  char boardSize[3] = { '/0', '/0', '/0' };       // Hold converted boardSize
-  char patternNum[3] = { '/0', '/0', '/0' };      // Hold converted pattern num
+  char boardSize[3] = "/0";                       // Hold converted boardSize
+  char patternNum[3] = "/0";                      // Hold converted pattern num
 
 
   // Convert the pattern num and boardSize
