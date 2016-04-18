@@ -75,11 +75,11 @@ private:
   // Collection of all pieces to be used split into corner, edge and inner types
   std::vector<std::vector<PuzzlePiece>> pieceVec;
 
-  // Boards in current generation
-  std::shared_ptr<std::vector<Board>> currBoards;
+  //// Boards in current generation
+  //std::shared_ptr<std::vector<Board>> currBoards;
 
-  // Board in previous generation
-  std::shared_ptr<std::vector<Board>> prevBoards;
+  //// Board in previous generation
+  //std::shared_ptr<std::vector<Board>> prevBoards;
 
   // Seeds rand() with time and initalises currBoards
   BoardManager();
@@ -141,6 +141,12 @@ private:
   void PopulatePieces(Board* pBoard);                      // *In*
 
 public:
+  // Boards in current generation
+  std::shared_ptr<std::vector<Board>> currBoards;
+
+  // Board in previous generation
+  std::shared_ptr<std::vector<Board>> prevBoards;
+
   // Returns the instance to the class, if none currently exists, creates one
   static BoardManager* GetInstance();
 
@@ -155,6 +161,10 @@ public:
 
   // Returns a pointer to the vector that holds the previous population
   std::shared_ptr<std::vector<Board>> GetOldPop();
+
+  // Switch the current population to the old population and create a new
+  // shared vector for the new population
+  void SwitchPop();
 
   // Sets how many patterns to be used and how many pieces there are per board
   void InitialiseData(int size,                            // *In*

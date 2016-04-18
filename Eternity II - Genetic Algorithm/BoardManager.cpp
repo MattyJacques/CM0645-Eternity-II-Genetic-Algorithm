@@ -71,6 +71,20 @@ std::shared_ptr<std::vector<Board>> BoardManager::GetOldPop()
 } // GetOldPop()
 
 
+void BoardManager::SwitchPop()
+{ // Switch the current population to the old population and create a new
+  // shared vector for the new population
+
+  std::vector<Board> newVec; // Create vector for new population
+
+  prevBoards = currBoards;   // Make current population the previous population
+
+  // Make the new vector shared and set to current populuation
+  currBoards = std::make_shared<std::vector<Board>>(newVec);
+
+} // SwitchPop()
+
+
 void BoardManager::InitialiseData(int size,                            // *In*
                                   int patNum)                          // *In*
 { // Sets how many patterns to be used and how many pieces there are per board

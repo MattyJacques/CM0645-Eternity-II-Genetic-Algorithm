@@ -86,11 +86,11 @@ void GeneticAlgorithm::RunGA()
     { // If fitness improvement has been made in past 200 generations, keep
       // trying to solve
 
-      // Complete crossover of population
-      theCrossover.DoCrossover(popSize);
+      // Switch current population to previous and create new population
+      BoardManager::GetInstance()->SwitchPop();
 
-      // Complete mutation of population
-      theMutation.DoMutation(startPiece);
+      theCrossover.DoCrossover(popSize);  // Complete crossover of population
+      theMutation.DoMutation(startPiece); // Complete mutation of population
     }
     else
     { // If 200 generations have passed without immproved fitness, reset 
@@ -152,17 +152,19 @@ void GeneticAlgorithm::InitRandomPopulation()
   // Create a new vector for new population
   std::vector<Board> newVec;
 
+  // Set the current population pointer to new population vector
+  BoardManager::GetInstance()->GetPop() =
+    std::make_shared<std::vector<Board>>(newVec);
+
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
     Board newBoard;
     BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
-    newBoard.boardID = (int)newVec.size() + 1;
-    newVec.push_back(newBoard);
+    newBoard.boardID = (int)BoardManager::GetInstance()->GetPop()->size() + 1;
+    BoardManager::GetInstance()->GetPop()->push_back(newBoard);
   }
 
-  // Set the current population pointer to new population vector
-  BoardManager::GetInstance()->GetPop() =
-    std::make_shared<std::vector<Board>>(newVec);
+  
 
 } // InitRandomPopulation()
 

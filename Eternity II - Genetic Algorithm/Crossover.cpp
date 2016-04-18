@@ -38,14 +38,7 @@ void Crossover::DoCrossover(int popSize)                              // *In*
   // methods
 
   int totalFitness = 0;      // Holds the combined fitness of all boards
-  std::vector<Board> newVec; // Create vector for new population
   Board* parents[2];         // Two boards that have been selected as parents
-
-  // Switch the current generation to the previous generation
-  BoardManager::GetInstance()->GetOldPop() = BoardManager::GetInstance()->
-                                             GetPop();
-  BoardManager::GetInstance()->GetPop() = std::make_shared
-                                            <std::vector<Board>>(newVec);
 
   if (selectType == ROULETTE)
   { // If using roulette method, work out the total fitness now so not working
@@ -370,9 +363,9 @@ void Crossover::GetDuplicates(Board* pBoard,                          // *In*
   int boardSize = BoardManager::GetInstance()->GetSize();
 
   // Vector to check IDs against
-  std::vector<bool> checkIDs(BoardManager::GetInstance()->GetPieces()[CORNER].size() +
-                             BoardManager::GetInstance()->GetPieces()[EDGE].size() +
-                             BoardManager::GetInstance()->GetPieces()[INNER].size(), 
+  std::vector<bool> checkIDs((*BoardManager::GetInstance()->GetPieces())[CORNER].size() +
+                             (*BoardManager::GetInstance()->GetPieces())[EDGE].size() +
+                             (*BoardManager::GetInstance()->GetPieces())[INNER].size(), 
                              false);
 
   // Check the corner slots for duplicates
@@ -514,7 +507,7 @@ void Crossover::CheckInners(Board* pBoard,                           // *In*
   int yIndex = 1;  // Y index for slot
   int xIndex = 1;  // X index for slot
 
-  for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[INNER].size(); i++)
+  for (int i = 0; i < (*BoardManager::GetInstance()->GetPieces())[INNER].size(); i++)
   { // Loop through for every inner slot changing the appropriate element
     // to true if piece was found
 
