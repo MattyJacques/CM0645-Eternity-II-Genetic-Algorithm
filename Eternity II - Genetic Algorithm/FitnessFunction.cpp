@@ -16,7 +16,7 @@ FitnessFunction::FitnessFunction()
 } // FitnessFunction()
 
 
-void FitnessFunction::CheckFitness(Board* theBoard)
+void FitnessFunction::CheckFitness(Board* theBoard)        // *In-Out*
 { // Checks the fitness of the candidate provided by the GA
 
   pBoard = theBoard;      // Defines the board pointer to the current board
@@ -39,8 +39,10 @@ void FitnessFunction::CheckFitness(Board* theBoard)
 } // CheckFitness()
 
 
-bool FitnessFunction::IsMatchSide(int xIndex1, int yIndex1, int xIndex2, 
-                                  int yIndex2)
+bool FitnessFunction::IsMatchSide(int xIndex1,             // *In*
+                                  int yIndex1,             // *In*
+                                  int xIndex2,             // *In*
+                                  int yIndex2)             // *In*
 { // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
   
@@ -50,8 +52,10 @@ bool FitnessFunction::IsMatchSide(int xIndex1, int yIndex1, int xIndex2,
 } // IsMatchSide()
 
 
-bool FitnessFunction::IsMatchBottom(int xIndex1, int yIndex1, int xIndex2,
-                                    int yIndex2)
+bool FitnessFunction::IsMatchBottom(int xIndex1,           // *In*
+                                    int yIndex1,           // *In*
+                                    int xIndex2,           // *In*
+                                    int yIndex2)           // *In*
 { // Checks to see if the pattern located on bottom side of piece1 matches the
   // pattern located on the top of piece2
 

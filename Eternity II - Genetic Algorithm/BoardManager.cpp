@@ -48,24 +48,31 @@ int BoardManager::GetSize()
 
 
 std::vector<std::vector<PuzzlePiece>>* BoardManager::GetPieces()
-{
+{ // Returns the vector of vectors containing the puzzle pieces
+
   return &pieceVec;
+
 } // GetPieces()
 
 
 std::shared_ptr<std::vector<Board>> BoardManager::GetPop()
-{
+{ // Returns a pointer to the vector that holds the current population
+
   return currBoards;
+
 } // GetPop()
 
 
 std::shared_ptr<std::vector<Board>> BoardManager::GetOldPop()
-{
+{ // Returns a pointer to the vector that holds the previous population
+
   return prevBoards;
+
 } // GetOldPop()
 
 
-void BoardManager::InitialiseData(int size, int patNum)
+void BoardManager::InitialiseData(int size,                            // *In*
+                                  int patNum)                          // *In*
 { // Sets how many patterns to be used and how many pieces there are per board
 
   boardSize = size - 1;    // boardSize - 1 to include 0 index
@@ -74,7 +81,7 @@ void BoardManager::InitialiseData(int size, int patNum)
 } // InitialiseData()
 
 
-void BoardManager::InitEmptyBoard(Board* pBoard)
+void BoardManager::InitEmptyBoard(Board* pBoard)                       // *Out*  
 { // Initialises the boards vector of vectors with empty vectors
 
   for (int i = 0; i <= boardSize; i++)
@@ -86,7 +93,8 @@ void BoardManager::InitEmptyBoard(Board* pBoard)
 } // InitEmptyBoard()
 
 
-void BoardManager::InitFullBoard(Board* pBoard, bool startPiece)
+void BoardManager::InitFullBoard(Board* pBoard,                        // *Out*
+                                 bool startPiece)                      // *In*
 { // Creates the inital board filled with randomised order of pieces
 
   // Set the ID of the board
@@ -113,8 +121,10 @@ void BoardManager::InitFullBoard(Board* pBoard, bool startPiece)
 } // InitFullBoard()
 
 
-int BoardManager::GetPattern(Board* pBoard, int xIndex, int yIndex,
-  segLocation segment)
+int BoardManager::GetPattern(Board* pBoard,                            // *In*
+                             int xIndex,                               // *In*
+                             int yIndex,                               // *In*
+                             segLocation segment)                      // *In*
 { // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
 
@@ -143,7 +153,9 @@ int BoardManager::GetPattern(Board* pBoard, int xIndex, int yIndex,
 } // GetPattern()
 
 
-void BoardManager::FixOrientation(PuzzlePiece* piece, int xIndex, int yIndex)
+void BoardManager::FixOrientation(PuzzlePiece* piece,                  // *Out*
+                                  int yIndex,                          // *In*
+                                  int xIndex)                          // *In*
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
 
@@ -155,7 +167,8 @@ void BoardManager::FixOrientation(PuzzlePiece* piece, int xIndex, int yIndex)
 } // FixOrientation()
 
 
-void BoardManager::GenerateBoard(int size, int pattern)
+void BoardManager::GenerateBoard(int size,                             // *In*
+                                 int pattern)                          // *In*
 { // Generates a new board with random pieces placing all the pieces within
   // the pieces vectors
 
@@ -274,7 +287,7 @@ void BoardManager::GenerateBoard(int size, int pattern)
 } // GenerateBoard()
 
 
-void BoardManager::InitTopEdge(Board* pBoard)
+void BoardManager::InitTopEdge(Board* pBoard)                          // *Out* 
 { // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted
 
@@ -288,7 +301,7 @@ void BoardManager::InitTopEdge(Board* pBoard)
 } // InitTopEdge()
 
 
-void BoardManager::InitCornersSides(Board* pBoard)
+void BoardManager::InitCornersSides(Board* pBoard)                     // *Out*
 { // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
 
@@ -326,7 +339,7 @@ void BoardManager::InitCornersSides(Board* pBoard)
 } // InitCornerSides()
 
 
-void BoardManager::AddPieces(Board* pBoard)
+void BoardManager::AddPieces(Board* pBoard)                            // *Out*
 { // Adds pieces to the empty boards, top edge first, moving on to inner slots
   // then finally filling in the corners, side edges and bottom edge
 
@@ -357,7 +370,7 @@ void BoardManager::AddPieces(Board* pBoard)
 } // AddPieces()
 
 
-void BoardManager::FixStartPiece(Board* pBoard)
+void BoardManager::FixStartPiece(Board* pBoard)                        // *Out*
 { // If an official Eternity II solve attempt, make sure the start piece
   // constraint is met by placing the piece with the ID 139 on slot [7][8]
 
@@ -386,7 +399,9 @@ void BoardManager::FixStartPiece(Board* pBoard)
 } // FixStartPiece()
 
 
-void BoardManager::SwapStartPiece(Board* pBoard, int xIndex, int yIndex)
+void BoardManager::SwapStartPiece(Board* pBoard,                       // *Out*
+                                  int xIndex,                          // *In*  
+                                  int yIndex)                          // *In*
 { // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
 
@@ -402,7 +417,9 @@ void BoardManager::SwapStartPiece(Board* pBoard, int xIndex, int yIndex)
 } // SwapPiece()
 
 
-void BoardManager::RotateEdge(PuzzlePiece* piece, int xIndex, int yIndex)
+void BoardManager::RotateEdge(PuzzlePiece* piece,                      // *Out*  
+                              int xIndex,                              // *In*
+                              int yIndex)                              // *In*
 { // Rotates an edge piece so the edge pattern matches the edge of the board
 
   if (xIndex >= 1 && xIndex <= boardSize - 1 && yIndex == 0)
@@ -426,7 +443,9 @@ void BoardManager::RotateEdge(PuzzlePiece* piece, int xIndex, int yIndex)
 } // RotateEdge()
 
 
-void BoardManager::RotateCorner(PuzzlePiece* piece, int xIndex, int yIndex)
+void BoardManager::RotateCorner(PuzzlePiece* piece,                    // *Out*
+                                int xIndex,                            // *In*
+                                int yIndex)                            // *In*
 { // Rotates an corner piece so the corner pattern matches the edge of the board
 
   if (xIndex == 0 && yIndex == 0)
@@ -449,7 +468,8 @@ void BoardManager::RotateCorner(PuzzlePiece* piece, int xIndex, int yIndex)
 } // RotateCorner()
 
 
-PuzzlePiece BoardManager::GenCorner(int pattern1, int pattern2)
+PuzzlePiece BoardManager::GenCorner(int pattern1,                      // *In*
+                                    int pattern2)                      // *In*
 { // Generate a random corner piece, two parameters so that the corner can
   // match up to two other pieces. If no match is needed parameter equals -1.
   // pattern1 is segment 0, pattern2 is segment 1
@@ -484,8 +504,9 @@ PuzzlePiece BoardManager::GenCorner(int pattern1, int pattern2)
 } // GenCorner()
 
 
-PuzzlePiece BoardManager::GenEdge(int pattern1, int pattern2,
-  segLocation location)
+PuzzlePiece BoardManager::GenEdge(int pattern1,                        // *In*
+                                  int pattern2,                        // *In*
+                                  segLocation location)                // *In*
 { // Generate a random edge piece, two parameters so that the edge piece can
   // match the pattern on up to two other pieces. If no match is needed
   // parameter equals -1. pattern1 sets segment 0, pattern2 is placed on the
@@ -530,7 +551,8 @@ PuzzlePiece BoardManager::GenEdge(int pattern1, int pattern2,
 } // GenEdge()
 
 
-PuzzlePiece BoardManager::GenInner(int pattern1, int pattern2)
+PuzzlePiece BoardManager::GenInner(int pattern1,                       // *In*
+                                   int pattern2)                       // *In*
 { // Generates a random inner piece, two parameters so that the piece can match
   // up to two other pieces. If no match needed, parameter equals -1. pattern1
   // equals segment[0] and pattern2 equals segments[3]
@@ -568,7 +590,7 @@ PuzzlePiece BoardManager::GenInner(int pattern1, int pattern2)
 } // GenInner()
 
 
-void BoardManager::PopulatePieces(Board* pBoard)
+void BoardManager::PopulatePieces(Board* pBoard)                       // *In*
 { // Fill the piece vectors with the pieces located within the board given as
   // the parameter
 

@@ -10,7 +10,7 @@
 #include <iostream>           // DEBUG
 
 
-void GeneticAlgorithm::Setup(Settings theSettings)
+void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
@@ -109,7 +109,9 @@ void GeneticAlgorithm::RunGA()
 
 } // RunGA()
 
-void GeneticAlgorithm::GenRandomNum(int min, int max, int* randNum)
+void GeneticAlgorithm::GenRandomNum(int min,            // *In*
+                                    int max,            // *In*
+                                    int* randNum)       // *Out*
 { // Generates a random number between min and max in randNum parameter
 
   // Work out range between min and max (+1 to include max afterwards)
@@ -122,7 +124,7 @@ void GeneticAlgorithm::GenRandomNum(int min, int max, int* randNum)
 } // GenerateRandomNum()
 
 
-void GeneticAlgorithm::CalcMaxFitness(int boardSize)
+void GeneticAlgorithm::CalcMaxFitness(int boardSize)          // *In*
 { // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
   // along with calculating how many matches are in a 100% board 
@@ -187,7 +189,7 @@ void GeneticAlgorithm::DoFitness()
 } // DoFitness()
 
 
-void GeneticAlgorithm::OutputSettings(Settings theSettings)
+void GeneticAlgorithm::OutputSettings(Settings theSettings)   // *In* 
 { // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
 
