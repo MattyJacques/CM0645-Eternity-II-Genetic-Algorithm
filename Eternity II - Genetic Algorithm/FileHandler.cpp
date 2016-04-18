@@ -35,6 +35,119 @@ FileHandler::FileHandler()
 } // FileReader()
 
 
+Settings FileHandler::ReadSettingsFile()
+{ // Reads the settings file named "settings.ini" in the root directory, 
+  // setting the appropriate values that have been read in to the algorithm
+
+  Settings setData;    // Holds all of the loaded settings data
+  int startPiece = -1; // Holds parsed int for start piece constraint
+
+  if (OpenFile("settings.ini"))
+  { // Checks to see if the file is open before proceeding with reading of the
+    // file
+
+    ParseInt(&setData.boardSize);        // Parse the board size
+    ParseInt(&setData.patternNum);       // Parse the number of patterns
+    ParseInt(&setData.popSize);          // Parse the population size
+
+                                         // Parse the selection, crossover and mutation methods into the appropriate
+                                         // enums
+    ParseMethods(&setData);
+
+    ParseDouble(&setData.mutRate);       // Parse the mutation rate
+    ParseInt(&setData.eliteRate);        // Parse the elitism rate
+    ParseInt(&startPiece);               // Parse if start constraint is active
+
+    if (startPiece == 1)
+    { // If value from file equals 1, set start piece constraint to true
+      setData.startCons = true;
+    }
+    else if (startPiece == 0)
+    { // If value from file equals 0, set start piece constraint to false
+      setData.startCons = false;
+    }
+
+    theFile.close();                     // Close file after use
+  }
+
+  // Read in puzzle pieces
+  ReadDataFile(setData.boardSize, setData.patternNum);
+
+  // Calculate output filename
+  SetOutFilename(setData.boardSize, setData.patternNum, setData.selectType,
+    setData.crossType, setData.mutType);
+
+  return setData;  // Return parsed data
+
+} // ReadSettingsFile()
+
+
+void FileHandler::ReadDataFile(int size, int pattern)
+{ // Reads the piece file with the file name that matches the information
+  // passed as parameter storing piece info in the piece collection vector
+
+  // Get the index of the file name matching the data of the board size and
+  // number of patterns
+  int index = GetDataFilename(size, pattern);
+
+  std::string line = "/0";              // Stores current line to be parsed
+  int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
+
+  if (index >= 0)
+  {
+    if (OpenFile(filenames[index].c_str()))
+    { // Checks to see if the file is open before proceeding with reading of
+      // the file
+
+      while (std::getline(theFile, line))
+      { // While getline actually returns a line of data, proceed with parsing
+        ParseData(line, pData);
+        CreatePiece(pData);
+      }
+
+      theFile.close();                             // Close the file after use
+      printf("Loaded: %s\n\n", filenames[index].c_str()); // Output success
+    }
+  }
+  else
+  { // If the file was not opened, create a new file
+    MakeDataFile(size, pattern);
+  }
+
+} // ReadPieceFile()
+
+
+void FileHandler::OutputBoard(Board* pBoard, int genCount)
+{ // Output the board to a file to show progress or solved board, file name is
+  // date generation and time ran.
+
+  if (OpenFile(outFilename.c_str()))
+  { // If file has been created and open successfully output the data
+
+    OutputMatches(pBoard, genCount);   // Output board with pattern IDs
+    OutputIDs(pBoard, genCount);       // Output board with piece IDs 
+    theFile.close();                   // Close the file after use
+  }
+
+} // OutputBoard()
+
+
+void FileHandler::OutputFitness(int fitness)
+{ // Appends the fitness to file for tracking of algorithm performance
+
+  if (OpenFile(outFilename.c_str()))
+  { // If output file opened successfully output the fitness
+
+    // Convert the fitness integer and output the line to the file
+    theFile << fitness << std::endl;
+
+    // Close file after use
+    theFile.close();
+  }
+
+} // OutputFitness()
+
+
 bool FileHandler::OpenFile(const char* fileName)
 { // Opens the file using the filename provided return whether successful
   
@@ -88,51 +201,43 @@ void FileHandler::ScanFileDirectory()
 } // ScanFileDirectory()
 
 
-Settings FileHandler::ReadSettingsFile()
-{ // Reads the settings file named "settings.ini" in the root directory, 
-  // setting the appropriate values that have been read in to the algorithm
+void FileHandler::ParseInt(int* setting)
+{ // Parse int from next line of file placing in int passed as parameter
 
-  Settings setData;    // Holds all of the loaded settings data
-  int startPiece = -1; // Holds parsed int for start piece constraint
+  std::string line = "/0";         // Stores current line to be parsed
+  char temp[25] = "/0";            // Stores label of the line from file
 
-  if (OpenFile("settings.ini"))
-  { // Checks to see if the file is open before proceeding with reading of the
-    // file
-    
-    ParseInt(&setData.boardSize);        // Parse the board size
-    ParseInt(&setData.patternNum);       // Parse the number of patterns
-    ParseInt(&setData.popSize);          // Parse the population size
+  while (std::getline(theFile, line))
+  { // Read in the next line
+    if (!line.empty() && line[0] != '*')
+    { // If line is not empty or comment line, parse the data in to data var
 
-    // Parse the selection, crossover and mutation methods into the appropriate
-    // enums
-    ParseMethods(&setData); 
-
-    ParseDouble(&setData.mutRate);       // Parse the mutation rate
-    ParseInt(&setData.eliteRate);        // Parse the elitism rate
-    ParseInt(&startPiece);               // Parse if start constraint is active
-
-    if (startPiece == 1)
-    { // If value from file equals 1, set start piece constraint to true
-      setData.startCons = true;
+      sscanf_s(line.c_str(), "%s %i", temp, 25, setting);  // Parse value
+      break;                                               // Break out of loop
     }
-    else if (startPiece == 0)
-    { // If value from file equals 0, set start piece constraint to false
-      setData.startCons = false;
-    }
-
-    theFile.close();                     // Close file after use
   }
 
-  // Read in puzzle pieces
-  ReadDataFile(setData.boardSize, setData.patternNum);
+} // ParseInt()
 
-  // Calculate output filename
-  SetOutFilename(setData.boardSize, setData.patternNum, setData.selectType,
-                 setData.crossType, setData.mutType);
 
-  return setData;  // Return parsed data
+void FileHandler::ParseDouble(double* setting)
+{ // Parse double from next line of file placing value in double passed as
+  // parameter
 
-} // ReadSettingsFile()
+  std::string line = "/0";         // Stores current line to be parsed
+  char temp[25] = "/0";            // Stores label of the line from file
+
+  while (std::getline(theFile, line))
+  { // Read in the next line
+    if (!line.empty() && line[0] != '*')
+    { // If line is not empty or comment line, parse the data in to data var
+
+      sscanf_s(line.c_str(), "%s %lf", temp, 25, setting); // Parse value
+      break;                                               // Break out of loop
+    }
+  }
+
+} // ParseDouble()
 
 
 void FileHandler::ParseMethods(Settings* setData)
@@ -186,80 +291,6 @@ void FileHandler::ParseMethods(Settings* setData)
   }
 
 } // ParseMethods()
-
-
-void FileHandler::ParseInt(int* setting)
-{ // Parse int from next line of file placing in int passed as parameter
-
-  std::string line = "/0";         // Stores current line to be parsed
-  
-
-  while (std::getline(theFile, line))
-  { // Read in the next line
-    if (!line.empty() && line[0] != '*')
-    { // If line is not empty or comment line, parse the data in to data var
-
-      sscanf_s(line.c_str(), "%s %i", temp, 25, setting);  // Parse value
-      break;                                               // Break out of loop
-    }
-  }
-
-} // ParseInt()
-
-
-void FileHandler::ParseDouble(double* setting)
-{ // Parse double from next line of file placing value in double passed as
-  // parameter
-
-  std::string line = "/0";         // Stores current line to be parsed
-  char temp[25] = "/0";            // Stores label of the line from file
-
-  while (std::getline(theFile, line))
-  { // Read in the next line
-    if (!line.empty() && line[0] != '*')
-    { // If line is not empty or comment line, parse the data in to data var
-
-      sscanf_s(line.c_str(), "%s %lf", temp, 25, setting); // Parse value
-      break;                                               // Break out of loop
-    }
-  }
-
-} // ParseDouble()
-
-
-void FileHandler::ReadDataFile(int size, int pattern)
-{ // Reads the piece file with the file name that matches the information
-  // passed as parameter storing piece info in the piece collection vector
-
-  // Get the index of the file name matching the data of the board size and
-  // number of patterns
-  int index = GetDataFilename(size, pattern);
-
-  std::string line = "/0";              // Stores current line to be parsed
-  int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
-
-  if (index >= 0)
-  {
-    if (OpenFile(filenames[index].c_str()))
-    { // Checks to see if the file is open before proceeding with reading of
-      // the file
-
-      while (std::getline(theFile, line))
-      { // While getline actually returns a line of data, proceed with parsing
-        ParseData(line, pData);
-        CreatePiece(pData);
-      }
-
-      theFile.close();                             // Close the file after use
-      printf("Loaded: %s\n\n", filenames[index].c_str()); // Output success
-    }
-  }
-  else
-  { // If the file was not opened, create a new file
-    MakeDataFile(size, pattern);
-  }
-
-} // ReadPieceFile()
 
 
 int FileHandler::GetDataFilename(int size, int pattern)
@@ -392,19 +423,31 @@ PieceType FileHandler::CheckType(int* pData)
 } // CheckType()
 
 
-void FileHandler::OutputBoard(Board* pBoard, int genCount)
-{ // Output the board to a file to show progress or solved board, file name is
-  // date generation and time ran.
+void FileHandler::SetOutFilename(int boardSize, int patternNum, int select,
+  int crossover, int mutation)
+{ // Calculate the output filename
 
-  if (OpenFile(outFilename.c_str()))
-  { // If file has been created and open successfully output the data
-    
-    OutputMatches(pBoard, genCount);   // Output board with pattern IDs
-    OutputIDs(pBoard, genCount);       // Output board with piece IDs 
-    theFile.close();                   // Close the file after use
-  }
+  char intBuff[10] = "/0";               // Holds result of itoa
 
-} // OutputBoard()
+                                         // Set directory and board size label
+  outFilename = "Solutions/BoardSize ";
+
+  // Convert board size to char and append to filename
+  _itoa_s(boardSize, intBuff, 10);
+  outFilename += intBuff;
+
+  outFilename += " Pattern ";            // Append pattern label
+
+                                         // Convert the pattern number to char and append to filename
+  _itoa_s(patternNum, intBuff, 10);
+  outFilename += intBuff;
+
+  AppendSelectCross(select, crossover);  // Append select and crossover methods
+  AppendMutation(mutation);              // Append mutation method
+
+  outFilename += ".txt";  // Append file extension to filename
+
+} // SetOutFilename()
 
 
 void FileHandler::OutputMatches(Board* pBoard, int genCount)
@@ -487,49 +530,6 @@ void FileHandler::OutputIDs(Board* pBoard, int genCount)
   }
 
 } // OutputIDs()
-
-
-void FileHandler::OutputFitness(int fitness)
-{ // Appends the fitness to file for tracking of algorithm performance
-
-  if (OpenFile(outFilename.c_str()))
-  { // If output file opened successfully output the fitness
-
-    // Convert the fitness integer and output the line to the file
-    theFile << fitness << std::endl;
-
-    // Close file after use
-    theFile.close();
-  }
-
-} // OutputFitness()
-
-
-void FileHandler::SetOutFilename(int boardSize, int patternNum, int select,
-                                int crossover, int mutation)
-{ // Calculate the output filename
-
-  char intBuff[10] = "/0";               // Holds result of itoa
-
-  // Set directory and board size label
-  outFilename = "Solutions/BoardSize ";
-
-  // Convert board size to char and append to filename
-  _itoa_s(boardSize, intBuff, 10);
-  outFilename += intBuff;
-
-  outFilename += " Pattern ";            // Append pattern label
-  
-  // Convert the pattern number to char and append to filename
-  _itoa_s(patternNum, intBuff, 10);
-  outFilename += intBuff;
-
-  AppendSelectCross(select, crossover);  // Append select and crossover methods
-  AppendMutation(mutation);              // Append mutation method
-
-  outFilename += ".txt";  // Append file extension to filename
-
-} // SetOutFilename()
 
 
 void FileHandler::AppendSelectCross(int select, int crossover)

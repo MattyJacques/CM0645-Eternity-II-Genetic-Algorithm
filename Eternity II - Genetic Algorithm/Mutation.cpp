@@ -17,6 +17,47 @@ Mutation::Mutation()
 } // Mutation()
 
 
+void Mutation::Setup(MutateType type, double rate, int popSize)
+{ // Sets the method of mutation to use for this attempt
+
+  mutType = type;                 // Set mutation method
+  CalcMutRate(rate, popSize);     // Calc how many mutation per generation
+
+} // SetMethod()
+
+
+void Mutation::DoMutation(bool startPiece)
+{ // Randomly selects a board from the current population to be mutated
+  // then calls the appropriate subrountine that will do the needed mutation
+  // method on that board.
+
+  int boardID = -1;     // Holds random boardID to mutate
+
+  for (int i = 0; i < mutNum; i++)
+  { // Loop through to complete as many mutations as was calcualted on 
+    // application start up
+
+    // Get a random board ID to complete mutation on
+    GeneticAlgorithm::GenRandomNum(0, (int)BoardManager::GetInstance()->
+      currBoards->size() - 1, &boardID);
+
+    if (mutType == SWAP)   // If mutation method is swap, do swap
+      Swap(boardID, startPiece);
+    else if (mutType == ROTATE)
+      Rotate(boardID, startPiece);
+    else if (mutType == ROTATESWAP)
+      RotateSwap(boardID, startPiece);
+    else if (mutType == REGIONSWAP)
+      RegionSwap(boardID, startPiece);
+    else if (mutType == REGIONROTATE)
+      RegionRotate(boardID, startPiece);
+    else                  // Mutation method not recognised, output error
+      std::cout << "Mutation method not recognised" << std::endl;
+  }
+
+} // DoMutation()
+
+
 void Mutation::CalcMutRate(double rate, int popSize)
 { // Calculates how many mutations to implement per generation
 
@@ -368,45 +409,3 @@ void Mutation::RegionSwap(int boardID, bool startPiece)
   Swap(boardID, startPiece);
 
 } // RegionSwap()
-
-
-void Mutation::Setup(MutateType type, double rate, int popSize)
-{ // Sets the method of mutation to use for this attempt
-
-  mutType = type;                 // Set mutation method
-  CalcMutRate(rate, popSize);     // Calc how many mutation per generation
-
-} // SetMethod()
-
-
-void Mutation::DoMutation(bool startPiece)
-{ // Randomly selects a board from the current population to be mutated
-  // then calls the appropriate subrountine that will do the needed mutation
-  // method on that board.
-
-  int boardID = -1;     // Holds random boardID to mutate
-
-  for (int i = 0; i < mutNum; i++)
-  { // Loop through to complete as many mutations as was calcualted on 
-    // application start up
-
-    // Get a random board ID to complete mutation on
-    GeneticAlgorithm::GenRandomNum(0, (int)BoardManager::GetInstance()->
-                                   currBoards->size() - 1, &boardID);
-
-    if (mutType == SWAP)   // If mutation method is swap, do swap
-      Swap(boardID, startPiece);
-    else if (mutType == ROTATE)
-      Rotate(boardID, startPiece);
-    else if (mutType == ROTATESWAP)
-      RotateSwap(boardID, startPiece);
-    else if (mutType == REGIONSWAP)
-      RegionSwap(boardID, startPiece);
-    else if (mutType == REGIONROTATE)
-      RegionRotate(boardID, startPiece);
-    else                  // Mutation method not recognised, output error
-      std::cout << "Mutation method not recognised" << std::endl;
-
-  }
-
-} // DoMutation()

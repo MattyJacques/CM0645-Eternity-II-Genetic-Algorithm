@@ -34,38 +34,38 @@ class GeneticAlgorithm
 private:
   int popSize;                          // Holds the population size
   int maxFitness;                       // Fitness of 100% candidate
-  int currFitness;                  // Holds the max fitness of current gen
-  int currMatches;                       // Max amount pattern matches reached
-  int maxMatches;                       // Max amount of pattern matches at 100%
+  int currFitness;                      // Holds the max fitness of current gen
+  int currMatches;                      // Max num pattern matches reached
+  int maxMatches;                       // Max num of pattern matches at 100%
   int genCount;                         // Count of how many generations passed
   bool startPiece;                      // Switch for start piece constraint
   Crossover theCrossover;               // Object to handle crossover
   Mutation theMutation;                 // Object to handle mutation
   FitnessFunction theFitness;           // Object ot handle calculating fitness
 
-  // Outputs all of the loaded settings so the user can see what methods are
-  // used for solving attempt
-  void OutputSettings(Settings theSettings);
-
-  // Checks the fitness of the population and checks to see if there is a new
-  // fitness or pattern match record
-  void DoFitness();
-
   // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
   // along with calculating how many matches are in a 100% board
   void CalcMaxFitness(int boardSize);
 
-  // Output the solved bored along with how many generation it took to solve
-  void OutputSolved();
-
-  // Calls to ouput the current fitness to the file for record of performance
-  void OutputFitness();
-
   // Initialise random population of candidates. Used at the start of the 
   // algorithm to get the initial population and also used for the scramble
   // repair method if fitness has not increased within a period of generations
   void InitRandomPopulation();
+
+  // Checks the fitness of the population and checks to see if there is a new
+  // fitness or pattern match record
+  void DoFitness();
+
+  // Outputs all of the loaded settings so the user can see what methods are
+  // used for solving attempt
+  void OutputSettings(Settings theSettings);
+
+  // Calls to ouput the current fitness to the file for record of performance
+  void OutputFitness();
+
+  // Output the solved bored along with how many generation it took to solve
+  void OutputSolved();
 
 public:
   // Constructor that sets the elite, crossover and mutation rates, along with

@@ -20,6 +20,17 @@ Crossover::Crossover()
 } // Crossover()
 
 
+void Crossover::SetMethod(CrossoverType cross, SelectionType select, int elite)
+{ // Sets the crossover and selection type to use for crossover along with
+  // the elitism rate
+
+  crossType = cross;
+  selectType = select;
+  eliteRate = elite;
+
+} // SetMethod()
+
+
 void Crossover::DoCrossover(int popSize)
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
@@ -61,41 +72,6 @@ void Crossover::DoCrossover(int popSize)
   DoElitism(); // Transfer the elites over to new generation
 
 } // DoCrossover()
-
-
-void Crossover::DoElitism()
-{ // Adds the best and worst candidtes from the previous generation to the new
-  // generation. The amount of candidates is declared in eliteRate
-
-  // Sort the vector in ascending order to for easy access to elites
-  std::sort(BoardManager::GetInstance()->prevBoards->begin(), 
-            BoardManager::GetInstance()->prevBoards->end());
-
-  for (int i = 1; i < eliteRate + 1; i++)
-  { // Take the best and the worst candidates from the previous generation
-    // and push to the new generation vector
-
-    // Push worst on to new population
-    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
-                                                        ->prevBoards->begin()[i]);
-
-    // Push best on to new population
-    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
-                                                        ->prevBoards->end()[-i]);
-  }
-
-} // DoElitism()
-
-
-void Crossover::SetMethod(CrossoverType cross, SelectionType select, int elite)
-{ // Sets the crossover and selection type to use for crossover along with
-  // the elitism rate
-
-  crossType = cross;
-  selectType = select;
-  eliteRate = elite;
-
-} // SetMethod()
 
 
 void Crossover::SelectParents(Board* parents[2], int popSize, int totalFitness)
@@ -572,3 +548,27 @@ void Crossover::FixDuplicates(Board* pBoard, std::vector<PuzzlePiece> pieces,
   }
 
 } // FixDuplicates()
+
+
+void Crossover::DoElitism()
+{ // Adds the best and worst candidtes from the previous generation to the new
+  // generation. The amount of candidates is declared in eliteRate
+
+  // Sort the vector in ascending order to for easy access to elites
+  std::sort(BoardManager::GetInstance()->prevBoards->begin(),
+    BoardManager::GetInstance()->prevBoards->end());
+
+  for (int i = 1; i < eliteRate + 1; i++)
+  { // Take the best and the worst candidates from the previous generation
+    // and push to the new generation vector
+
+    // Push worst on to new population
+    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
+      ->prevBoards->begin()[i]);
+
+    // Push best on to new population
+    BoardManager::GetInstance()->currBoards->push_back(BoardManager::GetInstance()
+      ->prevBoards->end()[-i]);
+  }
+
+} // DoElitism()

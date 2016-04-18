@@ -28,10 +28,6 @@ private:
   int tournamentSize;                   // Holds how large tournaments are
   int eliteRate;                        // Holds how many candidates to keep
 
-  // Adds the best and worst candidtes from the previous generation to the new
-  // generation. The amount of candidates is declared in eliteRate
-  void DoElitism();
-
   // Selects with candidates to use for reproduction with the selection method  
   // chosen when the application was started
   void SelectParents(Board* parents[2], int popSize, int totalFitness);
@@ -99,15 +95,19 @@ private:
   void FixDuplicates(Board* pBoard, std::vector<PuzzlePiece> pieces,
                      std::vector<std::vector<int>> indexes);
 
+  // Adds the best and worst candidtes from the previous generation to the new
+  // generation. The amount of candidates is declared in eliteRate
+  void DoElitism();
+
 public:
   // Sets tournament size, initalise methods to default
   Crossover();
 
-  // Selects the parent candidates then commences with crossover with chosen
-  // methods
-  void DoCrossover(int popSize);
-
   // Sets the crossover and selection type to use for crossover along with
   // the elitism rate
   void SetMethod(CrossoverType cross, SelectionType select, int elite);
+
+  // Selects the parent candidates then commences with crossover with chosen
+  // methods
+  void DoCrossover(int popSize);
 };

@@ -16,6 +16,29 @@ FitnessFunction::FitnessFunction()
 } // FitnessFunction()
 
 
+void FitnessFunction::CheckFitness(Board* theBoard)
+{ // Checks the fitness of the candidate provided by the GA
+
+  pBoard = theBoard;      // Defines the board pointer to the current board
+  pBoard->fitScore = 0;   // Sets the score to 0 to begin calculation
+  pBoard->matchCount = 0; // Sets the matches to 0 to begin calculation
+
+  // Runs through and checks all the connections and piece locations of the
+  // candidate solutions adding up the score for each correct placement & match
+  // also adds up how many patterns are matched in the candidate
+  CheckTopLeft();
+  CheckTopEdge();
+  CheckTopRight();
+  CheckLeftEdge();
+  CheckInnerPieces();
+  CheckRightEdge();
+  CheckBottomLeft();
+  CheckBottomEdge();
+  CheckBottomRight();
+
+} // CheckFitness()
+
+
 bool FitnessFunction::IsMatchSide(int xIndex1, int yIndex1, int xIndex2, 
                                   int yIndex2)
 { // Checks to see if the pattern located on right side of piece1 matches the
@@ -292,26 +315,3 @@ void FitnessFunction::CheckInnerPieces()
   } // for int j < boardSize
 
 } // CheckInnerPieces()
-
-
-void FitnessFunction::CheckFitness(Board* theBoard)
-{ // Checks the fitness of the candidate provided by the GA
-
-  pBoard = theBoard;      // Defines the board pointer to the current board
-  pBoard->fitScore = 0;   // Sets the score to 0 to begin calculation
-  pBoard->matchCount = 0; // Sets the matches to 0 to begin calculation
-
-  // Runs through and checks all the connections and piece locations of the
-  // candidate solutions adding up the score for each correct placement & match
-  // also adds up how many patterns are matched in the candidate
-  CheckTopLeft();
-  CheckTopEdge();
-  CheckTopRight();
-  CheckLeftEdge();
-  CheckInnerPieces();
-  CheckRightEdge();
-  CheckBottomLeft();
-  CheckBottomEdge();
-  CheckBottomRight();
-
-} // CheckFitness()

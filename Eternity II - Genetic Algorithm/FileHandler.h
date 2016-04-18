@@ -24,6 +24,10 @@ private:
 
   // Opens the file using the filename provided return whether successful
   bool OpenFile(const char* fileName);
+
+  // Scans the directory for puzzle files, storing names in array for loading
+  // if the user wants to use one of them
+  void ScanFileDirectory();
  
   // Parse int from next line of file placing value in int passed as parameter
   void ParseInt(int* setting);
@@ -35,10 +39,6 @@ private:
   // Parses the methods of selection, crossover and mutation from the int in
   // file into the enum values
   void ParseMethods(Settings* setData);
-
-  // Scans the directory for puzzle files, storing names in array for loading
-  // if the user wants to use one of them
-  void ScanFileDirectory();
 
   // Find the correct filename from the vector of puzzle file names found
   // during the directory scan

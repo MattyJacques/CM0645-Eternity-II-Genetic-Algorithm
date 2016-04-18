@@ -136,11 +136,11 @@ public:
   // Sets how many patterns to be used and how many pieces there are per board
   void InitialiseData(int size, int patNum);
 
-  // Creates the inital board filled with randomised order of pieces
-  void InitFullBoard(Board* pBoard, bool startPiece);
-
   // Initialises the boards vector of vectors with empty vectors
   void InitEmptyBoard(Board* pBoard);
+
+  // Creates the inital board filled with randomised order of pieces
+  void InitFullBoard(Board* pBoard, bool startPiece);
 
   // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece

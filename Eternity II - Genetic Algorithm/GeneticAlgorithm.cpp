@@ -45,6 +45,148 @@ void GeneticAlgorithm::Setup(Settings theSettings)
 } // GeneticAlgorithm()
 
 
+void GeneticAlgorithm::RunGA()
+{ // Main function of the GA that continually runs
+
+  int stuckCounter = 200;    // Counts down from 200 for test if stuck
+  int prevFitness = 0;       // Holds the previous fitness to check if stuck
+
+                             // Initialise the first population
+  InitRandomPopulation();
+
+  while (currFitness != maxFitness)
+  { // While the solution has not been found, continue working towards solution
+
+    if (prevFitness < currFitness)
+    { // If fitness has improved, reset the stuck counter and set new high
+      // score for fitness
+      prevFitness = currFitness;
+      stuckCounter = 200;
+    }
+    else
+    { // If fitness has no improved, decrememnt to stuck counter
+      stuckCounter--;
+    }
+
+    genCount++;            // Increment the count of generations
+    currMatches = 0;       // Reset max amount of matches found
+    currFitness = 0;       // Reset max fitness reached
+
+                           // Check fitness of the population
+    DoFitness();
+
+    // Output summary of generation
+    float fitPercent = ((float)currFitness / maxFitness) * 100.0f;
+    float matchPercent = ((float)currMatches / maxMatches) * 100.0f;
+    printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n",
+      genCount, currFitness, maxFitness, fitPercent, currMatches,
+      maxMatches, matchPercent);
+
+    if (stuckCounter > 0)
+    { // If fitness improvement has been made in past 200 generations, keep
+      // trying to solve
+
+      // Complete crossover of population
+      theCrossover.DoCrossover(popSize);
+
+      // Complete mutation of population
+      theMutation.DoMutation(startPiece);
+    }
+    else
+    { // If 200 generations have passed without immproved fitness, reset 
+      // population and fitness to try again
+      InitRandomPopulation();
+      stuckCounter = 200;
+      prevFitness = 0;
+      currFitness = 0;
+    }
+
+    OutputFitness();
+
+  } // while (currFitness != maxFitness)
+
+  OutputSolved(); // Output the solved board
+
+} // RunGA()
+
+void GeneticAlgorithm::GenRandomNum(int min, int max, int* randNum)
+{ // Generates a random number between min and max in randNum parameter
+
+  // Work out range between min and max (+1 to include max afterwards)
+  int range = (max - min) + 1;
+
+  // Get random number between 0 and the range, then add min to get between min
+  // and max
+  *randNum = (std::rand() % range) + min;
+
+} // GenerateRandomNum()
+
+
+void GeneticAlgorithm::CalcMaxFitness(int boardSize)
+{ // Takes in the size of board and calculates what the fitness of a 100%
+  // solved candidate would be so the algorithm can quit when goal is achieved
+  // along with calculating how many matches are in a 100% board 
+
+  // Calc max fitness & max pattern matches of corner pattern matches
+  maxFitness += 8 * CORNERMATCH;
+  maxMatches += 8;
+
+  // Calc max fitness & max pattern matches of edge pieces pattern match
+  maxFitness += ((((boardSize - 2) * 2) - 1) * 4) * EDGEMATCH;
+  maxMatches += (((boardSize - 2) * 2) - 1) * 4;
+
+  // Calc max fitness & max pattern matches of inner pieces pattern match
+  maxFitness += ((boardSize - 3) * (boardSize - 2) * 2) * INNERMATCH;
+  maxMatches += (boardSize - 3) * (boardSize - 2) * 2;
+
+} // CalcMaxFitness()
+
+
+void GeneticAlgorithm::InitRandomPopulation()
+{ // Initialise random population of candidates. Used at the start of the 
+  // algorithm to get the initial population and also used for the scramble
+  // repair method if fitness has not increased within a period of generations
+
+  // Create a new vector for new population
+  std::vector<Board> newVec;
+
+  for (int i = 0; i < popSize; i++)
+  { // Create initialise population of boards with randomised boards
+    Board newBoard;
+    BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
+    newVec.push_back(newBoard);
+  }
+
+  // Set the current population pointer to new population vector
+  BoardManager::GetInstance()->currBoards =
+    std::make_shared<std::vector<Board>>(newVec);
+
+} // InitRandomPopulation()
+
+
+void GeneticAlgorithm::DoFitness()
+{ // Checks the fitness of the population and checks to see if there is a new
+  // fitness or pattern match record
+
+  for (int i = 0; i < popSize; i++)
+  { // Loop through every boards of population checking the fitness
+    theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
+
+    if (BoardManager::GetInstance()->currBoards->at(i).matchCount >
+      currMatches)
+    { // Check to see if new highest match count
+      currMatches = BoardManager::GetInstance()->currBoards->at(i).matchCount;
+    }
+
+    if (BoardManager::GetInstance()->currBoards->at(i).fitScore > currFitness)
+    { // If next maximum fitness of generation found, store new max fitness
+      currFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+    }
+  }
+
+} // DoFitness()
+
+
 void GeneticAlgorithm::OutputSettings(Settings theSettings)
 { // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
@@ -101,113 +243,6 @@ void GeneticAlgorithm::OutputSettings(Settings theSettings)
 } // OutputSettings()
 
 
-void GeneticAlgorithm::CalcMaxFitness(int boardSize)
-{ // Takes in the size of board and calculates what the fitness of a 100%
-  // solved candidate would be so the algorithm can quit when goal is achieved
-  // along with calculating how many matches are in a 100% board 
-  
-  // Calc max fitness & max pattern matches of corner pattern matches
-  maxFitness += 8 * CORNERMATCH;
-  maxMatches += 8;
-
-  // Calc max fitness & max pattern matches of edge pieces pattern match
-  maxFitness += ((((boardSize - 2) * 2) - 1) * 4) * EDGEMATCH;
-  maxMatches += (((boardSize - 2) * 2) - 1) * 4;
-
-  // Calc max fitness & max pattern matches of inner pieces pattern match
-  maxFitness += ((boardSize - 3) * (boardSize - 2) * 2) * INNERMATCH;
-  maxMatches += (boardSize - 3) * (boardSize - 2) * 2;
-
-} // CalcMaxFitness()
-
-
-void GeneticAlgorithm::InitRandomPopulation()
-{ // Initialise random population of candidates. Used at the start of the 
-  // algorithm to get the initial population and also used for the scramble
-  // repair method if fitness has not increased within a period of generations
-
-  // Create a new vector for new population
-  std::vector<Board> newVec;
-
-  for (int i = 0; i < popSize; i++)
-  { // Create initialise population of boards with randomised boards
-    Board newBoard;
-    BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
-    newVec.push_back(newBoard);
-  }
-
-  // Set the current population pointer to new population vector
-  BoardManager::GetInstance()->currBoards =
-    std::make_shared<std::vector<Board>>(newVec);
-
-} // InitRandomPopulation()
-
-
-void GeneticAlgorithm::RunGA()
-{ // Main function of the GA that continually runs
-
-  int stuckCounter = 200;    // Counts down from 200 for test if stuck
-  int prevFitness = 0;       // Holds the previous fitness to check if stuck
-
-  // Initialise the first population
-  InitRandomPopulation();
-
-  while (currFitness != maxFitness)
-  { // While the solution has not been found, continue working towards solution
-
-    if (prevFitness < currFitness)
-    { // If fitness has improved, reset the stuck counter and set new high
-      // score for fitness
-      prevFitness = currFitness;
-      stuckCounter = 200;
-    }
-    else
-    { // If fitness has no improved, decrememnt to stuck counter
-      stuckCounter--;
-    }
-
-    genCount++;            // Increment the count of generations
-    currMatches = 0;       // Reset max amount of matches found
-    currFitness = 0;       // Reset max fitness reached
-
-    // Check fitness of the population
-    DoFitness();
-
-    // Output summary of generation
-    float fitPercent = ((float)currFitness / maxFitness) * 100.0f;
-    float matchPercent = ((float)currMatches / maxMatches) * 100.0f;
-    printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n", 
-            genCount, currFitness, maxFitness, fitPercent, currMatches,
-            maxMatches, matchPercent);
-
-    if (stuckCounter > 0)
-    { // If fitness improvement has been made in past 200 generations, keep
-      // trying to solve
-
-      // Complete crossover of population
-      theCrossover.DoCrossover(popSize);
-
-      // Complete mutation of population
-      theMutation.DoMutation(startPiece);
-    }
-    else
-    { // If 200 generations have passed without immproved fitness, reset 
-      // population and fitness to try again
-      InitRandomPopulation();
-      stuckCounter = 200;
-      prevFitness = 0;
-      currFitness = 0;
-    }
-
-    OutputFitness();
-
-  } // Main algorithm loop
-
-  OutputSolved(); // Output the solved board
-
-} // RunGA()
-
-
 void GeneticAlgorithm::OutputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
@@ -233,39 +268,3 @@ void GeneticAlgorithm::OutputSolved()
   }
 
 } // OutputSolved
-
-
-void GeneticAlgorithm::DoFitness()
-{ // Checks the fitness of the population and checks to see if there is a new
-  // fitness or pattern match record
-
-  for (int i = 0; i < popSize; i++)
-  { // Loop through every boards of population checking the fitness
-    theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
-
-    if (BoardManager::GetInstance()->currBoards->at(i).matchCount > 
-        currMatches)
-    { // Check to see if new highest match count
-      currMatches = BoardManager::GetInstance()->currBoards->at(i).matchCount;
-    }
-
-    if (BoardManager::GetInstance()->currBoards->at(i).fitScore > currFitness)
-    { // If next maximum fitness of generation found, store new max fitness
-      currFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
-    }
-  }
-
-} // DoFitness()
-
-
-void GeneticAlgorithm::GenRandomNum(int min, int max, int* randNum)
-{ // Generates a random number between min and max in randNum parameter
-
-  // Work out range between min and max (+1 to include max afterwards)
-  int range = (max - min) + 1;
-
-  // Get random number between 0 and the range, then add min to get between min
-  // and max
-  *randNum = (std::rand() % range) + min;
-
-} // GenerateRandomNum()
