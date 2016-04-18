@@ -16,7 +16,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
   // mutation methods
 
   // Set up the crossover object using the input methods
-  theCrossover.SetMethod(theSettings.crossType, theSettings.selectType, 
+  theCrossover.setMethod(theSettings.crossType, theSettings.selectType, 
                          theSettings.eliteRate);
 
   // Set up the mutation method using the input methods
@@ -87,7 +87,7 @@ void GeneticAlgorithm::RunGA()
       // Switch current population to previous and create new population
       BoardManager::getInstance()->switchPop();
 
-      theCrossover.DoCrossover(popSize);  // Complete crossover of population
+      theCrossover.doCrossover(popSize);  // Complete crossover of population
       theMutation.DoMutation(startPiece); // Complete mutation of population
     }
     else

@@ -20,7 +20,7 @@ Crossover::Crossover()
 } // Crossover()
 
 
-void Crossover::SetMethod(CrossoverType cross,                        // *In*
+void Crossover::setMethod(CrossoverType cross,                        // *In*
                           SelectionType select,                       // *In*
                           int elite)                                  // *In*
 { // Sets the crossover and selection type to use for crossover along with
@@ -30,10 +30,10 @@ void Crossover::SetMethod(CrossoverType cross,                        // *In*
   selectType = select;
   eliteRate = elite;
 
-} // SetMethod()
+} // setMethod()
 
 
-void Crossover::DoCrossover(int popSize)                              // *In*                           
+void Crossover::doCrossover(int popSize)                              // *In*                           
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
 
@@ -57,19 +57,19 @@ void Crossover::DoCrossover(int popSize)                              // *In*
     // Loop to make sure both selected parents are not the same candidate
     do
     {
-      SelectParents(parents, popSize, totalFitness);
+      selectParents(parents, popSize, totalFitness);
     } while (parents[0]->boardID == parents[1]->boardID);
 
-    Reproduce(parents);  // Breed the parents together
-    CheckDuplication();  // Check for any duplicate pieces
+    reproduce(parents);  // Breed the parents together
+    checkDuplication();  // Check for any duplicate pieces
   }
 
-  DoElitism(); // Transfer the elites over to new generation
+  doElitism(); // Transfer the elites over to new generation
 
-} // DoCrossover()
+} // doCrossover()
 
 
-void Crossover::SelectParents(Board* parents[2],                      // *Out*                
+void Crossover::selectParents(Board* parents[2],                      // *Out*                
                               int popSize,                            // *In*
                               int totalFitness)                       // *In*
 { // Selects with candidates to use for reproduction with the selection method  
@@ -78,11 +78,11 @@ void Crossover::SelectParents(Board* parents[2],                      // *Out*
   if (selectType == ROULETTE) 
   { // If roulette method was chosen, work out the total fitness and do
     // roulette selection
-    RouletteSelect(parents, totalFitness);
+    rouletteSelect(parents, totalFitness);
   }
   else if (selectType == TOURNAMENT) // If tournament method was chosen
   {
-    TournamentSelect(parents, popSize);
+    tournamentSelect(parents, popSize);
   }
   else // Output error, method not recognised
   {
@@ -90,10 +90,10 @@ void Crossover::SelectParents(Board* parents[2],                      // *Out*
   }
 
 
-} // SelectParents()
+} // selectParents()
 
 
-void Crossover::RouletteSelect(Board* parents[2],                     // *Out* 
+void Crossover::rouletteSelect(Board* parents[2],                     // *Out* 
                                int totalFitness)                      // *In*
 { // Selects candidates via the roulette wheel method mentioned within the report
   // in chapter 3
@@ -134,10 +134,10 @@ void Crossover::RouletteSelect(Board* parents[2],                     // *Out*
     }
   } // for (unsigned int i = 0)
 
-} // RouletteSelect()
+} // rouletteSelect()
 
 
-void Crossover::TournamentSelect(Board* parents[2],                   // *Out*
+void Crossover::tournamentSelect(Board* parents[2],                   // *Out*
                                  int popSize)                         // *In*
 { // Selects candidates via the tournament selection method mentioned within the
   // report in chapter 3. Does not remove candidate from selection
@@ -171,24 +171,24 @@ void Crossover::TournamentSelect(Board* parents[2],                   // *Out*
 
   } // for i < 2
 
-} // TournamentSelect()
+} // tournamentSelect()
 
 
-void Crossover::Reproduce(Board* parents[2])                          // *In*
+void Crossover::reproduce(Board* parents[2])                          // *In*
 { // Calls whichever crossover method that has been selected during the start of
   // the application
 
   if (crossType == ONEPOINT)
-    OnePoint(parents);
+    onePoint(parents);
   else if (crossType == TWOPOINT)
-    TwoPoint(parents);
+    twoPoint(parents);
   else
     std::cout << "Crossover method not recognised" << std::endl;
 
-} // Reproduce()
+} // reproduce()
 
 
-void Crossover::CopyPieces(int numOfPieces,                           // *In*
+void Crossover::copyPieces(int numOfPieces,                           // *In*
                            int index[2],                              // *In*
                            Board* parent1,                            // *In*
                            Board* parent2,                            // *In*
@@ -218,10 +218,10 @@ void Crossover::CopyPieces(int numOfPieces,                           // *In*
     }
   }
 
-} // CopyPiece()
+} // copyPiece()
 
 
-void Crossover::OnePoint(Board* parents[2])                           // *In*
+void Crossover::onePoint(Board* parents[2])                           // *In*
 { // Takes two candidates, selects a point of the candidate to slice and exchanges
   // the data after that point with the second parent, explained fully in the
   // report, chapter 3
@@ -245,12 +245,12 @@ void Crossover::OnePoint(Board* parents[2])                           // *In*
 
   // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
   // the crossover point has been reached
-  CopyPieces(crossPoint, index, parents[0], parents[1], &offspring[0], 
+  copyPieces(crossPoint, index, parents[0], parents[1], &offspring[0], 
               &offspring[1]);
 
   // Copy pieces from parent1 to offspring2 and parent2 to offspring1 until
   // the end of the board
-  CopyPieces((numOfPieces - crossPoint), index, parents[0], parents[1], 
+  copyPieces((numOfPieces - crossPoint), index, parents[0], parents[1], 
               &offspring[1], &offspring[0]);
   
   for (int i = 0; i < 2; i++)
@@ -264,10 +264,10 @@ void Crossover::OnePoint(Board* parents[2])                           // *In*
     BoardManager::getInstance()->getPop()->push_back(offspring[i]);
   }
 
-} // OnePoint()
+} // onePoint()
 
 
-void Crossover::TwoPoint(Board* parents[2])                           // *In*
+void Crossover::twoPoint(Board* parents[2])                           // *In*
 { // Takes two candidates, selects two points of the candidate to slice and
   // exchanges the data after that point with the second parent, switching
   // again after the second point. Explained fully in the report, chapter 3.
@@ -293,17 +293,17 @@ void Crossover::TwoPoint(Board* parents[2])                           // *In*
 
   // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
   // the crossover point has been reached
-  CopyPieces(crossPoint[0], index, parents[0], parents[1], &offspring[0],
+  copyPieces(crossPoint[0], index, parents[0], parents[1], &offspring[0],
              &offspring[1]);
 
   // Copy pieces from parent1 to offspring2 and parent2 to offspring1 until
   // the end of the board
-  CopyPieces((crossPoint[1] - crossPoint[0]), index, parents[0], parents[1],
+  copyPieces((crossPoint[1] - crossPoint[0]), index, parents[0], parents[1],
              &offspring[1], &offspring[0]);
 
   // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
   // the crossover point has been reached
-  CopyPieces((numOfPieces - crossPoint[1]), index, parents[0], parents[1], 
+  copyPieces((numOfPieces - crossPoint[1]), index, parents[0], parents[1], 
              &offspring[0], &offspring[1]);
 
   for (int i = 0; i < 2; i++)
@@ -317,10 +317,10 @@ void Crossover::TwoPoint(Board* parents[2])                           // *In*
     BoardManager::getInstance()->getPop()->push_back(offspring[i]);
   }
 
-} // TwoPoint()
+} // twoPoint()
 
 
-void Crossover::CheckDuplication()
+void Crossover::checkDuplication()
 { // Scans through candidate to check if puzzle pieces end up appearing twice
   // within the same candidate, taking the duplicate list from one candidate
   // to place pieces within the candidate that no longer has them
@@ -343,18 +343,18 @@ void Crossover::CheckDuplication()
   // Call to find out which pieces are duplicates, storing in the pieces
   // and index vectors ready for fixing
   for (int i = 0; i < 2; i++)
-    GetDuplicates(pOffspring[i], &pieces[i], &indexes[i]);
+    getDuplicates(pOffspring[i], &pieces[i], &indexes[i]);
 
   // Calls to repair the boards after duplication was found, giving the pieces
   // and indexes of the duplicate slots, pieces vector switched to add pieces
   // that were found twice in other offspring
   for (int i = 0; i < 2; i++)
-    FixDuplicates(pOffspring[i], pieces[1 - i], indexes[i]);
+    fixDuplicates(pOffspring[i], pieces[1 - i], indexes[i]);
 
-} // CheckDuplication()
+} // checkDuplication()
 
 
-void Crossover::GetDuplicates(Board* pBoard,                          // *In* 
+void Crossover::getDuplicates(Board* pBoard,                          // *In* 
                               std::vector<PuzzlePiece>* pieces,       // *Out*
                               std::vector<std::vector<int>>* indexes) // *Out*
 {
@@ -368,18 +368,18 @@ void Crossover::GetDuplicates(Board* pBoard,                          // *In*
                              false);
 
   // Check the corner slots for duplicates
-  CheckCorners(pBoard, pieces, indexes, boardSize, &checkIDs);
+  checkCorners(pBoard, pieces, indexes, boardSize, &checkIDs);
 
   // Check the edge slots for duplicates
-  CheckEdges(pBoard, pieces, indexes, boardSize, &checkIDs);
+  checkEdges(pBoard, pieces, indexes, boardSize, &checkIDs);
 
   // Check the inner slots for duplicates
-  CheckInners(pBoard, pieces, indexes, boardSize, &checkIDs);
+  checkInners(pBoard, pieces, indexes, boardSize, &checkIDs);
 
-} // GetDuplicates()
+} // getDuplicates()
 
 
-void Crossover::CheckCorners(Board* pBoard,                           // *In*
+void Crossover::checkCorners(Board* pBoard,                           // *In*
                              std::vector<PuzzlePiece>* pieces,        // *Out*
                              std::vector<std::vector<int>>* indexes,  // *Out*
                              int boardSize,                           // *In*
@@ -427,10 +427,10 @@ void Crossover::CheckCorners(Board* pBoard,                           // *In*
     indexes->push_back(index);
   }
 
-} // CheckCorners()
+} // checkCorners()
 
 
-void Crossover::CheckEdges(Board* pBoard,                            // *In*
+void Crossover::checkEdges(Board* pBoard,                            // *In*
                            std::vector<PuzzlePiece>* pieces,         // *Out*
                            std::vector<std::vector<int>>* indexes,   // *Out*
                            int boardSize,                            // *In*
@@ -492,10 +492,10 @@ void Crossover::CheckEdges(Board* pBoard,                            // *In*
 
   } // for i < boardSize - 2
 
-} // CheckEdges()
+} // checkEdges()
 
 
-void Crossover::CheckInners(Board* pBoard,                           // *In*
+void Crossover::checkInners(Board* pBoard,                           // *In*
                             std::vector<PuzzlePiece>* pieces,        // *Out*
                             std::vector<std::vector<int>>* indexes,  // *Out*
                             int boardSize,                           // *In*
@@ -531,10 +531,10 @@ void Crossover::CheckInners(Board* pBoard,                           // *In*
     }
   }
 
-} // CheckInners()
+} // checkInners()
 
 
-void Crossover::FixDuplicates(Board* pBoard,                         // *In-Out*
+void Crossover::fixDuplicates(Board* pBoard,                         // *In-Out*
                               std::vector<PuzzlePiece> pieces,       // *In*
                               std::vector<std::vector<int>> indexes) // *In*   
 { // Uses the vector of pieces along with the vector of slot indexes to place
@@ -555,10 +555,10 @@ void Crossover::FixDuplicates(Board* pBoard,                         // *In-Out*
     }
   }
 
-} // FixDuplicates()
+} // fixDuplicates()
 
 
-void Crossover::DoElitism()
+void Crossover::doElitism()
 { // Adds the best and worst candidtes from the previous generation to the new
   // generation. The amount of candidates is declared in eliteRate
 
@@ -579,4 +579,4 @@ void Crossover::DoElitism()
                                                      ->getOldPop()->end()[-i]);
   }
 
-} // DoElitism()
+} // doElitism()
