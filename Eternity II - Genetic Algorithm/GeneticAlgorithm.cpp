@@ -20,7 +20,7 @@ void GeneticAlgorithm::setup(Settings theSettings)            // *In*
                          theSettings.eliteRate);
 
   // Set up the mutation method using the input methods
-  theMutation.Setup(theSettings.mutType, theSettings.mutRate, 
+  theMutation.setup(theSettings.mutType, theSettings.mutRate, 
                     theSettings.popSize);
 
   popSize = theSettings.popSize; // Set the population for each generation
@@ -88,7 +88,7 @@ void GeneticAlgorithm::runGA()
       BoardManager::getInstance()->switchPop();
 
       theCrossover.doCrossover(popSize);  // Complete crossover of population
-      theMutation.DoMutation(startPiece); // Complete mutation of population
+      theMutation.doMutation(startPiece); // Complete mutation of population
     }
     else
     { // If 200 generations have passed without immproved fitness, reset 
