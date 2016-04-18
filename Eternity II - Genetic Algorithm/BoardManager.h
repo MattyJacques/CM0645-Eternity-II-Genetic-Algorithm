@@ -87,107 +87,107 @@ private:
 
   // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted
-  void InitTopEdge(Board* pBoard);                         // *Out*  
+  void initTopEdge(Board* pBoard);                         // *Out*  
 
   // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
-  void InitCornersSides(Board* pBoard);                    // *Out*
+  void initCornersSides(Board* pBoard);                    // *Out*
 
   // Adds pieces to the empty boards, top edge first, moving on to inner slots
   // then finally filling in the corners, side edges and bottom edge
-  void AddPieces(Board* pBoard);                           // *Out*
+  void addPieces(Board* pBoard);                           // *Out*
 
   // If an official Eternity II solve attempt, make sure the start piece
   // constraint is met by placing the piece with the ID 139 on slot [7][8]
-  void FixStartPiece(Board* pBoard);                       // *Out*
+  void fixStartPiece(Board* pBoard);                       // *Out*
 
   // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
-  void SwapStartPiece(Board* pBoard,                       // *Out*
+  void swapStartPiece(Board* pBoard,                       // *Out*
                       int xIndex,                          // *In*  
                       int yIndex);                         // *In*
 
   // Rotates an edge piece so the edge pattern matches the edge of the board
-  void RotateEdge(PuzzlePiece* piece,                      // *Out*  
+  void rotateEdge(PuzzlePiece* piece,                      // *Out*  
                   int xIndex,                              // *In*
                   int yIndex);                             // *In*
 
   // Rotates an corner piece so the corner pattern matches the edge of the board
-  void RotateCorner(PuzzlePiece* piece,                    // *Out*
+  void rotateCorner(PuzzlePiece* piece,                    // *Out*
                     int xIndex,                            // *In*
                     int yIndex);                           // *In*
 
   // Generate a random corner piece, two parameters so that the corner can
   // match up to two other pieces. If no match is needed parameter equals -1.
   // pattern1 is segment[0], pattern2 is segment[1]
-  PuzzlePiece GenCorner(int pattern1,                      // *In*
+  PuzzlePiece genCorner(int pattern1,                      // *In*
                         int pattern2);                     // *In*
 
   // Generate a random edge piece, two parameters so that the edge piece can
   // match the pattern on up to two other pieces. If no match is needed
   // parameter equals -1. pattern1 sets segment[0], pattern2 is placed on the
   // segment given as the location parameter
-  PuzzlePiece GenEdge(int pattern1,                        // *In*
+  PuzzlePiece genEdge(int pattern1,                        // *In*
                       int pattern2,                        // *In*
                       segLocation location);               // *In*
 
   // Generates a random inner piece, two parameters so that the piece can match
   // up to two other pieces. If no match needed, parameter equals -1. pattern1
   // equals segment[0] and pattern2 equals segments[3]
-  PuzzlePiece GenInner(int pattern1,                       // *In*
+  PuzzlePiece genInner(int pattern1,                       // *In*
                        int pattern2);                      // *In*
 
   // Fill the piece vectors with the pieces located within the board given as
   // the parameter
-  void PopulatePieces(Board* pBoard);                      // *In*
+  void populatePieces(Board* pBoard);                      // *In*
 
 public:
   // Returns the instance to the class, if none currently exists, creates one
-  static BoardManager* GetInstance();
+  static BoardManager* getInstance();
 
   // Returns the board size
-  int GetSize();
+  int getSize();
 
   // Returns a pointer to the vector of vectors containing the puzzle pieces
-  std::vector<std::vector<PuzzlePiece>>* GetPieces();
+  std::vector<std::vector<PuzzlePiece>>* getPieces();
 
   // Returns a pointer to the vector that holds the current population
-  std::shared_ptr<std::vector<Board>> GetPop();
+  std::shared_ptr<std::vector<Board>> getPop();
 
   // Returns a pointer to the vector that holds the previous population
-  std::shared_ptr<std::vector<Board>> GetOldPop();
+  std::shared_ptr<std::vector<Board>> getOldPop();
 
   // Switch the current population to the old population and create a new
   // shared vector for the new population
-  void SwitchPop();
+  void switchPop();
 
   // Sets how many patterns to be used and how many pieces there are per board
-  void InitialiseData(int size,                            // *In*
+  void initialiseData(int size,                            // *In*
                       int patNum);                         // *In*
 
   // Initialises the boards vector of vectors with empty vectors
-  void InitEmptyBoard(Board* pBoard);                      // *Out*
+  void initEmptyBoard(Board* pBoard);                      // *Out*
 
   // Creates the inital board filled with randomised order of pieces
-  void InitFullBoard(Board* pBoard,                        // *Out*
+  void initFullBoard(Board* pBoard,                        // *Out*
                      bool startPiece);                     // *In*
 
   // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
-  int GetPattern(Board* pBoard,                            // *In*
+  int getPattern(Board* pBoard,                            // *In*
                  int xIndex,                               // *In*
                  int yIndex,                               // *In*
                  segLocation segment);                     // *In*
 
   // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
-  void FixOrientation(PuzzlePiece* piece,                  // *Out*
+  void fixOrientation(PuzzlePiece* piece,                  // *Out*
                       int yIndex,                          // *In*
                       int xIndex);                         // *In*
 
   // Generates a new board with random pieces placing all the pieces within
   // the pieces vectors
-  void GenerateBoard(int size,                             // *In*
+  void generateBoard(int size,                             // *In*
                      int pattern);                         // *In*
 
   // Destructor to delete the instance of the class

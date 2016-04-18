@@ -39,7 +39,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
   CalcMaxFitness(theSettings.boardSize);
 
   // Initialise the board manager with the board size and number of patterns
-  BoardManager::GetInstance()->InitialiseData(theSettings.boardSize, 
+  BoardManager::getInstance()->initialiseData(theSettings.boardSize, 
                                               theSettings.patternNum);
 
 } // Setup()
@@ -85,7 +85,7 @@ void GeneticAlgorithm::RunGA()
       // trying to solve
 
       // Switch current population to previous and create new population
-      BoardManager::GetInstance()->SwitchPop();
+      BoardManager::getInstance()->switchPop();
 
       theCrossover.DoCrossover(popSize);  // Complete crossover of population
       theMutation.DoMutation(startPiece); // Complete mutation of population
@@ -151,15 +151,15 @@ void GeneticAlgorithm::InitRandomPopulation()
   std::vector<Board> newVec;
 
   // Set the current population pointer to new population vector
-  BoardManager::GetInstance()->GetPop() =
+  BoardManager::getInstance()->getPop() =
     std::make_shared<std::vector<Board>>(newVec);
 
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
     Board newBoard;
-    BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
-    newBoard.boardID = (int)BoardManager::GetInstance()->GetPop()->size() + 1;
-    BoardManager::GetInstance()->GetPop()->push_back(newBoard);
+    BoardManager::getInstance()->initFullBoard(&newBoard, startPiece);
+    newBoard.boardID = (int)BoardManager::getInstance()->getPop()->size() + 1;
+    BoardManager::getInstance()->getPop()->push_back(newBoard);
   }
 
   
@@ -173,16 +173,16 @@ void GeneticAlgorithm::DoFitness()
 
   for (int i = 0; i < popSize; i++)
   { // Loop through every boards of population checking the fitness
-    theFitness.CheckFitness(&BoardManager::GetInstance()->GetPop()->at(i));
+    theFitness.CheckFitness(&BoardManager::getInstance()->getPop()->at(i));
 
-    if (BoardManager::GetInstance()->GetPop()->at(i).matchCount > currMatches)
+    if (BoardManager::getInstance()->getPop()->at(i).matchCount > currMatches)
     { // Check to see if new highest match count
-      currMatches = BoardManager::GetInstance()->GetPop()->at(i).matchCount;
+      currMatches = BoardManager::getInstance()->getPop()->at(i).matchCount;
     }
 
-    if (BoardManager::GetInstance()->GetPop()->at(i).fitScore > currFitness)
+    if (BoardManager::getInstance()->getPop()->at(i).fitScore > currFitness)
     { // If next maximum fitness of generation found, store new max fitness
-      currFitness = BoardManager::GetInstance()->GetPop()->at(i).fitScore;
+      currFitness = BoardManager::getInstance()->getPop()->at(i).fitScore;
     }
   }
 
@@ -260,10 +260,10 @@ void GeneticAlgorithm::OutputSolved()
   for (int i = 0; i < popSize; i++)
   { // Loop through the population, checking to see which candidate is solved
 
-    if (BoardManager::GetInstance()->GetPop()->at(i).fitScore == maxFitness)
+    if (BoardManager::getInstance()->getPop()->at(i).fitScore == maxFitness)
     { // If board fitness is max fitness, call to output the board
       FileHandler outFile;
-      outFile.OutputBoard(&BoardManager::GetInstance()->GetPop()->at(i), 
+      outFile.OutputBoard(&BoardManager::getInstance()->getPop()->at(i), 
                           genCount);
       break;
     }

@@ -19,14 +19,14 @@ FileHandler::FileHandler()
 { // Calls to the file directory for available piece data files, make sure
   // puzzle piece vector is initialised
 
-  if (BoardManager::GetInstance()->GetPieces()->size() == 0)
+  if (BoardManager::getInstance()->getPieces()->size() == 0)
   { // Make sure puzzle piece vector is initialised before pushing
 
     for (int i = 0; i < 3; i++)
     { // Create new vector to hold the puzzle piece collection and push onto
       // vector of vectors that holds all pieces
       std::vector<PuzzlePiece> newVec;
-      BoardManager::GetInstance()->GetPieces()->push_back(newVec);
+      BoardManager::getInstance()->getPieces()->push_back(newVec);
     }
   }
 
@@ -380,11 +380,11 @@ void FileHandler::CreatePiece(int pData[5])                // *In*
 
   // Add piece to appropriate vector within pieces vector
   if (newPiece.type == CORNER)
-    (*BoardManager::GetInstance()->GetPieces())[CORNER].push_back(newPiece);
+    (*BoardManager::getInstance()->getPieces())[CORNER].push_back(newPiece);
   else if (newPiece.type == EDGE)
-    (*BoardManager::GetInstance()->GetPieces())[EDGE].push_back(newPiece);
+    (*BoardManager::getInstance()->getPieces())[EDGE].push_back(newPiece);
   else if (newPiece.type == INNER)
-    (*BoardManager::GetInstance()->GetPieces())[INNER].push_back(newPiece);
+    (*BoardManager::getInstance()->getPieces())[INNER].push_back(newPiece);
 
 } // CreatePiece()
 
@@ -471,14 +471,14 @@ void FileHandler::OutputMatches(Board* pBoard,             // *In*
   // Ouput how many generations the solution took
   theFile << std::endl << "Generation: " << genCount << std::endl;
 
-  for (int j = 0; j <= BoardManager::GetInstance()->GetSize(); j++)
+  for (int j = 0; j <= BoardManager::getInstance()->getSize(); j++)
   { // Y index for pieces to output
-    for (int i = 0; i <= BoardManager::GetInstance()->GetSize(); i++)
+    for (int i = 0; i <= BoardManager::getInstance()->getSize(); i++)
     { // X index for pieces to ouput, parse a piece into three rows
       // of output.
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, TOP), buff, 
+      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, TOP), buff, 
            10);
 
       output[0] += "  ";      // Add whitespace for formatting
@@ -486,20 +486,20 @@ void FileHandler::OutputMatches(Board* pBoard,             // *In*
       output[0] += "  ";      // Add more whitespace for formatting
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, LEFT), buff,
+      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, LEFT), buff,
            10);
 
       output[1] += buff;     // Add converted pattern ID to the middle line
       output[1] += "   ";    // Add whitespace for formatting
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, RIGHT), buff,
+      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, RIGHT), buff,
            10);
 
       output[1] += buff;     // Add right pattern ID to middle line
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::GetInstance()->GetPattern(pBoard, i, j, BOTTOM), buff,
+      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, BOTTOM), buff,
            10);
 
       output[2] += "  ";    // Add whitespace for formatting
@@ -526,9 +526,9 @@ void FileHandler::OutputIDs(Board* pBoard,                 // *In*
 
   theFile << std::endl;   // Add whitepsace between two boards
 
-  for (int j = 0; j <= BoardManager::GetInstance()->GetSize(); j++)
+  for (int j = 0; j <= BoardManager::getInstance()->getSize(); j++)
   { // Y index for pieces to output
-    for (int i = 0; i <= BoardManager::GetInstance()->GetSize(); i++)
+    for (int i = 0; i <= BoardManager::getInstance()->getSize(); i++)
     { // X index for pieces to output
 
       // Output piece ID and add comma for separator
@@ -617,7 +617,7 @@ void FileHandler::MakeDataFile(int size,                   // *In*
   filename += patternNum;
   filename += ".e2";
 
-  BoardManager::GetInstance()->GenerateBoard(size, pattern);
+  BoardManager::getInstance()->generateBoard(size, pattern);
 
   OutputDataFile(filename);
 
@@ -630,48 +630,48 @@ void FileHandler::OutputDataFile(std::string filename)     // *In*
   
   if (OpenFile(filename.c_str()))
   {
-    for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[CORNER].size();
+    for (int i = 0; i < BoardManager::getInstance()->getPieces()[CORNER].size();
          i++)
     { // Output corners to data file
-      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].pieceID << 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].pieceID << 
         std::endl;
-      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[0] 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[0] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[1] 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[1] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[2] 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[2] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[3];
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[3];
       theFile << std::endl;
     }
 
-    for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[EDGE].size(); 
+    for (int i = 0; i < (*BoardManager::getInstance()->getPieces())[EDGE].size(); 
          i++)
     { // Output edge pieces to data file
-      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].pieceID << 
+      theFile << (*BoardManager::getInstance()->getPieces())[1][i].pieceID << 
         " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[0] 
+      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[0] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[1] 
+      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[1] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[2] 
+      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[2] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[3];
+      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[3];
       theFile << std::endl;
     }
 
-    for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[INNER].size();
-         i++)
+    for (int i = 0; i < (*BoardManager::getInstance()->getPieces())[INNER].
+         size(); i++)
     { // Output the inner pieces to data file
-      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].pieceID << 
+      theFile << (*BoardManager::getInstance()->getPieces())[2][i].pieceID << 
         " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[0] 
+      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[0] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[1] 
+      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[1] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[2] 
+      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[2] 
         << " ";
-      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[3];
+      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[3];
       theFile << std::endl;
     }
 

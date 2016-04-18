@@ -43,13 +43,13 @@ void Crossover::DoCrossover(int popSize)                              // *In*
   if (selectType == ROULETTE)
   { // If using roulette method, work out the total fitness now so not working
     // out the total fitness every select
-    for (Board i : *BoardManager::GetInstance()->GetOldPop())
+    for (Board i : *BoardManager::getInstance()->getOldPop())
     { // Loops through all boards and total up all fitness scores from boards
       totalFitness += i.fitScore;
     }
   }
 
-  while (BoardManager::GetInstance()->GetPop()->size() < popSize -
+  while (BoardManager::getInstance()->getPop()->size() < popSize -
          (eliteRate * 2) - 1)
   { // While the new vector is not filled with the right population size
     // make more candidates
@@ -101,7 +101,7 @@ void Crossover::RouletteSelect(Board* parents[2],                     // *Out*
   int oldFitness = 0;     // Holds the older combined fitness score
 
   // Index to hold which parent the iteration relates to
-  int boardIndex = (int)BoardManager::GetInstance()->GetOldPop()->size() - 1;
+  int boardIndex = (int)BoardManager::getInstance()->getOldPop()->size() - 1;
 
   // Holds two random indexes to use as indexes in total fitness
   int randomIndex[2] = { -1, -1 };
@@ -112,25 +112,25 @@ void Crossover::RouletteSelect(Board* parents[2],                     // *Out*
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
   
-  for (unsigned int i = 0; i < BoardManager::GetInstance()->GetOldPop()->size(); i++)
+  for (unsigned int i = 0; i < BoardManager::getInstance()->getOldPop()->size(); i++)
   { // Loops through all boards accumulating the fitness scores, if random number
     // is between total fitness and the previous total fitness, set the ID of
     // the parent
 
     // Set the previous fitness and add on the fitness score of the next board
     oldFitness = totalFitness;
-    totalFitness += BoardManager::GetInstance()->GetOldPop()->at(i).fitScore;
+    totalFitness += BoardManager::getInstance()->getOldPop()->at(i).fitScore;
 
     // If section has been found for first parent, set ID
     if (totalFitness >= randomIndex[0] && randomIndex[0] >= oldFitness)
     {
-      parents[0] = &BoardManager::GetInstance()->GetOldPop()->at(i);
+      parents[0] = &BoardManager::getInstance()->getOldPop()->at(i);
     }
 
     // If section has been found for first parent, set ID
     if (totalFitness >= randomIndex[1] && randomIndex[1] >= oldFitness)
     {
-      parents[1] = &BoardManager::GetInstance()->GetOldPop()->at(i);
+      parents[1] = &BoardManager::getInstance()->getOldPop()->at(i);
     }
   } // for (unsigned int i = 0)
 
@@ -161,9 +161,9 @@ void Crossover::TournamentSelect(Board* parents[2],                   // *Out*
 
       // Test to see if the fitness score of that candidate is highest than the
       // current stored fitness
-      if ((BoardManager::GetInstance()->GetOldPop()->at(boardID).fitScore) > highfitness)
+      if ((BoardManager::getInstance()->getOldPop()->at(boardID).fitScore) > highfitness)
       {
-        parents[i] = &BoardManager::GetInstance()->GetOldPop()->at(boardID);
+        parents[i] = &BoardManager::getInstance()->getOldPop()->at(boardID);
         highfitness = parents[i]->fitScore;
       }
 
@@ -211,7 +211,7 @@ void Crossover::CopyPieces(int numOfPieces,                           // *In*
 
     index[0]++;  // Increment the xIndex to move to next slot in row
 
-    if (index[0] == BoardManager::GetInstance()->GetSize() + 1)
+    if (index[0] == BoardManager::getInstance()->getSize() + 1)
     { // If we have reached the end of the line of the board, increment row
       index[0] = 0;
       index[1]++;
@@ -231,8 +231,8 @@ void Crossover::OnePoint(Board* parents[2])                           // *In*
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
-  int numOfPieces = (BoardManager::GetInstance()->GetSize() + 1) *
-                    (BoardManager::GetInstance()->GetSize() + 1);
+  int numOfPieces = (BoardManager::getInstance()->getSize() + 1) *
+                    (BoardManager::getInstance()->getSize() + 1);
 
   int crossPoint = -1;     // Holds the crossover point
 
@@ -240,8 +240,8 @@ void Crossover::OnePoint(Board* parents[2])                           // *In*
   GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1, &crossPoint);
 
   // Initialise new empty boards
-  BoardManager::GetInstance()->InitEmptyBoard(&offspring[0]);
-  BoardManager::GetInstance()->InitEmptyBoard(&offspring[1]);
+  BoardManager::getInstance()->initEmptyBoard(&offspring[0]);
+  BoardManager::getInstance()->initEmptyBoard(&offspring[1]);
 
   // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
   // the crossover point has been reached
@@ -257,11 +257,11 @@ void Crossover::OnePoint(Board* parents[2])                           // *In*
   { // Set boardID and push the new offspring on to the new population
 
     // Set boardID
-    offspring[i].boardID = (int)BoardManager::GetInstance()->GetPop()->
+    offspring[i].boardID = (int)BoardManager::getInstance()->getPop()->
       size() + 1;
 
     // Push on to board vector
-    BoardManager::GetInstance()->GetPop()->push_back(offspring[i]);
+    BoardManager::getInstance()->getPop()->push_back(offspring[i]);
   }
 
 } // OnePoint()
@@ -278,8 +278,8 @@ void Crossover::TwoPoint(Board* parents[2])                           // *In*
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
-  int numOfPieces = (BoardManager::GetInstance()->GetSize() + 1) *
-                    (BoardManager::GetInstance()->GetSize() + 1);
+  int numOfPieces = (BoardManager::getInstance()->getSize() + 1) *
+                    (BoardManager::getInstance()->getSize() + 1);
 
   // Get random crossover points to split the boards, making sure the second
   // generated number is after the first
@@ -288,8 +288,8 @@ void Crossover::TwoPoint(Board* parents[2])                           // *In*
                                  &crossPoint[1]);
 
   // Initialise new empty boards and give the boards an ID
-  BoardManager::GetInstance()->InitEmptyBoard(&offspring[0]);
-  BoardManager::GetInstance()->InitEmptyBoard(&offspring[1]);
+  BoardManager::getInstance()->initEmptyBoard(&offspring[0]);
+  BoardManager::getInstance()->initEmptyBoard(&offspring[1]);
 
   // Copy pieces from parent1 to offspring1 and parent2 to offspring2 until
   // the crossover point has been reached
@@ -310,11 +310,11 @@ void Crossover::TwoPoint(Board* parents[2])                           // *In*
   { // Set boardID and push the new offspring on to the new population
 
     // Set boardID
-    offspring[i].boardID = (int)BoardManager::GetInstance()->GetPop()->
+    offspring[i].boardID = (int)BoardManager::getInstance()->getPop()->
       size() + 1;
 
     // Push on to board vector
-    BoardManager::GetInstance()->GetPop()->push_back(offspring[i]);
+    BoardManager::getInstance()->getPop()->push_back(offspring[i]);
   }
 
 } // TwoPoint()
@@ -335,10 +335,10 @@ void Crossover::CheckDuplication()
   std::vector<std::vector<int>> indexes[2];
 
   // Get the addresses of the last two boards created
-  pOffspring[0] = &BoardManager::GetInstance()->GetPop()->at(
-                    BoardManager::GetInstance()->GetPop()->size() - 2);
-  pOffspring[1] = &BoardManager::GetInstance()->GetPop()->at(
-                    BoardManager::GetInstance()->GetPop()->size() - 1);
+  pOffspring[0] = &BoardManager::getInstance()->getPop()->at(
+                    BoardManager::getInstance()->getPop()->size() - 2);
+  pOffspring[1] = &BoardManager::getInstance()->getPop()->at(
+                    BoardManager::getInstance()->getPop()->size() - 1);
 
   // Call to find out which pieces are duplicates, storing in the pieces
   // and index vectors ready for fixing
@@ -359,12 +359,12 @@ void Crossover::GetDuplicates(Board* pBoard,                          // *In*
                               std::vector<std::vector<int>>* indexes) // *Out*
 {
   // Store the boardSize for easier code readability and quicker access
-  int boardSize = BoardManager::GetInstance()->GetSize();
+  int boardSize = BoardManager::getInstance()->getSize();
 
   // Vector to check IDs against
-  std::vector<bool> checkIDs((*BoardManager::GetInstance()->GetPieces())[CORNER].size() +
-                             (*BoardManager::GetInstance()->GetPieces())[EDGE].size() +
-                             (*BoardManager::GetInstance()->GetPieces())[INNER].size(), 
+  std::vector<bool> checkIDs((*BoardManager::getInstance()->getPieces())[CORNER].size() +
+                             (*BoardManager::getInstance()->getPieces())[EDGE].size() +
+                             (*BoardManager::getInstance()->getPieces())[INNER].size(), 
                              false);
 
   // Check the corner slots for duplicates
@@ -506,7 +506,7 @@ void Crossover::CheckInners(Board* pBoard,                           // *In*
   int yIndex = 1;  // Y index for slot
   int xIndex = 1;  // X index for slot
 
-  for (int i = 0; i < (*BoardManager::GetInstance()->GetPieces())[INNER].size(); i++)
+  for (int i = 0; i < (*BoardManager::getInstance()->getPieces())[INNER].size(); i++)
   { // Loop through for every inner slot changing the appropriate element
     // to true if piece was found
 
@@ -523,7 +523,7 @@ void Crossover::CheckInners(Board* pBoard,                           // *In*
 
     xIndex++;    // Increment X index to move to the slot on the right
 
-    if (xIndex == BoardManager::GetInstance()->GetSize())
+    if (xIndex == BoardManager::getInstance()->getSize())
     { // If we have reached the end of the line of the board, increment
       // to next line
       xIndex = 1;
@@ -549,7 +549,7 @@ void Crossover::FixDuplicates(Board* pBoard,                         // *In-Out*
     if (pBoard->boardVecs[indexes[i][0]][indexes[i][1]].type == CORNER ||
         pBoard->boardVecs[indexes[i][0]][indexes[i][1]].type == EDGE)
     { // If piece is an edge or corner piece, make sure piece is properly rotated
-      BoardManager::GetInstance()->FixOrientation(&pBoard->boardVecs[indexes[i][0]]
+      BoardManager::getInstance()->fixOrientation(&pBoard->boardVecs[indexes[i][0]]
                                                   [indexes[i][1]], indexes[i][0],
                                                   indexes[i][1]);
     }
@@ -563,20 +563,20 @@ void Crossover::DoElitism()
   // generation. The amount of candidates is declared in eliteRate
 
   // Sort the vector in ascending order to for easy access to elites
-  std::sort(BoardManager::GetInstance()->GetOldPop()->begin(),
-            BoardManager::GetInstance()->GetOldPop()->end());
+  std::sort(BoardManager::getInstance()->getOldPop()->begin(),
+            BoardManager::getInstance()->getOldPop()->end());
 
   for (int i = 1; i < eliteRate + 1; i++)
   { // Take the best and the worst candidates from the previous generation
     // and push to the new generation vector
 
     // Push worst on to new population
-    BoardManager::GetInstance()->GetPop()->push_back(BoardManager::GetInstance()
-                                                     ->GetOldPop()->begin()[i]);
+    BoardManager::getInstance()->getPop()->push_back(BoardManager::getInstance()
+                                                     ->getOldPop()->begin()[i]);
 
     // Push best on to new population
-    BoardManager::GetInstance()->GetPop()->push_back(BoardManager::GetInstance()
-                                                     ->GetOldPop()->end()[-i]);
+    BoardManager::getInstance()->getPop()->push_back(BoardManager::getInstance()
+                                                     ->getOldPop()->end()[-i]);
   }
 
 } // DoElitism()
