@@ -17,8 +17,9 @@ BoardManager* BoardManager::pInstance = nullptr;
 BoardManager::BoardManager()
 { // Seeds rand() with time and initalises currBoards
 
-  // Create a new vector and set it to the current generation pointer
-  std::vector<Board> newVec;
+  std::vector<Board> newVec;    // Create a new vector for first population
+
+  // Set current population pointer to new board vector
   currBoards = std::make_shared<std::vector<Board>>(newVec);
 
   // Seed rand with time for random number generation
@@ -99,7 +100,8 @@ void BoardManager::InitEmptyBoard(Board* pBoard)                       // *Out*
 { // Initialises the boards vector of vectors with empty vectors
 
   for (int i = 0; i <= boardSize; i++)
-  { // Loop through and create vector of vector for the board
+  { // Loop through and create vector of pieces for the board and push on to
+    // vector of vectors
     std::vector<PuzzlePiece> newVec;
     pBoard->boardVecs.push_back(newVec);
   }
@@ -360,7 +362,7 @@ void BoardManager::AddPieces(Board* pBoard)                            // *Out*
   int index = 1;         // Index of current vector to place piece in
   int count = 0;         // Count how many pieces places to increment index
 
-                         // Add edge pieces to vectors that will contain inner pieces
+  // Add edge pieces to vectors that will contain inner pieces
   InitTopEdge(pBoard);
 
   for (PuzzlePiece piece : pieceVec[INNER])
@@ -488,7 +490,7 @@ PuzzlePiece BoardManager::GenCorner(int pattern1,                      // *In*
   // match up to two other pieces. If no match is needed parameter equals -1.
   // pattern1 is segment 0, pattern2 is segment 1
 
-  PuzzlePiece newPiece;       // Create a new puzzle piece
+  PuzzlePiece newPiece;       // Create a new puzzle piece for board
   newPiece.type = CORNER;     // Set the piece type
   newPiece.orientation = 0;   // Set the orientation of the piece to default
 
@@ -526,7 +528,7 @@ PuzzlePiece BoardManager::GenEdge(int pattern1,                        // *In*
   // parameter equals -1. pattern1 sets segment 0, pattern2 is placed on the
   // segment given as the location parameter
 
-  PuzzlePiece newPiece;       // Create a new puzzle piece
+  PuzzlePiece newPiece;       // Create a new puzzle piece for board
   newPiece.type = EDGE;       // Set the piece type
   newPiece.orientation = 0;   // Set the orientation of the piece to default
 
@@ -571,8 +573,8 @@ PuzzlePiece BoardManager::GenInner(int pattern1,                       // *In*
   // up to two other pieces. If no match needed, parameter equals -1. pattern1
   // equals segment[0] and pattern2 equals segments[3]
 
-  PuzzlePiece newPiece;
-  newPiece.type = INNER;
+  PuzzlePiece newPiece;       // New puzzle piece for board
+  newPiece.type = INNER;      // Set piece type
   newPiece.orientation = 0;   // Set the orientation of the piece to default
 
   if (pattern1 > 0)
@@ -608,7 +610,7 @@ void BoardManager::PopulatePieces(Board* pBoard)                       // *In*
 { // Fill the piece vectors with the pieces located within the board given as
   // the parameter
 
-  int pieceCount = 1;
+  int pieceCount = 1;     // Counts number of pieces for pieceID
 
   // Push all corners to the piece vectors
   pieceVec[0].push_back(pBoard->boardVecs[0][0]);

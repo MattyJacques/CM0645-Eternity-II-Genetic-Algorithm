@@ -23,7 +23,8 @@ FileHandler::FileHandler()
   { // Make sure puzzle piece vector is initialised before pushing
 
     for (int i = 0; i < 3; i++)
-    { // Create new puzzle piece vector and push onto puzzle piece vector
+    { // Create new vector to hold the puzzle piece collection and push onto
+      // vector of vectors that holds all pieces
       std::vector<PuzzlePiece> newVec;
       BoardManager::GetInstance()->GetPieces()->push_back(newVec);
     }
@@ -75,7 +76,7 @@ Settings FileHandler::ReadSettingsFile()
 
   // Calculate output filename
   SetOutFilename(setData.boardSize, setData.patternNum, setData.selectType,
-    setData.crossType, setData.mutType);
+                 setData.crossType, setData.mutType);
 
   return setData;  // Return parsed data
 
@@ -167,7 +168,7 @@ void FileHandler::ScanFileDirectory()
   // if the user wants to use one of them
 
   LPCWSTR dirPath = L"Puzzles/*";         // Directory path
-  WIN32_FIND_DATA fileData;               // File object
+  WIN32_FIND_DATA fileData;               // Holds file data
 
   // Create new handle and find the first file in the directory
   HANDLE find = FindFirstFile(dirPath, &fileData);
@@ -467,6 +468,7 @@ void FileHandler::OutputMatches(Board* pBoard,             // *In*
   char buff[10] = "/0";       // Holds integer that has been converted to char
   std::string output[3] = { "/0", "/0", "/0" }; // Holds three rows of output
 
+  // Ouput how many generations the solution took
   theFile << std::endl << "Generation: " << genCount << std::endl;
 
   for (int j = 0; j <= BoardManager::GetInstance()->GetSize(); j++)

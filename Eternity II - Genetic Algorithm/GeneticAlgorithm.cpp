@@ -25,7 +25,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
 
   popSize = theSettings.popSize; // Set the population for each generation
   maxFitness = 0;                // Initialise maximum fitness of 100% candidate
-  currFitness = 0;           // Init maximum fitness GA has reached
+  currFitness = 0;               // Init maximum fitness GA has reached
   genCount = 0;                  // Init generation count
   maxMatches = 0;                // Init maximum matches in candidate
 
@@ -51,8 +51,7 @@ void GeneticAlgorithm::RunGA()
   int stuckCounter = 200;    // Counts down from 200 for test if stuck
   int prevFitness = 0;       // Holds the previous fitness to check if stuck
 
-                             // Initialise the first population
-  InitRandomPopulation();
+  InitRandomPopulation();    // Initialise the first population
 
   while (currFitness != maxFitness)
   { // While the solution has not been found, continue working towards solution
@@ -71,9 +70,8 @@ void GeneticAlgorithm::RunGA()
     genCount++;            // Increment the count of generations
     currMatches = 0;       // Reset max amount of matches found
     currFitness = 0;       // Reset max fitness reached
-
-                           // Check fitness of the population
-    DoFitness();
+             
+    DoFitness();           // Check fitness of the population
 
     // Output summary of generation
     float fitPercent = ((float)currFitness / maxFitness) * 100.0f;
@@ -101,11 +99,11 @@ void GeneticAlgorithm::RunGA()
       currFitness = 0;
     }
 
-    OutputFitness();
+    OutputFitness();                      // Output the current fitness
 
   } // while (currFitness != maxFitness)
 
-  OutputSolved(); // Output the solved board
+  OutputSolved();                         // Output the solved board
 
 } // RunGA()
 

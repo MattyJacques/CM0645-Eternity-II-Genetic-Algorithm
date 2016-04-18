@@ -60,7 +60,8 @@ struct Board
 
     return result;  // Return result
 
-  }
+  } // bool operator <
+
 }; // Board
 
 
@@ -75,11 +76,11 @@ private:
   // Collection of all pieces to be used split into corner, edge and inner types
   std::vector<std::vector<PuzzlePiece>> pieceVec;
 
-  //// Boards in current generation
-  //std::shared_ptr<std::vector<Board>> currBoards;
+  // Boards in current generation
+  std::shared_ptr<std::vector<Board>> currBoards;
 
-  //// Board in previous generation
-  //std::shared_ptr<std::vector<Board>> prevBoards;
+  // Board in previous generation
+  std::shared_ptr<std::vector<Board>> prevBoards;
 
   // Seeds rand() with time and initalises currBoards
   BoardManager();
@@ -141,12 +142,6 @@ private:
   void PopulatePieces(Board* pBoard);                      // *In*
 
 public:
-  // Boards in current generation
-  std::shared_ptr<std::vector<Board>> currBoards;
-
-  // Board in previous generation
-  std::shared_ptr<std::vector<Board>> prevBoards;
-
   // Returns the instance to the class, if none currently exists, creates one
   static BoardManager* GetInstance();
 

@@ -213,7 +213,6 @@ void Crossover::CopyPieces(int numOfPieces,                           // *In*
 
     if (index[0] == BoardManager::GetInstance()->GetSize() + 1)
     { // If we have reached the end of the line of the board, increment row
-
       index[0] = 0;
       index[1]++;
     }
@@ -227,8 +226,8 @@ void Crossover::OnePoint(Board* parents[2])                           // *In*
   // the data after that point with the second parent, explained fully in the
   // report, chapter 3
 
-  Board offspring[2];      // Holds the two new offspring boards
-  int index[2] = { 0, 0 }; // Index of the current piece to copy over
+  Board offspring[2];         // Holds the two new offspring boards
+  int index[2] = { 0, 0 };    // Index of the current piece to copy over
 
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
@@ -280,7 +279,7 @@ void Crossover::TwoPoint(Board* parents[2])                           // *In*
   // Work out number of pieces to avoid calculations for each check below.
   // + 1 to include the 0 index
   int numOfPieces = (BoardManager::GetInstance()->GetSize() + 1) *
-    (BoardManager::GetInstance()->GetSize() + 1);
+                    (BoardManager::GetInstance()->GetSize() + 1);
 
   // Get random crossover points to split the boards, making sure the second
   // generated number is after the first
@@ -565,7 +564,7 @@ void Crossover::DoElitism()
 
   // Sort the vector in ascending order to for easy access to elites
   std::sort(BoardManager::GetInstance()->GetOldPop()->begin(),
-    BoardManager::GetInstance()->GetOldPop()->end());
+            BoardManager::GetInstance()->GetOldPop()->end());
 
   for (int i = 1; i < eliteRate + 1; i++)
   { // Take the best and the worst candidates from the previous generation
@@ -573,11 +572,11 @@ void Crossover::DoElitism()
 
     // Push worst on to new population
     BoardManager::GetInstance()->GetPop()->push_back(BoardManager::GetInstance()
-      ->GetOldPop()->begin()[i]);
+                                                     ->GetOldPop()->begin()[i]);
 
     // Push best on to new population
     BoardManager::GetInstance()->GetPop()->push_back(BoardManager::GetInstance()
-      ->GetOldPop()->end()[-i]);
+                                                     ->GetOldPop()->end()[-i]);
   }
 
 } // DoElitism()
