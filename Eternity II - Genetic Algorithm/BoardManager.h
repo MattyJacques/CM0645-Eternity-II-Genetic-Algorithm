@@ -120,8 +120,6 @@ private:
   void PopulatePieces(Board* pBoard);
 
 public:
-  //int boardSize;                      // How many pieces per board
-
   // Collection of all pieces to be used split into corner, edge and inner types
   std::vector<std::vector<PuzzlePiece>> pieceVec;    
 
