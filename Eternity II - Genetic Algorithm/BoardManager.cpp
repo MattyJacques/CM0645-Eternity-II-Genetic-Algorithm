@@ -17,12 +17,12 @@ BoardManager* BoardManager::pInstance = nullptr;
 BoardManager::BoardManager()
 { // Seeds rand() with time and initalises currBoards
 
-  // Seed rand with time for random number generation
-  srand((unsigned int)time(NULL));
-
   // Create a new vector and set it to the current generation pointer
   std::vector<Board> newVec;
   currBoards = std::make_shared<std::vector<Board>>(newVec);
+
+  // Seed rand with time for random number generation
+  srand((unsigned int)time(NULL));
 
 } // BoardManager()
 

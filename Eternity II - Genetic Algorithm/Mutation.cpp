@@ -384,11 +384,11 @@ void Mutation::DoMutation(bool startPiece)
   // then calls the appropriate subrountine that will do the needed mutation
   // method on that board.
 
+  int boardID = -1;     // Holds random boardID to mutate
+
   for (int i = 0; i < mutNum; i++)
   { // Loop through to complete as many mutations as was calcualted on 
     // application start up
-
-    int boardID = -1;     // Holds random boardID to mutate
 
     // Get a random board ID to complete mutation on
     GeneticAlgorithm::GenRandomNum(0, (int)BoardManager::GetInstance()->

@@ -192,13 +192,13 @@ void FileHandler::ParseInt(int* setting)
 { // Parse int from next line of file placing in int passed as parameter
 
   std::string line = "/0";         // Stores current line to be parsed
+  
 
   while (std::getline(theFile, line))
   { // Read in the next line
     if (!line.empty() && line[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
 
-      char temp[25];                                       // Throwaway label
       sscanf_s(line.c_str(), "%s %i", temp, 25, setting);  // Parse value
       break;                                               // Break out of loop
     }
@@ -212,13 +212,13 @@ void FileHandler::ParseDouble(double* setting)
   // parameter
 
   std::string line = "/0";         // Stores current line to be parsed
+  char temp[25] = "/0";            // Stores label of the line from file
 
   while (std::getline(theFile, line))
   { // Read in the next line
     if (!line.empty() && line[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
 
-      char temp[25] = "/0";                                // Throwaway label
       sscanf_s(line.c_str(), "%s %lf", temp, 25, setting); // Parse value
       break;                                               // Break out of loop
     }
@@ -235,14 +235,14 @@ void FileHandler::ReadDataFile(int size, int pattern)
   // number of patterns
   int index = GetDataFilename(size, pattern);
 
+  std::string line = "/0";              // Stores current line to be parsed
+  int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
+
   if (index >= 0)
   {
     if (OpenFile(filenames[index].c_str()))
     { // Checks to see if the file is open before proceeding with reading of
       // the file
-
-      std::string line = "/0";              // Stores current line to be parsed
-      int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
 
       while (std::getline(theFile, line))
       { // While getline actually returns a line of data, proceed with parsing
@@ -299,13 +299,12 @@ void FileHandler::ParseData(std::string line, int pData[5])
 { // Takes string of data and parses into the array of integers to use to create		
   // the puzzle piece		
     
-  int j = 0;    // Holds the number of char for parsing		
+  int j = 0;                        // Holds the index of char for parsing		
+  std::string data = "/0";          // Holds the data gathered from getline	
   
-  for (int i = 0; i <= 4; i++)
+  for (int i = 0; i < 5; i++)
   { // For loop to loop through and get the 5 bits of data that are on each		
     // line in a e2 file		
-      
-    std::string data "/0"; // Holds the data gathered from getline		
     
     while (line[j] != ' ' && j != line.length())
     { // Loops though to check for whitespace in the file or it has reached		
@@ -510,7 +509,7 @@ void FileHandler::SetOutFilename(int boardSize, int patternNum, int select,
                                 int crossover, int mutation)
 { // Calculate the output filename
 
-  char intBuff[10] = "/0";      // Holds result of itoa
+  char intBuff[10] = "/0";               // Holds result of itoa
 
   // Set directory and board size label
   outFilename = "Solutions/BoardSize ";
@@ -519,7 +518,7 @@ void FileHandler::SetOutFilename(int boardSize, int patternNum, int select,
   _itoa_s(boardSize, intBuff, 10);
   outFilename += intBuff;
 
-  outFilename += " Pattern ";   // Append pattern label
+  outFilename += " Pattern ";            // Append pattern label
   
   // Convert the pattern number to char and append to filename
   _itoa_s(patternNum, intBuff, 10);

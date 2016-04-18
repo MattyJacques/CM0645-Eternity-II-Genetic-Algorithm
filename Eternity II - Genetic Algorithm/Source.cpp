@@ -9,6 +9,7 @@ void main()
 
   GeneticAlgorithm theGA;                       // Create algorithm object
   FileHandler fileHandle;                       // Create file reader object
+
   theGA.Setup(fileHandle.ReadSettingsFile());   // Read algorithms settings
   theGA.RunGA();                                // Run the algorithm
 

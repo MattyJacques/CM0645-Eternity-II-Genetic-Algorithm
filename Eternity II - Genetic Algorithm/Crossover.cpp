@@ -24,8 +24,9 @@ void Crossover::DoCrossover(int popSize)
 { // Selects the parent candidates then commences with crossover with chosen
   // methods
 
-  int totalFitness = 0;   // Holds the combined fitness of all boards
+  int totalFitness = 0;      // Holds the combined fitness of all boards
   std::vector<Board> newVec; // Create vector for new population
+  Board* parents[2];         // Two boards that have been selected as parents
 
   // Switch the current generation to the previous generation
   BoardManager::GetInstance()->prevBoards = BoardManager::GetInstance()->
@@ -46,8 +47,6 @@ void Crossover::DoCrossover(int popSize)
          (eliteRate * 2) - 1)
   { // While the new vector is not filled with the right population size
     // make more candidates
-
-    Board* parents[2];    // Two boards that have been selected as parents
 
     // Loop to make sure both selected parents are not the same candidate
     do
