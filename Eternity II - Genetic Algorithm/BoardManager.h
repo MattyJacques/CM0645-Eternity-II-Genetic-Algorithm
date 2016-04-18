@@ -67,10 +67,13 @@ class BoardManager
 
 private:
   int patternNum;                     // Amount of patterns within board
+  //int boardSize;                      // Holds the size of the board
   static BoardManager* pInstance;     // Current instance of class
 
   // Seeds rand() with time and initalises currBoards
   BoardManager();
+
+
 
   // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted

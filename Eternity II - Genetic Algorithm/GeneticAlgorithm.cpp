@@ -154,6 +154,7 @@ void GeneticAlgorithm::InitRandomPopulation()
   { // Create initialise population of boards with randomised boards
     Board newBoard;
     BoardManager::GetInstance()->InitFullBoard(&newBoard, startPiece);
+    newBoard.boardID = newVec.size() + 1;
     newVec.push_back(newBoard);
   }
 

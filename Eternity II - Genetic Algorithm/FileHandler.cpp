@@ -90,7 +90,7 @@ void FileHandler::ReadDataFile(int size, int pattern)
   // number of patterns
   int index = GetDataFilename(size, pattern);
 
-  std::string line = "/0";              // Stores current line to be parsed
+  std::string line = "";                // Stores current line to be parsed
   int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
 
   if (index >= 0)
@@ -331,11 +331,13 @@ void FileHandler::ParseData(std::string line, int pData[5])
   // the puzzle piece		
     
   int j = 0;                        // Holds the index of char for parsing		
-  std::string data = "/0";          // Holds the data gathered from getline	
+  std::string data = "";            // Holds the data gathered from getline	
   
   for (int i = 0; i < 5; i++)
   { // For loop to loop through and get the 5 bits of data that are on each		
-    // line in a e2 file		
+    // line in a e2 file
+
+    data.clear();                   // Empty the string ready for next data
     
     while (line[j] != ' ' && j != line.length())
     { // Loops though to check for whitespace in the file or it has reached		
@@ -376,7 +378,7 @@ void FileHandler::CreatePiece(int pData[5])
     BoardManager::GetInstance()->pieceVec[CORNER].push_back(newPiece);
   else if (newPiece.type == EDGE)
     BoardManager::GetInstance()->pieceVec[EDGE].push_back(newPiece);
-  else
+  else if (newPiece.type == INNER)
     BoardManager::GetInstance()->pieceVec[INNER].push_back(newPiece);
 
 } // CreatePiece()
