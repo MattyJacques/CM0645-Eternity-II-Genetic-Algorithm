@@ -249,7 +249,7 @@ void GeneticAlgorithm::OutputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
   FileHandler outFile;                       // Create object for output
-  outFile.OutputFitness(currFitness);        // Call to output the fitness
+  outFile.outputFitness(currFitness);        // Call to output the fitness
 
 } // OutputFitness()
 
@@ -263,7 +263,7 @@ void GeneticAlgorithm::OutputSolved()
     if (BoardManager::getInstance()->getPop()->at(i).fitScore == maxFitness)
     { // If board fitness is max fitness, call to output the board
       FileHandler outFile;
-      outFile.OutputBoard(&BoardManager::getInstance()->getPop()->at(i), 
+      outFile.outputBoard(&BoardManager::getInstance()->getPop()->at(i), 
                           genCount);
       break;
     }
