@@ -19,13 +19,13 @@ FileHandler::FileHandler()
 { // Calls to the file directory for available piece data files, make sure
   // puzzle piece vector is initialised
 
-  if (BoardManager::GetInstance()->pieceVec.size() == 0)
+  if (BoardManager::GetInstance()->GetPieces()->size() == 0)
   { // Make sure puzzle piece vector is initialised before pushing
 
     for (int i = 0; i < 3; i++)
     { // Create new puzzle piece vector and push onto puzzle piece vector
       std::vector<PuzzlePiece> newVec;
-      BoardManager::GetInstance()->pieceVec.push_back(newVec);
+      BoardManager::GetInstance()->GetPieces()->push_back(newVec);
     }
   }
 
@@ -375,11 +375,11 @@ void FileHandler::CreatePiece(int pData[5])
 
   // Add piece to appropriate vector within pieces vector
   if (newPiece.type == CORNER)
-    BoardManager::GetInstance()->pieceVec[CORNER].push_back(newPiece);
+    (*BoardManager::GetInstance()->GetPieces())[CORNER].push_back(newPiece);
   else if (newPiece.type == EDGE)
-    BoardManager::GetInstance()->pieceVec[EDGE].push_back(newPiece);
+    (*BoardManager::GetInstance()->GetPieces())[EDGE].push_back(newPiece);
   else if (newPiece.type == INNER)
-    BoardManager::GetInstance()->pieceVec[INNER].push_back(newPiece);
+    (*BoardManager::GetInstance()->GetPieces())[INNER].push_back(newPiece);
 
 } // CreatePiece()
 
@@ -617,33 +617,48 @@ void FileHandler::OutputDataFile(std::string filename)
   
   if (OpenFile(filename.c_str()))
   {
-    for (int i = 0; i < BoardManager::GetInstance()->pieceVec[0].size(); i++)
+    for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[CORNER].size();
+         i++)
     { // Output corners to data file
-      theFile << BoardManager::GetInstance()->pieceVec[0][i].pieceID << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[0] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[1] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[2] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[0][i].segments[3];
+      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].pieceID << 
+        std::endl;
+      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[0] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[1] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[2] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[0][i].segments[3];
       theFile << std::endl;
     }
 
-    for (int i = 0; i < BoardManager::GetInstance()->pieceVec[1].size(); i++)
+    for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[EDGE].size(); 
+         i++)
     { // Output edge pieces to data file
-      theFile << BoardManager::GetInstance()->pieceVec[1][i].pieceID << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[0] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[1] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[2] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[1][i].segments[3];
+      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].pieceID << 
+        " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[0] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[1] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[2] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[1][i].segments[3];
       theFile << std::endl;
     }
 
-    for (int i = 0; i < BoardManager::GetInstance()->pieceVec[2].size(); i++)
+    for (int i = 0; i < BoardManager::GetInstance()->GetPieces()[INNER].size();
+         i++)
     { // Output the inner pieces to data file
-      theFile << BoardManager::GetInstance()->pieceVec[2][i].pieceID << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[0] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[1] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[2] << " ";
-      theFile << BoardManager::GetInstance()->pieceVec[2][i].segments[3];
+      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].pieceID << 
+        " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[0] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[1] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[2] 
+        << " ";
+      theFile << (*BoardManager::GetInstance()->GetPieces())[2][i].segments[3];
       theFile << std::endl;
     }
 

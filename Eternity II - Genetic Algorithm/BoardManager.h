@@ -70,6 +70,15 @@ private:
   int boardSize;                      // Holds the size of the board
   static BoardManager* pInstance;     // Current instance of class
 
+  // Collection of all pieces to be used split into corner, edge and inner types
+  std::vector<std::vector<PuzzlePiece>> pieceVec;
+
+  // Boards in current generation
+  std::shared_ptr<std::vector<Board>> currBoards;
+
+  // Board in previous generation
+  std::shared_ptr<std::vector<Board>> prevBoards;
+
   // Seeds rand() with time and initalises currBoards
   BoardManager();
 
@@ -120,20 +129,17 @@ private:
   void PopulatePieces(Board* pBoard);
 
 public:
-  // Collection of all pieces to be used split into corner, edge and inner types
-  std::vector<std::vector<PuzzlePiece>> pieceVec;    
-
-  // Boards in current generation
-  std::shared_ptr<std::vector<Board>> currBoards;
-
-  // Board in previous generation
-  std::shared_ptr<std::vector<Board>> prevBoards;
-
   // Returns the instance to the class, if none currently exists, creates one
   static BoardManager* GetInstance();
 
   // Returns the board size
   int GetSize();
+
+  std::vector<std::vector<PuzzlePiece>>* GetPieces();
+
+  std::shared_ptr<std::vector<Board>> GetPop();
+
+  std::shared_ptr<std::vector<Board>> GetOldPop();
 
   // Sets how many patterns to be used and how many pieces there are per board
   void InitialiseData(int size, int patNum);

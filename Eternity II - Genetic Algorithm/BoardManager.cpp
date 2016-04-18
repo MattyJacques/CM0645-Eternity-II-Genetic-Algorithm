@@ -47,6 +47,24 @@ int BoardManager::GetSize()
 } // GetSize()
 
 
+std::vector<std::vector<PuzzlePiece>>* BoardManager::GetPieces()
+{
+  return &pieceVec;
+} // GetPieces()
+
+
+std::shared_ptr<std::vector<Board>> BoardManager::GetPop()
+{
+  return currBoards;
+} // GetPop()
+
+
+std::shared_ptr<std::vector<Board>> BoardManager::GetOldPop()
+{
+  return prevBoards;
+} // GetOldPop()
+
+
 void BoardManager::InitialiseData(int size, int patNum)
 { // Sets how many patterns to be used and how many pieces there are per board
 

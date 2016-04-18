@@ -39,7 +39,7 @@ void Mutation::DoMutation(bool startPiece)
 
     // Get a random board ID to complete mutation on
     GeneticAlgorithm::GenRandomNum(0, (int)BoardManager::GetInstance()->
-      currBoards->size() - 1, &boardID);
+      GetPop()->size() - 1, &boardID);
 
     if (mutType == SWAP)   // If mutation method is swap, do swap
       Swap(boardID, startPiece);
@@ -203,7 +203,7 @@ void Mutation::SwapPiece(int boardID, int pieceIndex1[2], int pieceIndex2[2])
   // also given as parameters
 
   // Create pointer to board to work with and initalise to point to board
-  Board* pBoard = &BoardManager::GetInstance()->currBoards->at(boardID);
+  Board* pBoard = &BoardManager::GetInstance()->GetPop()->at(boardID);
 
   // Temp puzzle piece to use during the swap
   PuzzlePiece temp = pBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
@@ -237,16 +237,16 @@ void Mutation::RotatePiece(int boardID, int pieceIndex[2])
 { // Rotates a piece 90 degrees clockwise, checks for orientation overflow.
   // Board and piece index given as parameters
 
-  if (BoardManager::GetInstance()->currBoards->at(boardID).
+  if (BoardManager::GetInstance()->GetPop()->at(boardID).
     boardVecs[pieceIndex[0]][pieceIndex[1]].orientation == 3)
   { // If the orientation is 1 rotation away from full 360 degree rotation
     // reset to original rotation
-    BoardManager::GetInstance()->currBoards->at(boardID).
+    BoardManager::GetInstance()->GetPop()->at(boardID).
       boardVecs[pieceIndex[0]][pieceIndex[1]].orientation = 0;
   }
   else
   { // If next rotation will not be original orientation, increment orientation
-    BoardManager::GetInstance()->currBoards->at(boardID).
+    BoardManager::GetInstance()->GetPop()->at(boardID).
       boardVecs[pieceIndex[0]][pieceIndex[1]].orientation++;
   }
 

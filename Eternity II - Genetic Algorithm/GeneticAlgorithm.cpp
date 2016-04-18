@@ -159,7 +159,7 @@ void GeneticAlgorithm::InitRandomPopulation()
   }
 
   // Set the current population pointer to new population vector
-  BoardManager::GetInstance()->currBoards =
+  BoardManager::GetInstance()->GetPop() =
     std::make_shared<std::vector<Board>>(newVec);
 
 } // InitRandomPopulation()
@@ -171,17 +171,16 @@ void GeneticAlgorithm::DoFitness()
 
   for (int i = 0; i < popSize; i++)
   { // Loop through every boards of population checking the fitness
-    theFitness.CheckFitness(&BoardManager::GetInstance()->currBoards->at(i));
+    theFitness.CheckFitness(&BoardManager::GetInstance()->GetPop()->at(i));
 
-    if (BoardManager::GetInstance()->currBoards->at(i).matchCount >
-      currMatches)
+    if (BoardManager::GetInstance()->GetPop()->at(i).matchCount > currMatches)
     { // Check to see if new highest match count
-      currMatches = BoardManager::GetInstance()->currBoards->at(i).matchCount;
+      currMatches = BoardManager::GetInstance()->GetPop()->at(i).matchCount;
     }
 
-    if (BoardManager::GetInstance()->currBoards->at(i).fitScore > currFitness)
+    if (BoardManager::GetInstance()->GetPop()->at(i).fitScore > currFitness)
     { // If next maximum fitness of generation found, store new max fitness
-      currFitness = BoardManager::GetInstance()->currBoards->at(i).fitScore;
+      currFitness = BoardManager::GetInstance()->GetPop()->at(i).fitScore;
     }
   }
 
@@ -259,10 +258,10 @@ void GeneticAlgorithm::OutputSolved()
   for (int i = 0; i < popSize; i++)
   { // Loop through the population, checking to see which candidate is solved
 
-    if (BoardManager::GetInstance()->currBoards->at(i).fitScore == maxFitness)
+    if (BoardManager::GetInstance()->GetPop()->at(i).fitScore == maxFitness)
     { // If board fitness is max fitness, call to output the board
       FileHandler outFile;
-      outFile.OutputBoard(&BoardManager::GetInstance()->currBoards->at(i), 
+      outFile.OutputBoard(&BoardManager::GetInstance()->GetPop()->at(i), 
                           genCount);
       break;
     }
