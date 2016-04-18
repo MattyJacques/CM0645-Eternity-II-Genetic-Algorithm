@@ -7,9 +7,9 @@
 #pragma once
 
 
-#define CORNERMATCH 10
-#define EDGEMATCH   5
-#define INNERMATCH  1
+#define CORNERMATCH 10          // How many points for corner match
+#define EDGEMATCH   5           // How many points for edge match
+#define INNERMATCH  1           // How many points for inner match
 
 
 #include "BoardManager.h"       // For board size access
