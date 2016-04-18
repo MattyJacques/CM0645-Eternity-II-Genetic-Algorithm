@@ -1,3 +1,9 @@
+// Title        : Main.cpp
+// Purpose      : Main function of code
+// Author       : Matthew Jacques
+// Date         : 9/11/2015
+
+
 #include "GeneticAlgorithm.h"     // To create and call the GA
 #include "FileHandler.h"          // To read in settings
 
