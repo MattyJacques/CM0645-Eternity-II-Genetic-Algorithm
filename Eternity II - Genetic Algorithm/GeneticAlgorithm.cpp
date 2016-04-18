@@ -10,7 +10,7 @@
 #include <iostream>           // DEBUG
 
 
-void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
+void GeneticAlgorithm::setup(Settings theSettings)            // *In*
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
@@ -33,25 +33,25 @@ void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
   startPiece = theSettings.startCons;
 
   // Output all settings to user
-  OutputSettings(theSettings);
+  outputSettings(theSettings);
 
   // Calculate the maximum fitness of a 100% solved candidate
-  CalcMaxFitness(theSettings.boardSize);
+  calcMaxFitness(theSettings.boardSize);
 
   // Initialise the board manager with the board size and number of patterns
   BoardManager::getInstance()->initialiseData(theSettings.boardSize, 
                                               theSettings.patternNum);
 
-} // Setup()
+} // setup()
 
 
-void GeneticAlgorithm::RunGA()
+void GeneticAlgorithm::runGA()
 { // Main function of the GA that continually runs
 
   int stuckCounter = 200;    // Counts down from 200 for test if stuck
   int prevFitness = 0;       // Holds the previous fitness to check if stuck
 
-  InitRandomPopulation();    // Initialise the first population
+  initRandomPopulation();    // Initialise the first population
 
   while (currFitness != maxFitness)
   { // While the solution has not been found, continue working towards solution
@@ -71,7 +71,7 @@ void GeneticAlgorithm::RunGA()
     currMatches = 0;       // Reset max amount of matches found
     currFitness = 0;       // Reset max fitness reached
              
-    DoFitness();           // Check fitness of the population
+    doFitness();           // Check fitness of the population
 
     // Output summary of generation
     float fitPercent = ((float)currFitness / maxFitness) * 100.0f;
@@ -93,21 +93,21 @@ void GeneticAlgorithm::RunGA()
     else
     { // If 200 generations have passed without immproved fitness, reset 
       // population and fitness to try again
-      InitRandomPopulation();
+      initRandomPopulation();
       stuckCounter = 200;
       prevFitness = 0;
       currFitness = 0;
     }
 
-    OutputFitness();                      // Output the current fitness
+    outputFitness();                      // Output the current fitness
 
   } // while (currFitness != maxFitness)
 
-  OutputSolved();                         // Output the solved board
+  outputSolved();                         // Output the solved board
 
-} // RunGA()
+} // runGA()
 
-void GeneticAlgorithm::GenRandomNum(int min,            // *In*
+void GeneticAlgorithm::genRandomNum(int min,            // *In*
                                     int max,            // *In*
                                     int* randNum)       // *Out*
 { // Generates a random number between min and max in randNum parameter
@@ -119,10 +119,10 @@ void GeneticAlgorithm::GenRandomNum(int min,            // *In*
   // and max
   *randNum = (std::rand() % range) + min;
 
-} // GenRandomNum()
+} // genRandomNum()
 
 
-void GeneticAlgorithm::CalcMaxFitness(int boardSize)          // *In*
+void GeneticAlgorithm::calcMaxFitness(int boardSize)          // *In*
 { // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
   // along with calculating how many matches are in a 100% board 
@@ -139,10 +139,10 @@ void GeneticAlgorithm::CalcMaxFitness(int boardSize)          // *In*
   maxFitness += ((boardSize - 3) * (boardSize - 2) * 2) * INNERMATCH;
   maxMatches += (boardSize - 3) * (boardSize - 2) * 2;
 
-} // CalcMaxFitness()
+} // calcMaxFitness()
 
 
-void GeneticAlgorithm::InitRandomPopulation()
+void GeneticAlgorithm::initRandomPopulation()
 { // Initialise random population of candidates. Used at the start of the 
   // algorithm to get the initial population and also used for the scramble
   // repair method if fitness has not increased within a period of generations
@@ -164,10 +164,10 @@ void GeneticAlgorithm::InitRandomPopulation()
 
   
 
-} // InitRandomPopulation()
+} // initRandomPopulation()
 
 
-void GeneticAlgorithm::DoFitness()
+void GeneticAlgorithm::doFitness()
 { // Checks the fitness of the population and checks to see if there is a new
   // fitness or pattern match record
 
@@ -186,10 +186,10 @@ void GeneticAlgorithm::DoFitness()
     }
   }
 
-} // DoFitness()
+} // doFitness()
 
 
-void GeneticAlgorithm::OutputSettings(Settings theSettings)   // *In* 
+void GeneticAlgorithm::outputSettings(Settings theSettings)   // *In* 
 { // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
 
@@ -242,19 +242,19 @@ void GeneticAlgorithm::OutputSettings(Settings theSettings)   // *In*
     printf("Mutation: Region Swap\n\n");
   }
 
-} // OutputSettings()
+} // outputSettings()
 
 
-void GeneticAlgorithm::OutputFitness()
+void GeneticAlgorithm::outputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
   FileHandler outFile;                       // Create object for output
   outFile.outputFitness(currFitness);        // Call to output the fitness
 
-} // OutputFitness()
+} // outputFitness()
 
 
-void GeneticAlgorithm::OutputSolved()
+void GeneticAlgorithm::outputSolved()
 { // Output the solved bored along with how many generation it took to solve
 
   for (int i = 0; i < popSize; i++)
@@ -269,4 +269,4 @@ void GeneticAlgorithm::OutputSolved()
     }
   }
 
-} // OutputSolved()
+} // outputSolved()

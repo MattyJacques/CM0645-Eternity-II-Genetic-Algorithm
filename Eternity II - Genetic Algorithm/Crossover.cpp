@@ -107,8 +107,8 @@ void Crossover::rouletteSelect(Board* parents[2],                     // *Out*
   int randomIndex[2] = { -1, -1 };
     
   // Generate two random indexes to use in total fitness
-  GeneticAlgorithm::GenRandomNum(0, totalFitness, &randomIndex[0]);
-  GeneticAlgorithm::GenRandomNum(0, totalFitness, &randomIndex[1]);
+  GeneticAlgorithm::genRandomNum(0, totalFitness, &randomIndex[0]);
+  GeneticAlgorithm::genRandomNum(0, totalFitness, &randomIndex[1]);
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
   
@@ -157,7 +157,7 @@ void Crossover::tournamentSelect(Board* parents[2],                   // *Out*
     { // Test 20 random candidates storing highest fitness and ID
 
       // Generate a random boardID then 
-      GeneticAlgorithm::GenRandomNum(0, popSize - 1, &boardID);
+      GeneticAlgorithm::genRandomNum(0, popSize - 1, &boardID);
 
       // Test to see if the fitness score of that candidate is highest than the
       // current stored fitness
@@ -237,7 +237,7 @@ void Crossover::onePoint(Board* parents[2])                           // *In*
   int crossPoint = -1;     // Holds the crossover point
 
   // Get random crossover point to split the boards
-  GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1, &crossPoint);
+  GeneticAlgorithm::genRandomNum(1, numOfPieces - 1, &crossPoint);
 
   // Initialise new empty boards
   BoardManager::getInstance()->initEmptyBoard(&offspring[0]);
@@ -283,8 +283,8 @@ void Crossover::twoPoint(Board* parents[2])                           // *In*
 
   // Get random crossover points to split the boards, making sure the second
   // generated number is after the first
-  GeneticAlgorithm::GenRandomNum(1, numOfPieces - 1, &crossPoint[0]);
-  GeneticAlgorithm::GenRandomNum(crossPoint[0] + 1, numOfPieces, 
+  GeneticAlgorithm::genRandomNum(1, numOfPieces - 1, &crossPoint[0]);
+  GeneticAlgorithm::genRandomNum(crossPoint[0] + 1, numOfPieces, 
                                  &crossPoint[1]);
 
   // Initialise new empty boards and give the boards an ID

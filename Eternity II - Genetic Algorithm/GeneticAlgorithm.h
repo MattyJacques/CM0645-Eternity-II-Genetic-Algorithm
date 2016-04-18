@@ -47,38 +47,38 @@ private:
   // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
   // along with calculating how many matches are in a 100% board
-  void CalcMaxFitness(int boardSize);          // *In*
+  void calcMaxFitness(int boardSize);          // *In*
 
   // Initialise random population of candidates. Used at the start of the 
   // algorithm to get the initial population and also used for the scramble
   // repair method if fitness has not increased within a period of generations
-  void InitRandomPopulation();
+  void initRandomPopulation();
 
   // Checks the fitness of the population and checks to see if there is a new
   // fitness or pattern match record
-  void DoFitness();
+  void doFitness();
 
   // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
-  void OutputSettings(Settings theSettings);   // *In*
+  void outputSettings(Settings theSettings);   // *In*
 
   // Calls to ouput the current fitness to the file for record of performance
-  void OutputFitness();
+  void outputFitness();
 
   // Output the solved bored along with how many generation it took to solve
-  void OutputSolved();
+  void outputSolved();
 
 public:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
-  void Setup(Settings theSettings);            // *In*
+  void setup(Settings theSettings);            // *In*
 
   // Main function of the GA that continually runs
-  void RunGA();
+  void runGA();
 
   // Generates a random number between min and max in randNum parameter
-  static void GenRandomNum(int min,            // *In*
+  static void genRandomNum(int min,            // *In*
                            int max,            // *In*
                            int* randNum);      // *Out*
 

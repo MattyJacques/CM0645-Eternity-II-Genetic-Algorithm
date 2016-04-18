@@ -16,7 +16,7 @@ void main()
   GeneticAlgorithm theGA;                       // Create algorithm object
   FileHandler fileHandle;                       // Create file reader object
 
-  theGA.Setup(fileHandle.readSettingsFile());   // Read algorithms settings
-  theGA.RunGA();                                // Run the algorithm
+  theGA.setup(fileHandle.readSettingsFile());   // Read algorithms settings
+  theGA.runGA();                                // Run the algorithm
 
 } // main()

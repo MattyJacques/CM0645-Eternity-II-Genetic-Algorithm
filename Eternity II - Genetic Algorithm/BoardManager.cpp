@@ -500,7 +500,7 @@ PuzzlePiece BoardManager::genCorner(int pattern1,                      // *In*
   }
   else
   { // If no match needed, generate pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[0]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[0]);
   }
 
   if (pattern2 > 0)
@@ -509,7 +509,7 @@ PuzzlePiece BoardManager::genCorner(int pattern1,                      // *In*
   }
   else
   { // If no match needed, generate pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[1]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[1]);
   }
 
   newPiece.segments[2] = 0;   // Set the edge pattern ID
@@ -538,7 +538,7 @@ PuzzlePiece BoardManager::genEdge(int pattern1,                        // *In*
   }
   else
   { // If no match needed, generate pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[0]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[0]);
   }
 
   if (location == RIGHT && pattern2 > 0)
@@ -548,7 +548,7 @@ PuzzlePiece BoardManager::genEdge(int pattern1,                        // *In*
   }
   else
   { // If no match needed, generate random pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[1]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[1]);
   }
 
   newPiece.segments[2] = 0;    // Set edge pattern ID
@@ -559,7 +559,7 @@ PuzzlePiece BoardManager::genEdge(int pattern1,                        // *In*
   }
   else
   { // If no match needed, generate pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[3]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[3]);
   }
 
   return newPiece; // Return the new piece
@@ -583,14 +583,14 @@ PuzzlePiece BoardManager::genInner(int pattern1,                       // *In*
   }
   else
   { // If no match needed, generate pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[0]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[0]);
   }
 
   // Generate random pattern for right edge of piece
-  GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[1]);
+  GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[1]);
 
   // Generate random pattern for bottom edge of piece
-  GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[2]);
+  GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[2]);
 
   if (pattern2 > 0)
   { // If piece needs to match adjacent piece, set the correct pattern
@@ -598,7 +598,7 @@ PuzzlePiece BoardManager::genInner(int pattern1,                       // *In*
   }
   else
   { // If no match needed, generate pattern ID
-    GeneticAlgorithm::GenRandomNum(1, patternNum, &newPiece.segments[3]);
+    GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[3]);
   }
 
   return newPiece;
