@@ -25,7 +25,7 @@ void Mutation::Setup(MutateType type,          // *In*
   mutType = type;                 // Set mutation method
   CalcMutRate(rate, popSize);     // Calc how many mutation per generation
 
-} // SetMethod()
+} // Setup()
 
 
 void Mutation::DoMutation(bool startPiece)     // *In*

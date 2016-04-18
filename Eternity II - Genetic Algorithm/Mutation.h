@@ -10,7 +10,7 @@
 #include "BoardManager.h"    // PieceType enum
 
 
-// Readability for methods of mutation
+// Holds all of the different mutation methods that can be used
 enum MutateType { SWAP, ROTATE, ROTATESWAP, REGIONSWAP, REGIONROTATE};
 
 
@@ -106,5 +106,6 @@ public:
   // then calls the appropriate subroutine that will do the needed mutation
   // method on that board.
   void DoMutation(bool startPiece);    // *In*
-};
+
+}; // Mutation
 

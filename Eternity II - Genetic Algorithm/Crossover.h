@@ -128,4 +128,5 @@ public:
   // Selects the parent candidates then commences with crossover with chosen
   // methods
   void DoCrossover(int popSize);                                // *In*
-};
+
+}; // Crossover

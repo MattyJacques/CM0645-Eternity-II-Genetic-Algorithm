@@ -110,5 +110,6 @@ public:
 
   // Calculate the output filename
   void OutputFitness(int fitness);                    // *In*
-};
+
+}; // FileHandler
 

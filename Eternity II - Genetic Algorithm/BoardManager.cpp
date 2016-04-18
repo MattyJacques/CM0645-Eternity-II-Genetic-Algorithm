@@ -336,7 +336,7 @@ void BoardManager::InitCornersSides(Board* pBoard)                     // *Out*
   FixOrientation(&pieceVec[CORNER][3], boardSize, boardSize);
   pBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][3]);
 
-} // InitCornerSides()
+} // InitCornersSides()
 
 
 void BoardManager::AddPieces(Board* pBoard)                            // *Out*
@@ -414,7 +414,7 @@ void BoardManager::SwapStartPiece(Board* pBoard,                       // *Out*
   // Place piece back in to the slot that the starting piece was located
   pBoard->boardVecs[xIndex][yIndex] = temp;
 
-} // SwapPiece()
+} // SwapStartPiece()
 
 
 void BoardManager::RotateEdge(PuzzlePiece* piece,                      // *Out*  

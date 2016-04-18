@@ -42,7 +42,7 @@ void GeneticAlgorithm::Setup(Settings theSettings)            // *In*
   BoardManager::GetInstance()->InitialiseData(theSettings.boardSize, 
                                               theSettings.patternNum);
 
-} // GeneticAlgorithm()
+} // Setup()
 
 
 void GeneticAlgorithm::RunGA()
@@ -121,7 +121,7 @@ void GeneticAlgorithm::GenRandomNum(int min,            // *In*
   // and max
   *randNum = (std::rand() % range) + min;
 
-} // GenerateRandomNum()
+} // GenRandomNum()
 
 
 void GeneticAlgorithm::CalcMaxFitness(int boardSize)          // *In*
@@ -269,4 +269,4 @@ void GeneticAlgorithm::OutputSolved()
     }
   }
 
-} // OutputSolved
+} // OutputSolved()

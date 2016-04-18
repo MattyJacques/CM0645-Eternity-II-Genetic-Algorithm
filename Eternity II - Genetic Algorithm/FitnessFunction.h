@@ -6,9 +6,11 @@
 
 #pragma once
 
+
 #define CORNERMATCH 10
 #define EDGEMATCH   5
 #define INNERMATCH  1
+
 
 #include "BoardManager.h"       // For board size access
 
@@ -79,5 +81,6 @@ public:
 
   // Checks the fitness of the candidate provided by the GA
   void CheckFitness(Board* theBoard);   // *In-Out*
-};
+
+}; // FitnessFunction
 

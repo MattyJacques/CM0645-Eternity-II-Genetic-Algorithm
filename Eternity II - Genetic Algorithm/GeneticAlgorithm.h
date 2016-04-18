@@ -25,7 +25,8 @@ struct Settings
   MutateType mutType;          // Which mutation method to use
   double mutRate;              // Rate of mutation to apply
   bool startCons;              // Whether the start constraint is active
-};
+
+}; // Settings
 
 
 class GeneticAlgorithm
@@ -80,5 +81,6 @@ public:
   static void GenRandomNum(int min,            // *In*
                            int max,            // *In*
                            int* randNum);      // *Out*
-};
+
+}; // GeneticAlgorithm
 

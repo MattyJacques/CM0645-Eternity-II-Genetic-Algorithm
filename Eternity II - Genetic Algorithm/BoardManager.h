@@ -26,7 +26,8 @@ struct PuzzlePiece
   PieceType type;   // Holds the type of the puzzle piece, example corner, edge
   int orientation;  // Holds the rotation of the puzzle piece
   int segments[4];  // Holds the pattern for each segment of the piece
-};
+
+}; // PuzzlePiece
 
 
 struct Board
@@ -58,8 +59,9 @@ struct Board
     }
 
     return result;  // Return result
+
   }
-};
+}; // Board
 
 
 class BoardManager
@@ -186,5 +188,5 @@ public:
   // Destructor to delete the instance of the class
   ~BoardManager();
 
-};
+}; // BoardManager
 

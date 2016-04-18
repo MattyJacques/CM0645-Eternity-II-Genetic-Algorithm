@@ -125,7 +125,7 @@ void FitnessFunction::CheckBottomLeft()
     pBoard->matchCount++;
   }
 
-} //CheckBottomLeft()
+} // CheckBottomLeft()
 
 
 void FitnessFunction::CheckBottomRight()

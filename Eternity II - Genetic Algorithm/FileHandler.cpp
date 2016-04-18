@@ -4,7 +4,7 @@
 // Date         : 19/11/2015
 
 
-#include "FileHandler.h"     // Include the header for the class
+#include "FileHandler.h"    // Include the header for the class
 #include "Crossover.h"      // Selection and Crossover type
 #include "Mutation.h"       // Mutation type
 #include <iostream>         // Include input and output library
@@ -50,8 +50,8 @@ Settings FileHandler::ReadSettingsFile()
     ParseInt(&setData.patternNum);       // Parse the number of patterns
     ParseInt(&setData.popSize);          // Parse the population size
 
-                                         // Parse the selection, crossover and mutation methods into the appropriate
-                                         // enums
+    // Parse the selection, crossover and mutation methods into the appropriate
+    // enums
     ParseMethods(&setData);
 
     ParseDouble(&setData.mutRate);       // Parse the mutation rate
@@ -115,7 +115,7 @@ void FileHandler::ReadDataFile(int size,                   // *In*
     MakeDataFile(size, pattern);
   }
 
-} // ReadPieceFile()
+} // ReadDataFile()
 
 
 void FileHandler::OutputBoard(Board* pBoard,               // *In*
@@ -438,7 +438,7 @@ void FileHandler::SetOutFilename(int boardSize,            // *In*
 
   char intBuff[10] = "/0";               // Holds result of itoa
 
-                                         // Set directory and board size label
+   // Set directory and board size label
   outFilename = "Solutions/BoardSize ";
 
   // Convert board size to char and append to filename
@@ -447,7 +447,7 @@ void FileHandler::SetOutFilename(int boardSize,            // *In*
 
   outFilename += " Pattern ";            // Append pattern label
 
-                                         // Convert the pattern number to char and append to filename
+  // Convert the pattern number to char and append to filename
   _itoa_s(patternNum, intBuff, 10);
   outFilename += intBuff;
 
