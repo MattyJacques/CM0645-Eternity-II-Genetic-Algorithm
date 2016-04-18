@@ -24,63 +24,63 @@ private:
 
   // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
-  bool IsMatchSide(int xIndex1,         // *In*
+  bool isMatchSide(int xIndex1,         // *In*
                    int yIndex1,         // *In*
                    int xIndex2,         // *In*
                    int yIndex2);        // *In*
 
   // Checks to see if the pattern located on bottom side of piece1 matches the
   // pattern located on the top of piece2
-  bool IsMatchBottom(int xIndex1,       // *In*
+  bool isMatchBottom(int xIndex1,       // *In*
                      int yIndex1,       // *In*
                      int xIndex2,       // *In*
                      int yIndex2);      // *In*
 
   // Checks the top left corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces
-  void CheckTopLeft();
+  void checkTopLeft();
 
   // Checks the top right corner to see if the piece is the correct type and if
   // the edges of that piece match adjacent pieces
-  void CheckTopRight();
+  void checkTopRight();
 
   // Checks the bottom left corner to see if the piece is the correct type and
   // if the edges of that piece match adjacent pieces
-  void CheckBottomLeft();
+  void checkBottomLeft();
 
   // Checks the bottom right corner to see if the piece is the correct type and
   // if the edges of that piece match adjacent pieces
-  void CheckBottomRight();
+  void checkBottomRight();
 
   // Checks the slots along the top edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckTopEdge();
+  void checkTopEdge();
 
   // Checks the slots along the left edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckLeftEdge();
+  void checkLeftEdge();
 
   // Checks the slots along the right edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckRightEdge();
+  void checkRightEdge();
 
   // Checks the slots along the bottom edge to see if the piece placed within that
   // slot is of the right piece type and checks if any edges of those pieces
   // match with adjacent pieces
-  void CheckBottomEdge();
+  void checkBottomEdge();
 
   // Checks the pieces in the inner slots of the board for matching connections
-  void CheckInnerPieces();
+  void checkInnerPieces();
 
 public:
   // Initialse board and board manager pointers
   FitnessFunction();
 
   // Checks the fitness of the candidate provided by the GA
-  void CheckFitness(Board* theBoard);   // *In-Out*
+  void checkFitness(Board* theBoard);   // *In-Out*
 
 }; // FitnessFunction
 

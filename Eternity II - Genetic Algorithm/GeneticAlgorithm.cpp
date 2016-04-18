@@ -173,7 +173,7 @@ void GeneticAlgorithm::DoFitness()
 
   for (int i = 0; i < popSize; i++)
   { // Loop through every boards of population checking the fitness
-    theFitness.CheckFitness(&BoardManager::getInstance()->getPop()->at(i));
+    theFitness.checkFitness(&BoardManager::getInstance()->getPop()->at(i));
 
     if (BoardManager::getInstance()->getPop()->at(i).matchCount > currMatches)
     { // Check to see if new highest match count
