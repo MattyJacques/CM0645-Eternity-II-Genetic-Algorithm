@@ -4,8 +4,8 @@
 // Date         : 6/12/2015
 
 
-#include "BoardManager.h"
-#include "GeneticAlgorithm.h"
+#include "BoardManager.h"     // Class declaration
+#include "GeneticAlgorithm.h" // Random number generation
 #include <algorithm>          // Random_shuffle()
 #include <time.h>             // time()
 

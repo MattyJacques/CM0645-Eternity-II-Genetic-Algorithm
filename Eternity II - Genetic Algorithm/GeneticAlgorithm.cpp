@@ -4,10 +4,10 @@
 // Date         : 9/11/2015
 
 
-#include "GeneticAlgorithm.h" // Include header for the class
-#include "FileHandler.h"       // Ability for input and output
-#include <algorithm>          // Sorting
-#include <iostream>           // DEBUG
+#include "GeneticAlgorithm.h"  // Class declaration
+#include "FileHandler.h"       // File input and output
+#include <algorithm>           // Sorting
+#include <iostream>            // Console output
 
 
 void GeneticAlgorithm::setup(Settings theSettings)            // *In*

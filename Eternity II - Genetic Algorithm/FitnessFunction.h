@@ -12,7 +12,7 @@
 #define INNERMATCH  1           // How many points for inner match
 
 
-#include "BoardManager.h"       // For board size access
+#include "BoardManager.h"       // For board size access, board definition
 
 
 class FitnessFunction

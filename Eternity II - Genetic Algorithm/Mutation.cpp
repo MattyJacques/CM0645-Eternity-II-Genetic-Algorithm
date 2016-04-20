@@ -4,9 +4,9 @@
 // Date         : 23/01/2016
 
 
-#include "Mutation.h"
+#include "Mutation.h"         // Class declaration
 #include "GeneticAlgorithm.h" // Get random number
-#include <iostream>           // Debug output
+#include <iostream>           // Error output
 
 
 Mutation::Mutation()

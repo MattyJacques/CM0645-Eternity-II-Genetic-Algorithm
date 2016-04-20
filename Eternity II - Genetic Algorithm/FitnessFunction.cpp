@@ -4,7 +4,7 @@
 // Date         : 2/12/2015
 
 
-#include "FitnessFunction.h"    // Include the header file
+#include "FitnessFunction.h"    // Class declaration
 
 
 FitnessFunction::FitnessFunction()

@@ -4,10 +4,10 @@
 // Date         : 19/11/2015
 
 
-#include "FileHandler.h"    // Include the header for the class
+#include "FileHandler.h"    // Class declariation
 #include "Crossover.h"      // Selection and Crossover type
 #include "Mutation.h"       // Mutation type
-#include <iostream>         // Include input and output library
+#include <iostream>         // Console input and output
 #include <windows.h>        // Include file directory functions
 
 

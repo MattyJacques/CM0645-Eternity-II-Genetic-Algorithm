@@ -4,9 +4,9 @@
 // Date         : 21/1/2016
 
 
-#include "Crossover.h"
+#include "Crossover.h"          // Class declaration
 #include "GeneticAlgorithm.h"   // Random number generation
-#include <iostream>             // Error output
+#include <iostream>             // Console output
 #include <algorithm>            // Sorting functionality
 
 

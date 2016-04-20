@@ -7,9 +7,9 @@
 #pragma once
 
 
-#include "BoardManager.h"     // For PieceType & piece vector
+#include "BoardManager.h"     // For PieceType, piece vector, board definition
 #include "GeneticAlgorithm.h" // Settings struct
-#include <fstream>            // Includes file input function
+#include <fstream>            // Includes file input and output
 #include <string>             // Includes strings and stoi
 #include <vector>             // Include vectors for filenames
 

@@ -7,7 +7,7 @@
 #pragma once
 
 
-#include "BoardManager.h"    // PieceType enum
+#include "BoardManager.h"    // PieceType, access to population, board size
 
 
 // Holds all of the different mutation methods that can be used
