@@ -39,7 +39,7 @@ private:
   int currMatches;                      // Max num pattern matches reached
   int maxMatches;                       // Max num of pattern matches at 100%
   int genCount;                         // Count of how many generations passed
-  bool startPiece;                      // Switch for start piece constraint
+  bool isStartPiece;                    // Switch for start piece constraint
   Crossover theCrossover;               // Object to handle crossover
   Mutation theMutation;                 // Object to handle mutation
   FitnessFunction theFitness;           // Object ot handle calculating fitness

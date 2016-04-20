@@ -326,7 +326,7 @@ void Crossover::checkDuplication()
   // to place pieces within the candidate that no longer has them
 
   // Holds location of both offspring
-  Board* pOffspring[2];   
+  Board* offspring[2];   
 
   // Holds list of duplicate pieces found
   std::vector<PuzzlePiece> pieces[2];  
@@ -335,26 +335,26 @@ void Crossover::checkDuplication()
   std::vector<std::vector<int>> indexes[2];
 
   // Get the addresses of the last two boards created
-  pOffspring[0] = &BoardManager::getInstance()->getPop()->at(
+  offspring[0] = &BoardManager::getInstance()->getPop()->at(
                     BoardManager::getInstance()->getPop()->size() - 2);
-  pOffspring[1] = &BoardManager::getInstance()->getPop()->at(
+  offspring[1] = &BoardManager::getInstance()->getPop()->at(
                     BoardManager::getInstance()->getPop()->size() - 1);
 
   // Call to find out which pieces are duplicates, storing in the pieces
   // and index vectors ready for fixing
   for (int i = 0; i < 2; i++)
-    getDuplicates(pOffspring[i], &pieces[i], &indexes[i]);
+    getDuplicates(offspring[i], &pieces[i], &indexes[i]);
 
   // Calls to repair the boards after duplication was found, giving the pieces
   // and indexes of the duplicate slots, pieces vector switched to add pieces
   // that were found twice in other offspring
   for (int i = 0; i < 2; i++)
-    fixDuplicates(pOffspring[i], pieces[1 - i], indexes[i]);
+    fixDuplicates(offspring[i], pieces[1 - i], indexes[i]);
 
 } // checkDuplication()
 
 
-void Crossover::getDuplicates(Board* theBoard,                          // *In* 
+void Crossover::getDuplicates(Board* theBoard,                        // *In* 
                               std::vector<PuzzlePiece>* pieces,       // *Out*
                               std::vector<std::vector<int>>* indexes) // *Out*
 {
@@ -362,39 +362,39 @@ void Crossover::getDuplicates(Board* theBoard,                          // *In*
   int boardSize = BoardManager::getInstance()->getSize();
 
   // Vector to check IDs against
-  std::vector<bool> checkIDs((*BoardManager::getInstance()->getPieces())[CORNER].size() +
+  std::vector<bool> isFound((*BoardManager::getInstance()->getPieces())[CORNER].size() +
                              (*BoardManager::getInstance()->getPieces())[EDGE].size() +
                              (*BoardManager::getInstance()->getPieces())[INNER].size(), 
                              false);
 
   // Check the corner slots for duplicates
-  checkCorners(theBoard, pieces, indexes, boardSize, &checkIDs);
+  checkCorners(theBoard, pieces, indexes, boardSize, &isFound);
 
   // Check the edge slots for duplicates
-  checkEdges(theBoard, pieces, indexes, boardSize, &checkIDs);
+  checkEdges(theBoard, pieces, indexes, boardSize, &isFound);
 
   // Check the inner slots for duplicates
-  checkInners(theBoard, pieces, indexes, boardSize, &checkIDs);
+  checkInners(theBoard, pieces, indexes, boardSize, &isFound);
 
 } // getDuplicates()
 
 
-void Crossover::checkCorners(Board* theBoard,                           // *In*
+void Crossover::checkCorners(Board* theBoard,                         // *In*
                              std::vector<PuzzlePiece>* pieces,        // *Out*
                              std::vector<std::vector<int>>* indexes,  // *Out*
                              int boardSize,                           // *In*
-                             std::vector<bool>* checkIDs)             // *In*
+                             std::vector<bool>* isFound)              // *In*
 { // Checks all corners to see if there are any duplicate pieces within the
   // corner slots, if so store the piece and the index of the duplicate slot
 
   // Set the ID of the piece in the top left corner to true, can't be duplicate
   // as is the first corner to be checked
-  checkIDs->at(theBoard->boardVecs[0][0].pieceID - 1) = true;
+  isFound->at(theBoard->boardVecs[0][0].pieceID - 1) = true;
 
   // Check the top right corner to see if that piece ID has already been found
-  if (!checkIDs->at(theBoard->boardVecs[0][boardSize].pieceID - 1))
+  if (!isFound->at(theBoard->boardVecs[0][boardSize].pieceID - 1))
   { 
-    checkIDs->at(theBoard->boardVecs[0][boardSize].pieceID - 1) = true;
+    isFound->at(theBoard->boardVecs[0][boardSize].pieceID - 1) = true;
   }
   else
   { // Piece already found, add to duplicate pieces vector and index vector
@@ -404,9 +404,9 @@ void Crossover::checkCorners(Board* theBoard,                           // *In*
   }
 
   // Check the bottom left corner to see if that piece ID has already been found
-  if (!checkIDs->at(theBoard->boardVecs[boardSize][0].pieceID - 1))
+  if (!isFound->at(theBoard->boardVecs[boardSize][0].pieceID - 1))
   {
-    checkIDs->at(theBoard->boardVecs[boardSize][0].pieceID - 1) = true;
+    isFound->at(theBoard->boardVecs[boardSize][0].pieceID - 1) = true;
   }
   else
   { // Piece already found, add to duplicate pieces vector and index vector
@@ -416,9 +416,9 @@ void Crossover::checkCorners(Board* theBoard,                           // *In*
   }
 
   // Check the bottom right corner to see if that piece ID has already been found
-  if (!checkIDs->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1))
+  if (!isFound->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1))
   {
-    checkIDs->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1) = true;
+    isFound->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1) = true;
   }
   else
   { // Piece already found, add to duplicate pieces vector and index vector
@@ -430,11 +430,11 @@ void Crossover::checkCorners(Board* theBoard,                           // *In*
 } // checkCorners()
 
 
-void Crossover::checkEdges(Board* theBoard,                            // *In*
+void Crossover::checkEdges(Board* theBoard,                          // *In*
                            std::vector<PuzzlePiece>* pieces,         // *Out*
                            std::vector<std::vector<int>>* indexes,   // *Out*
                            int boardSize,                            // *In*
-                           std::vector<bool>* checkIDs)              // *In-Out*
+                           std::vector<bool>* isFound)               // *In-Out*
 { // Checks all edges to see if there are any duplicate pieces within the
   // edge slots, if so store the piece and the index of the duplicate slot
 
@@ -443,9 +443,9 @@ void Crossover::checkEdges(Board* theBoard,                            // *In*
     // for duplicates on one slot of each edge at a time
     
     // If ID on top edge has not already been found, set to found
-    if (!checkIDs->at(theBoard->boardVecs[0][i].pieceID - 1))
+    if (!isFound->at(theBoard->boardVecs[0][i].pieceID - 1))
     {
-      checkIDs->at(theBoard->boardVecs[0][i].pieceID - 1) = true;
+      isFound->at(theBoard->boardVecs[0][i].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
@@ -455,9 +455,9 @@ void Crossover::checkEdges(Board* theBoard,                            // *In*
     }
 
     // If ID on left edge has not already been found, set to found
-    if (!checkIDs->at(theBoard->boardVecs[i][0].pieceID - 1))
+    if (!isFound->at(theBoard->boardVecs[i][0].pieceID - 1))
     {
-      checkIDs->at(theBoard->boardVecs[i][0].pieceID - 1) = true;
+      isFound->at(theBoard->boardVecs[i][0].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
@@ -467,9 +467,9 @@ void Crossover::checkEdges(Board* theBoard,                            // *In*
     }
 
     // If ID on right edge has not already been found, set to found
-    if (!checkIDs->at(theBoard->boardVecs[i][boardSize].pieceID - 1))
+    if (!isFound->at(theBoard->boardVecs[i][boardSize].pieceID - 1))
     {
-      checkIDs->at(theBoard->boardVecs[i][boardSize].pieceID - 1) = true;
+      isFound->at(theBoard->boardVecs[i][boardSize].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
@@ -479,9 +479,9 @@ void Crossover::checkEdges(Board* theBoard,                            // *In*
     }
 
     // If ID on bottom edge has not already been found, set to found
-    if (!checkIDs->at(theBoard->boardVecs[boardSize][i].pieceID - 1))
+    if (!isFound->at(theBoard->boardVecs[boardSize][i].pieceID - 1))
     {
-      checkIDs->at(theBoard->boardVecs[boardSize][i].pieceID - 1) = true;
+      isFound->at(theBoard->boardVecs[boardSize][i].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
@@ -495,24 +495,25 @@ void Crossover::checkEdges(Board* theBoard,                            // *In*
 } // checkEdges()
 
 
-void Crossover::checkInners(Board* theBoard,                           // *In*
+void Crossover::checkInners(Board* theBoard,                         // *In*
                             std::vector<PuzzlePiece>* pieces,        // *Out*
                             std::vector<std::vector<int>>* indexes,  // *Out*
                             int boardSize,                           // *In*
-                            std::vector<bool>* checkIDs)             // *In-Out*
+                            std::vector<bool>* isFound)              // *In-Out*
 { // Checks all inner slots to see if there are any duplicate pieces within the
   // inner slots, if so store the piece and the index of the duplicate slot
 
   int yIndex = 1;  // Y index for slot
   int xIndex = 1;  // X index for slot
 
-  for (int i = 0; i < (int)(*BoardManager::getInstance()->getPieces())[INNER].size(); i++)
+  for (int i = 0; i < (int)(*BoardManager::getInstance()->getPieces())[INNER].
+       size(); i++)
   { // Loop through for every inner slot changing the appropriate element
     // to true if piece was found
 
-    if (!checkIDs->at(theBoard->boardVecs[xIndex][yIndex].pieceID - 1))
+    if (!isFound->at(theBoard->boardVecs[xIndex][yIndex].pieceID - 1))
     { // If piece has not already been found, change element to true
-      checkIDs->at(theBoard->boardVecs[xIndex][yIndex].pieceID - 1) = true;
+      isFound->at(theBoard->boardVecs[xIndex][yIndex].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
@@ -534,7 +535,7 @@ void Crossover::checkInners(Board* theBoard,                           // *In*
 } // checkInners()
 
 
-void Crossover::fixDuplicates(Board* theBoard,                         // *In-Out*
+void Crossover::fixDuplicates(Board* theBoard,                       // *In-Out*
                               std::vector<PuzzlePiece> pieces,       // *In*
                               std::vector<std::vector<int>> indexes) // *In*   
 { // Uses the vector of pieces along with the vector of slot indexes to place
@@ -549,8 +550,10 @@ void Crossover::fixDuplicates(Board* theBoard,                         // *In-Ou
     if (theBoard->boardVecs[indexes[i][0]][indexes[i][1]].type == CORNER ||
         theBoard->boardVecs[indexes[i][0]][indexes[i][1]].type == EDGE)
     { // If piece is an edge or corner piece, make sure piece is properly rotated
-      BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs[indexes[i][0]]
-                                                  [indexes[i][1]], indexes[i][0],
+      BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs
+                                                  [indexes[i][0]]
+                                                  [indexes[i][1]], 
+                                                  indexes[i][0],
                                                   indexes[i][1]);
     }
   }

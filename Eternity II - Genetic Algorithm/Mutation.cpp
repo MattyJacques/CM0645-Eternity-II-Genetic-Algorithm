@@ -215,16 +215,16 @@ void Mutation::swapPiece(int boardID,          // *In*
   Board* theBoard = &BoardManager::getInstance()->getPop()->at(boardID);
 
   // Temp puzzle piece to use during the swap
-  PuzzlePiece temp = theBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
+  PuzzlePiece swapTemp = theBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
 
   // Place the second puzzle piece where first puzzle piece was located
   theBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]] =
     theBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]];
 
   // Place first puzzle piece back in second puzzle piece slot
-  theBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]] = temp;
+  theBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]] = swapTemp;
 
-  if (temp.type == EDGE || temp.type == CORNER)
+  if (swapTemp.type == EDGE || swapTemp.type == CORNER)
   { // Make sure the pieces are roatetd correctly if mutation occured on a 
     // corner or edge piece
 

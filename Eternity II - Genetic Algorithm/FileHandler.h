@@ -23,7 +23,7 @@ private:
   static std::string outFilename;     // Holds filename of output file
 
   // Opens the file using the filename provided return whether successful
-  bool openFile(const char* fileName);                // *In*
+  bool openFile(const char* filename);                // *In*
 
   // Scans the directory for puzzle files, storing names in array for loading
   // if the user wants to use one of them
@@ -38,7 +38,7 @@ private:
 
   // Parses the methods of selection, crossover and mutation from the int in
   // file into the enum values
-  void parseMethods(Settings* setData);               // *Out*
+  void parseMethods(Settings* settingData);           // *Out*
 
   // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
@@ -47,15 +47,15 @@ private:
 
   // Takes string of data and parses into the array of integers to use to create		
   // the puzzle piece		
-  void parseData(std::string line,                    // *In*
-                 int pData[5]);                       // *Out*
+  void parseData(std::string inLine,                  // *In*
+                 int parsedData[5]);                  // *Out*
 
   // Creates a new puzzle piece and stores in the puzzle piece vector
-  void createPiece(int pData[5]);                     // *In*
+  void createPiece(int parsedData[5]);                // *In*
 
   // Checks to see what type of piece is currently being read, returning the
   // answer
-  PieceType checkType(int* pData);                    // *In*
+  PieceType checkType(int* parsedData);               // *In*
 
   // Calculate the output filename
   void setOutFilename(int boardSize,                  // *In*
@@ -66,12 +66,12 @@ private:
 
   // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
-  void outputMatches(Board* theBoard,                   // *In*
+  void outputMatches(Board* theBoard,                 // *In*
                      int genCount);                   // *In*
 
   // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution
-  void outputIDs(Board* theBoard,                       // *In*
+  void outputIDs(Board* theBoard,                     // *In*
                  int genCount);                       // *In*
 
   // Append the selection method and crossover method to filename
@@ -105,7 +105,7 @@ public:
 
   // Output the board to a file to show progress or solved board, file name is
   // date, generation and time ran.
-  void outputBoard(Board* theBoard,                     // *In* 
+  void outputBoard(Board* theBoard,                   // *In* 
                    int genCount);                     // *In*
 
   // Calculate the output filename

@@ -11,15 +11,15 @@ FitnessFunction::FitnessFunction()
 { // Initialse board and board manager pointers
 
   theBoard = nullptr;
-  BoardMan = BoardManager::getInstance();
+  boardMan = BoardManager::getInstance();
 
 } // FitnessFunction()
 
 
-void FitnessFunction::checkFitness(Board* theBoard)        // *In-Out*
+void FitnessFunction::checkFitness(Board* aBoard)        // *In-Out*
 { // Checks the fitness of the candidate provided by the GA
 
-  theBoard = theBoard;      // Defines the board pointer to the current board
+  theBoard = aBoard;        // Defines the board pointer to the current board
   theBoard->fitScore = 0;   // Sets the score to 0 to begin calculation
   theBoard->matchCount = 0; // Sets the matches to 0 to begin calculation
 
@@ -46,8 +46,8 @@ bool FitnessFunction::isMatchSide(int xIndex1,             // *In*
 { // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2
   
-  return (theBoardMan->getPattern(theBoard, xIndex1, yIndex1, RIGHT)
-          == theBoardMan->getPattern(theBoard, xIndex2, yIndex2, LEFT));
+  return (boardMan->getPattern(theBoard, xIndex1, yIndex1, RIGHT)
+          == boardMan->getPattern(theBoard, xIndex2, yIndex2, LEFT));
 
 } // isMatchSide()
 
@@ -59,8 +59,8 @@ bool FitnessFunction::isMatchBottom(int xIndex1,           // *In*
 { // Checks to see if the pattern located on bottom side of piece1 matches the
   // pattern located on the top of piece2
 
-  return (theBoardMan->getPattern(theBoard, xIndex1, yIndex1, BOTTOM)
-          == theBoardMan->getPattern(theBoard, xIndex2, yIndex2, TOP));
+  return (boardMan->getPattern(theBoard, xIndex1, yIndex1, BOTTOM)
+          == boardMan->getPattern(theBoard, xIndex2, yIndex2, TOP));
 
 } // isMatchBottom()
 
@@ -312,8 +312,8 @@ void FitnessFunction::checkInnerPieces()
     if (isMatchSide(j, boardMan->getSize() - 1, j + 1,
       boardMan->getSize() - 1))
     { // If the most bottom inner piece in col i has match at right, add score
-      board->fitScore += INNERMATCH;
-      board->matchCount++;
+      theBoard->fitScore += INNERMATCH;
+      theBoard->matchCount++;
     }
 
   } // for int j < boardSize

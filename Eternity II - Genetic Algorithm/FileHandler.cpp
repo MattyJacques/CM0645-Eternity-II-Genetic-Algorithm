@@ -25,8 +25,8 @@ FileHandler::FileHandler()
     for (int i = 0; i < 3; i++)
     { // Create new vector to hold the puzzle piece collection and push onto
       // vector of vectors that holds all pieces
-      std::vector<PuzzlePiece> newVec;
-      BoardManager::getInstance()->getPieces()->push_back(newVec);
+      std::vector<PuzzlePiece> newBoard;
+      BoardManager::getInstance()->getPieces()->push_back(newBoard);
     }
   }
 
@@ -40,45 +40,45 @@ Settings FileHandler::readSettingsFile()
 { // Reads the settings file named "settings.ini" in the root directory, 
   // setting the appropriate values that have been read in to the algorithm
 
-  Settings setData;    // Holds all of the loaded settings data
+  Settings settingData;    // Holds all of the loaded settings data
   int startPiece = -1; // Holds parsed int for start piece constraint
 
   if (openFile("settings.ini"))
   { // Checks to see if the file is open before proceeding with reading of the
     // file
 
-    parseInt(&setData.boardSize);        // Parse the board size
-    parseInt(&setData.patternNum);       // Parse the number of patterns
-    parseInt(&setData.popSize);          // Parse the population size
+    parseInt(&settingData.boardSize);        // Parse the board size
+    parseInt(&settingData.patternNum);       // Parse the number of patterns
+    parseInt(&settingData.popSize);          // Parse the population size
 
     // Parse the selection, crossover and mutation methods into the appropriate
     // enums
-    parseMethods(&setData);
+    parseMethods(&settingData);
 
-    parseDouble(&setData.mutRate);       // Parse the mutation rate
-    parseInt(&setData.eliteRate);        // Parse the elitism rate
+    parseDouble(&settingData.mutRate);       // Parse the mutation rate
+    parseInt(&settingData.eliteRate);        // Parse the elitism rate
     parseInt(&startPiece);               // Parse if start constraint is active
 
     if (startPiece == 1)
     { // If value from file equals 1, set start piece constraint to true
-      setData.startCons = true;
+      settingData.startCons = true;
     }
     else if (startPiece == 0)
     { // If value from file equals 0, set start piece constraint to false
-      setData.startCons = false;
+      settingData.startCons = false;
     }
 
     theFile.close();                     // Close file after use
   }
 
   // Read in puzzle pieces
-  readDataFile(setData.boardSize, setData.patternNum);
+  readDataFile(settingData.boardSize, settingData.patternNum);
 
   // Calculate output filename
-  setOutFilename(setData.boardSize, setData.patternNum, setData.selectType,
-                 setData.crossType, setData.mutType);
+  setOutFilename(settingData.boardSize, settingData.patternNum, settingData.selectType,
+                 settingData.crossType, settingData.mutType);
 
-  return setData;  // Return parsed data
+  return settingData;  // Return parsed data
 
 } // readSettingsFile()
 
@@ -92,8 +92,8 @@ void FileHandler::readDataFile(int size,                   // *In*
   // number of patterns
   int index = getDataFilename(size, pattern);
 
-  std::string line = "";                // Stores current line to be parsed
-  int pData[5] = { 0, 0, 0, 0, 0 };     // Holds parsed data from the line
+  std::string inLine = "";                // Stores current line to be parsed
+  int parsedData[5] = { 0, 0, 0, 0, 0 };  // Holds parsed data from the line
 
   if (index >= 0)
   {
@@ -101,10 +101,10 @@ void FileHandler::readDataFile(int size,                   // *In*
     { // Checks to see if the file is open before proceeding with reading of
       // the file
 
-      while (std::getline(theFile, line))
+      while (std::getline(theFile, inLine))
       { // While getline actually returns a line of data, proceed with parsing
-        parseData(line, pData);
-        createPiece(pData);
+        parseData(inLine, parsedData);
+        createPiece(parsedData);
       }
 
       theFile.close();                             // Close the file after use
@@ -119,7 +119,7 @@ void FileHandler::readDataFile(int size,                   // *In*
 } // readDataFile()
 
 
-void FileHandler::outputBoard(Board* theBoard,               // *In*
+void FileHandler::outputBoard(Board* theBoard,             // *In*
                               int genCount)                // *In*
 { // Output the board to a file to show progress or solved board, file name is
   // date generation and time ran.
@@ -171,9 +171,9 @@ void FileHandler::scanFileDirectory()
   WIN32_FIND_DATA fileData;               // Holds file data
 
   // Create new handle and find the first file in the directory
-  HANDLE find = FindFirstFile(dirPath, &fileData);
+  HANDLE findHandle = FindFirstFile(dirPath, &fileData);
 
-  if (find != INVALID_HANDLE_VALUE)
+  if (findHandle != INVALID_HANDLE_VALUE)
   { // If there is a file in the directory loop through and push filenames on to
     // the vector of filenames
 
@@ -196,10 +196,10 @@ void FileHandler::scanFileDirectory()
         // Push filename on to vector
         filenames.push_back(fullpath);
       }
+      // If another file found, do again
+    } while (FindNextFile(findHandle, &fileData)); 
 
-    } while (FindNextFile(find, &fileData)); // If another file found, do again
-
-  }
+  } // if (findHandle != INVALID_HANDLE_VALUE)
 
 } // scanFileDirectory()
 
@@ -207,15 +207,15 @@ void FileHandler::scanFileDirectory()
 void FileHandler::parseInt(int* setting)                   // *Out*
 { // Parse int from next line of file placing in int passed as parameter
 
-  std::string line = "/0";         // Stores current line to be parsed
-  char temp[25] = "/0";            // Stores label of the line from file
+  std::string inLine = "/0";         // Stores current line to be parsed
+  char label[25] = "/0";             // Stores label of the line from file
 
-  while (std::getline(theFile, line))
+  while (std::getline(theFile, inLine))
   { // Read in the next line
-    if (!line.empty() && line[0] != '*')
+    if (!inLine.empty() && inLine[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
-
-      sscanf_s(line.c_str(), "%s %i", temp, 25, setting);  // Parse value
+      // label storing junk label from file
+      sscanf_s(inLine.c_str(), "%s %i", label, 25, setting);  // Parse value
       break;                                               // Break out of loop
     }
   }
@@ -227,15 +227,15 @@ void FileHandler::parseDouble(double* setting)             // *Out*
 { // Parse double from next line of file placing value in double passed as
   // parameter
 
-  std::string line = "/0";         // Stores current line to be parsed
-  char temp[25] = "/0";            // Stores label of the line from file
+  std::string inLine = "/0";         // Stores current line to be parsed
+  char label[25] = "/0";             // Stores label of the line from file
 
-  while (std::getline(theFile, line))
+  while (std::getline(theFile, inLine))
   { // Read in the next line
-    if (!line.empty() && line[0] != '*')
+    if (!inLine.empty() && inLine[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
-
-      sscanf_s(line.c_str(), "%s %lf", temp, 25, setting); // Parse value
+      // label storing junk label from file
+      sscanf_s(inLine.c_str(), "%s %lf", label, 25, setting); // Parse value
       break;                                               // Break out of loop
     }
   }
@@ -301,8 +301,8 @@ int FileHandler::getDataFilename(int size,                 // *In*
 { // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
 
-  std::string name = "Puzzles/BoardSize ";      // Hold file name to open
-  int result = -1;                              // Hold index of filename
+  std::string filename = "Puzzles/BoardSize ";      // Hold file name to open
+  int index = -1;                              // Hold index of filename
   char boardSize[3] = "/0";                     // Hold converted boardSize
   char patternNum[3] = "/0";                    // Hold converted pattern num
 
@@ -311,31 +311,31 @@ int FileHandler::getDataFilename(int size,                 // *In*
   _itoa_s(pattern, patternNum, 10);
 
   // Construct the rest of the file name using the board size and pattern num
-  name += boardSize;
-  name += " - Pattern ";
-  name += patternNum;
-  name += ".e2";
+  filename += boardSize;
+  filename += " - Pattern ";
+  filename += patternNum;
+  filename += ".e2";
 
   for (int i = 0; i < (int)filenames.size(); i++)
   { // Loop through all filenames, checking if filename needed
-    if (filenames[i] == name)
+    if (filenames[i] == filename)
     { // If filename matches, store result
-      result = i;
+      index = i;
       break; // Break from loop if filename found
     }
   }
 
-  return result; // Return index found
+  return index; // Return index found
 
 } // getDataFilename()
 
 
 void FileHandler::parseData(std::string line,              // *In*
-                            int pData[5])                  // *Out*
+                            int parsedData[5])             // *Out*
 { // Takes string of data and parses into the array of integers to use to create		
   // the puzzle piece		
     
-  int j = 0;                        // Holds the index of char for parsing		
+  int index = 0;                    // Holds the index of char for parsing		
   std::string data = "";            // Holds the data gathered from getline	
   
   for (int i = 0; i < 5; i++)
@@ -344,38 +344,38 @@ void FileHandler::parseData(std::string line,              // *In*
 
     data.clear();                   // Empty the string ready for next data
     
-    while (line[j] != ' ' && j != line.length())
+    while (line[index] != ' ' && index != line.length())
     { // Loops though to check for whitespace in the file or it has reached		
       // the end of the data from that line. Data is added to the string on		
       // each pass		
        
-      data += line[j];    // Add the char to the string to be converted		
-      j++;                // Increment char counter for parsing		
+      data += line[index];    // Add the char to the string to be converted		
+      index++;                // Increment char counter for parsing		
     }
    
     // If whitepsace was found in line, skip to next char		
-    if (line[j] == ' ')
-      j++;
+    if (line[index] == ' ')
+      index++;
     
     // Convert the data to a int and set it to appropriate element		
-    pData[i] = std::stoi(data);
+    parsedData[i] = std::stoi(data);
   } // for (int i = 0; i <= 4; i++)		
  
 } // parseData()
 
 
-void FileHandler::createPiece(int pData[5])                // *In*
+void FileHandler::createPiece(int parsedData[5])           // *In*
 { // Creates a new puzzle piece and stores in the puzzle piece vector
 
   // Set each element of the piece to the parsed section of data
   PuzzlePiece newPiece;
 
-  newPiece.pieceID = pData[0];
-  newPiece.type = checkType(pData);
-  newPiece.segments[TOP] = pData[1];
-  newPiece.segments[RIGHT] = pData[2];
-  newPiece.segments[BOTTOM] = pData[3];
-  newPiece.segments[LEFT] = pData[4];
+  newPiece.pieceID = parsedData[0];
+  newPiece.type = checkType(parsedData);
+  newPiece.segments[TOP] = parsedData[1];
+  newPiece.segments[RIGHT] = parsedData[2];
+  newPiece.segments[BOTTOM] = parsedData[3];
+  newPiece.segments[LEFT] = parsedData[4];
   newPiece.orientation = 0;
 
   // Add piece to appropriate vector within pieces vector
@@ -389,23 +389,23 @@ void FileHandler::createPiece(int pData[5])                // *In*
 } // createPiece()
 
 
-PieceType FileHandler::checkType(int* pData)               // *In*
+PieceType FileHandler::checkType(int* parsedData)          // *In*
 { // Checks to see what type of piece is currently being read, returning the
   // answer
 
   PieceType type = DEFAULT;    // Object to return, holds types of piece
-  int count = 0;               // Count for how many times edge pattern occurs
+  int edgeCount = 0;               // Count for how many times edge pattern occurs
 
   for (int i = 0; i <= 4; i++)
   { // Loop for each quadrant to check if the pattern ID matches the edge pattern
 
-    if (pData[i] == 0)
+    if (parsedData[i] == 0)
     { // If the current quadrant has the edge pattern, increment the count
-      count++;
+      edgeCount++;
     }
   }
 
-  switch (count)
+  switch (edgeCount)
   { // Using how many edge patterns were counted, set the piece type
 
     case 0:  // If no edge patterns, piece is of the inner type

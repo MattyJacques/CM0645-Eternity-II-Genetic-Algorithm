@@ -48,7 +48,7 @@ void GeneticAlgorithm::setup(Settings theSettings)            // *In*
 void GeneticAlgorithm::runGA()
 { // Main function of the GA that continually runs
 
-  int stuckCounter = 200;    // Counts down from 200 for test if stuck
+  int sinceImprove = 200;    // Counts down from 200 for test if stuck
   int prevFitness = 0;       // Holds the previous fitness to check if stuck
 
   initRandomPopulation();    // Initialise the first population
@@ -60,11 +60,11 @@ void GeneticAlgorithm::runGA()
     { // If fitness has improved, reset the stuck counter and set new high
       // score for fitness
       prevFitness = currFitness;
-      stuckCounter = 200;
+      sinceImprove = 200;
     }
     else
     { // If fitness has no improved, decrememnt to stuck counter
-      stuckCounter--;
+      sinceImprove--;
     }
 
     genCount++;            // Increment the count of generations
@@ -80,7 +80,7 @@ void GeneticAlgorithm::runGA()
       genCount, currFitness, maxFitness, fitPercent, currMatches,
       maxMatches, matchPercent);
 
-    if (stuckCounter > 0)
+    if (sinceImprove > 0)
     { // If fitness improvement has been made in past 200 generations, keep
       // trying to solve
 
@@ -94,7 +94,7 @@ void GeneticAlgorithm::runGA()
     { // If 200 generations have passed without immproved fitness, reset 
       // population and fitness to try again
       initRandomPopulation();
-      stuckCounter = 200;
+      sinceImprove = 200;
       prevFitness = 0;
       currFitness = 0;
     }
@@ -148,11 +148,11 @@ void GeneticAlgorithm::initRandomPopulation()
   // repair method if fitness has not increased within a period of generations
 
   // Create a new vector for new population
-  std::vector<Board> newVec;
+  std::vector<Board> newPop;
 
   // Set the current population pointer to new population vector
   BoardManager::getInstance()->getPop() =
-    std::make_shared<std::vector<Board>>(newVec);
+    std::make_shared<std::vector<Board>>(newPop);
 
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
@@ -248,8 +248,8 @@ void GeneticAlgorithm::outputSettings(Settings theSettings)   // *In*
 void GeneticAlgorithm::outputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
-  FileHandler outFile;                       // Create object for output
-  outFile.outputFitness(currFitness);        // Call to output the fitness
+  FileHandler fileHandle;                     // Create object for output
+  fileHandle.outputFitness(currFitness);      // Call to output the fitness
 
 } // outputFitness()
 
@@ -257,13 +257,14 @@ void GeneticAlgorithm::outputFitness()
 void GeneticAlgorithm::outputSolved()
 { // Output the solved bored along with how many generation it took to solve
 
+  FileHandler fileHandle;                     // Filehandler to output to file
+
   for (int i = 0; i < popSize; i++)
   { // Loop through the population, checking to see which candidate is solved
 
     if (BoardManager::getInstance()->getPop()->at(i).fitScore == maxFitness)
     { // If board fitness is max fitness, call to output the board
-      FileHandler outFile;
-      outFile.outputBoard(&BoardManager::getInstance()->getPop()->at(i), 
+      fileHandle.outputBoard(&BoardManager::getInstance()->getPop()->at(i),
                           genCount);
       break;
     }
