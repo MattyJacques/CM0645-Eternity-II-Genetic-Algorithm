@@ -30,7 +30,7 @@ void GeneticAlgorithm::setup(Settings theSettings)            // *In*
   maxMatches = 0;                // Init maximum matches in candidate
 
   // Set if the start piece constraint is active
-  startPiece = theSettings.startCons;
+  isStartPiece = theSettings.startCons;
 
   // Output all settings to user
   outputSettings(theSettings);
@@ -87,8 +87,8 @@ void GeneticAlgorithm::runGA()
       // Switch current population to previous and create new population
       BoardManager::getInstance()->switchPop();
 
-      theCrossover.doCrossover(popSize);  // Complete crossover of population
-      theMutation.doMutation(startPiece); // Complete mutation of population
+      theCrossover.doCrossover(popSize);    // Complete crossover of population
+      theMutation.doMutation(isStartPiece); // Complete mutation of population
     }
     else
     { // If 200 generations have passed without immproved fitness, reset 
@@ -157,7 +157,7 @@ void GeneticAlgorithm::initRandomPopulation()
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
     Board newBoard;
-    BoardManager::getInstance()->initFullBoard(&newBoard, startPiece);
+    BoardManager::getInstance()->initFullBoard(&newBoard, isStartPiece);
     newBoard.boardID = (int)BoardManager::getInstance()->getPop()->size() + 1;
     BoardManager::getInstance()->getPop()->push_back(newBoard);
   }
