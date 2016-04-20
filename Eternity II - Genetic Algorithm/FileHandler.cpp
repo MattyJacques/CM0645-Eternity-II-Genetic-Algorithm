@@ -119,7 +119,7 @@ void FileHandler::readDataFile(int size,                   // *In*
 } // readDataFile()
 
 
-void FileHandler::outputBoard(Board* pBoard,               // *In*
+void FileHandler::outputBoard(Board* theBoard,               // *In*
                               int genCount)                // *In*
 { // Output the board to a file to show progress or solved board, file name is
   // date generation and time ran.
@@ -127,8 +127,8 @@ void FileHandler::outputBoard(Board* pBoard,               // *In*
   if (openFile(outFilename.c_str()))
   { // If file has been created and open successfully output the data
 
-    outputMatches(pBoard, genCount);   // Output board with pattern IDs
-    outputIDs(pBoard, genCount);       // Output board with piece IDs 
+    outputMatches(theBoard, genCount);   // Output board with pattern IDs
+    outputIDs(theBoard, genCount);       // Output board with piece IDs 
     theFile.close();                   // Close the file after use
   }
 
@@ -316,7 +316,7 @@ int FileHandler::getDataFilename(int size,                 // *In*
   name += patternNum;
   name += ".e2";
 
-  for (int i = 0; i < filenames.size(); i++)
+  for (int i = 0; i < (int)filenames.size(); i++)
   { // Loop through all filenames, checking if filename needed
     if (filenames[i] == name)
     { // If filename matches, store result
@@ -460,7 +460,7 @@ void FileHandler::setOutFilename(int boardSize,            // *In*
 } // setOutFilename()
 
 
-void FileHandler::outputMatches(Board* pBoard,             // *In*
+void FileHandler::outputMatches(Board* theBoard,             // *In*
                                 int genCount)              // *In*
 { // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
@@ -478,7 +478,7 @@ void FileHandler::outputMatches(Board* pBoard,             // *In*
       // of output.
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, TOP), buff, 
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, TOP), buff, 
            10);
 
       output[0] += "  ";      // Add whitespace for formatting
@@ -486,20 +486,20 @@ void FileHandler::outputMatches(Board* pBoard,             // *In*
       output[0] += "  ";      // Add more whitespace for formatting
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, LEFT), buff,
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, LEFT), buff,
            10);
 
       output[1] += buff;     // Add converted pattern ID to the middle line
       output[1] += "   ";    // Add whitespace for formatting
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, RIGHT), buff,
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, RIGHT), buff,
            10);
 
       output[1] += buff;     // Add right pattern ID to middle line
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(pBoard, i, j, BOTTOM), buff,
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, BOTTOM), buff,
            10);
 
       output[2] += "  ";    // Add whitespace for formatting
@@ -519,7 +519,7 @@ void FileHandler::outputMatches(Board* pBoard,             // *In*
 } // outputMatches()
 
 
-void FileHandler::outputIDs(Board* pBoard,                 // *In*
+void FileHandler::outputIDs(Board* theBoard,                 // *In*
                             int genCount)                  // *In*
 { // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution
@@ -532,11 +532,11 @@ void FileHandler::outputIDs(Board* pBoard,                 // *In*
     { // X index for pieces to output
 
       // Output piece ID and add comma for separator
-      theFile << pBoard->boardVecs[i][j].pieceID << ",";
+      theFile << theBoard->boardVecs[i][j].pieceID << ",";
 
       // Output the piece orientation and add some whitespace to seperate
       // piece data
-      theFile << pBoard->boardVecs[i][j].orientation << "  ";
+      theFile << theBoard->boardVecs[i][j].orientation << "  ";
     }
 
     theFile << std::endl; // Add whitespace for next row
@@ -630,23 +630,23 @@ void FileHandler::outputDataFile(std::string filename)     // *In*
   
   if (openFile(filename.c_str()))
   {
-    for (int i = 0; i < BoardManager::getInstance()->getPieces()[CORNER].size();
-         i++)
+    for (int i = 0; i < (int)BoardManager::getInstance()->getPieces()[CORNER].
+         size(); i++)
     { // Output corners to data file
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].pieceID << 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].pieceID <<
         std::endl;
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[0] 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[0]
         << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[1] 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[1]
         << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[2] 
+      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[2]
         << " ";
       theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[3];
       theFile << std::endl;
     }
 
-    for (int i = 0; i < (*BoardManager::getInstance()->getPieces())[EDGE].size(); 
-         i++)
+    for (int i = 0; i < (int)(*BoardManager::getInstance()->getPieces())[EDGE].
+         size(); i++)
     { // Output edge pieces to data file
       theFile << (*BoardManager::getInstance()->getPieces())[1][i].pieceID << 
         " ";
@@ -660,7 +660,7 @@ void FileHandler::outputDataFile(std::string filename)     // *In*
       theFile << std::endl;
     }
 
-    for (int i = 0; i < (*BoardManager::getInstance()->getPieces())[INNER].
+    for (int i = 0; i < (int)(*BoardManager::getInstance()->getPieces())[INNER].
          size(); i++)
     { // Output the inner pieces to data file
       theFile << (*BoardManager::getInstance()->getPieces())[2][i].pieceID << 

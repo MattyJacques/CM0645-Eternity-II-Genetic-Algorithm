@@ -87,23 +87,23 @@ private:
 
   // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted
-  void initTopEdge(Board* pBoard);                         // *Out*  
+  void initTopEdge(Board* theBoard);                         // *Out*  
 
   // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
-  void initCornersSides(Board* pBoard);                    // *Out*
+  void initCornersSides(Board* theBoard);                    // *Out*
 
   // Adds pieces to the empty boards, top edge first, moving on to inner slots
   // then finally filling in the corners, side edges and bottom edge
-  void addPieces(Board* pBoard);                           // *Out*
+  void addPieces(Board* theBoard);                           // *Out*
 
   // If an official Eternity II solve attempt, make sure the start piece
   // constraint is met by placing the piece with the ID 139 on slot [7][8]
-  void fixStartPiece(Board* pBoard);                       // *Out*
+  void fixStartPiece(Board* theBoard);                       // *Out*
 
   // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
-  void swapStartPiece(Board* pBoard,                       // *Out*
+  void swapStartPiece(Board* theBoard,                       // *Out*
                       int xIndex,                          // *In*  
                       int yIndex);                         // *In*
 
@@ -139,7 +139,7 @@ private:
 
   // Fill the piece vectors with the pieces located within the board given as
   // the parameter
-  void populatePieces(Board* pBoard);                      // *In*
+  void populatePieces(Board* theBoard);                      // *In*
 
 public:
   // Returns the instance to the class, if none currently exists, creates one
@@ -166,15 +166,15 @@ public:
                       int patNum);                         // *In*
 
   // Initialises the boards vector of vectors with empty vectors
-  void initEmptyBoard(Board* pBoard);                      // *Out*
+  void initEmptyBoard(Board* theBoard);                      // *Out*
 
   // Creates the inital board filled with randomised order of pieces
-  void initFullBoard(Board* pBoard,                        // *Out*
+  void initFullBoard(Board* theBoard,                        // *Out*
                      bool startPiece);                     // *In*
 
   // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
-  int getPattern(Board* pBoard,                            // *In*
+  int getPattern(Board* theBoard,                            // *In*
                  int xIndex,                               // *In*
                  int yIndex,                               // *In*
                  segLocation segment);                     // *In*

@@ -96,28 +96,28 @@ void BoardManager::initialiseData(int size,                            // *In*
 } // initialiseData()
 
 
-void BoardManager::initEmptyBoard(Board* pBoard)                       // *Out*  
+void BoardManager::initEmptyBoard(Board* theBoard)                       // *Out*  
 { // Initialises the boards vector of vectors with empty vectors
 
   for (int i = 0; i <= boardSize; i++)
   { // Loop through and create vector of pieces for the board and push on to
     // vector of vectors
     std::vector<PuzzlePiece> newVec;
-    pBoard->boardVecs.push_back(newVec);
+    theBoard->boardVecs.push_back(newVec);
   }
 
 } // initEmptyBoard()
 
 
-void BoardManager::initFullBoard(Board* pBoard,                        // *Out*
+void BoardManager::initFullBoard(Board* theBoard,                        // *Out*
                                  bool startPiece)                      // *In*
 { // Creates the inital board filled with randomised order of pieces
 
   // Set the ID of the board
-  pBoard->boardID = (int)currBoards->size() + 1;
+  theBoard->boardID = (int)currBoards->size() + 1;
 
   // Fill vector of vectors with empty vectors
-  initEmptyBoard(pBoard);
+  initEmptyBoard(theBoard);
 
   for (int i = 0; i < 3; i++)
   { // Loop to shuffle all piece types
@@ -127,17 +127,17 @@ void BoardManager::initFullBoard(Board* pBoard,                        // *Out*
   }
 
   // Add pieces to empty vectors
-  addPieces(pBoard);
+  addPieces(theBoard);
 
   // If starting piece constraint is active and piece 139 is not in slot [7][8]
   // place piece 139 in slot [7][8]
-  if (startPiece && pBoard->boardVecs[7][8].pieceID != 139)
-    fixStartPiece(pBoard);
+  if (startPiece && theBoard->boardVecs[7][8].pieceID != 139)
+    fixStartPiece(theBoard);
 
 } // initFullBoard()
 
 
-int BoardManager::getPattern(Board* pBoard,                            // *In*
+int BoardManager::getPattern(Board* theBoard,                            // *In*
                              int xIndex,                               // *In*
                              int yIndex,                               // *In*
                              segLocation segment)                      // *In*
@@ -145,7 +145,7 @@ int BoardManager::getPattern(Board* pBoard,                            // *In*
   // provided taking into consideration the orientation of the piece
 
   // Get the index of the segment taking into account orientation
-  int index = (segment - pBoard->boardVecs[xIndex][yIndex].orientation);
+  int index = (segment - theBoard->boardVecs[xIndex][yIndex].orientation);
 
   if (index < 0)
   { // If index is below limit, cycle back around
@@ -164,7 +164,7 @@ int BoardManager::getPattern(Board* pBoard,                            // *In*
   }
 
   // Modular of 4 to keep segment index 3 or below
-  return pBoard->boardVecs[xIndex][yIndex].segments[index];
+  return theBoard->boardVecs[xIndex][yIndex].segments[index];
 
 } // getPattern()
 
@@ -303,7 +303,7 @@ void BoardManager::generateBoard(int size,                             // *In*
 } // generateBoard()
 
 
-void BoardManager::initTopEdge(Board* pBoard)                          // *Out* 
+void BoardManager::initTopEdge(Board* theBoard)                          // *Out* 
 { // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted
 
@@ -311,30 +311,30 @@ void BoardManager::initTopEdge(Board* pBoard)                          // *Out*
   { // Add edge pieces to inner 13 vectors (so not left and right most vectors)
     // Rotate as needed
     fixOrientation(&pieceVec[EDGE][i], i + 1, 0);
-    pBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i]);
+    theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i]);
   }
 
 } // initTopEdge()
 
 
-void BoardManager::initCornersSides(Board* pBoard)                     // *Out*
+void BoardManager::initCornersSides(Board* theBoard)                     // *Out*
 { // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
 
   // Push the first two corner pieces on to the top left and right corners
   // of the board rotating as needed
   fixOrientation(&pieceVec[CORNER][0], 0, 0);
-  pBoard->boardVecs[0].push_back(pieceVec[CORNER][0]);
+  theBoard->boardVecs[0].push_back(pieceVec[CORNER][0]);
   fixOrientation(&pieceVec[CORNER][1], boardSize, 0);
-  pBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][1]);
+  theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][1]);
 
   for (int i = 0; i < boardSize - 1; i++)
   { // Loops through and push edge pieces on to the left and right edges
     // of the board rotating as needed
     fixOrientation(&pieceVec[EDGE][i + boardSize - 1], 0, i + 1);
-    pBoard->boardVecs[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
+    theBoard->boardVecs[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
     fixOrientation(&pieceVec[EDGE][i + (boardSize * 2) - 2], boardSize, i + 1);
-    pBoard->boardVecs[boardSize].push_back(pieceVec[EDGE]
+    theBoard->boardVecs[boardSize].push_back(pieceVec[EDGE]
       [i + (boardSize * 2) - 2]);
   }
 
@@ -342,20 +342,20 @@ void BoardManager::initCornersSides(Board* pBoard)                     // *Out*
   { // Loops through and adds an edge piece to each vector for the bottom edge
     // of the board rotating as needed
     fixOrientation(&pieceVec[EDGE][i + (boardSize * 3) - 3], i + 1, boardSize);
-    pBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
+    theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
   }
 
   // Push the last two corner pieces on to the bottom left and bottom right
   // corners of the board rotating as needed
   fixOrientation(&pieceVec[CORNER][2], 0, boardSize);
-  pBoard->boardVecs[0].push_back(pieceVec[CORNER][2]);
+  theBoard->boardVecs[0].push_back(pieceVec[CORNER][2]);
   fixOrientation(&pieceVec[CORNER][3], boardSize, boardSize);
-  pBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][3]);
+  theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][3]);
 
 } // initCornersSides()
 
 
-void BoardManager::addPieces(Board* pBoard)                            // *Out*
+void BoardManager::addPieces(Board* theBoard)                            // *Out*
 { // Adds pieces to the empty boards, top edge first, moving on to inner slots
   // then finally filling in the corners, side edges and bottom edge
 
@@ -363,13 +363,13 @@ void BoardManager::addPieces(Board* pBoard)                            // *Out*
   int count = 0;         // Count how many pieces places to increment index
 
   // Add edge pieces to vectors that will contain inner pieces
-  initTopEdge(pBoard);
+  initTopEdge(theBoard);
 
   for (PuzzlePiece piece : pieceVec[INNER])
   { // Loop through the collection of pieces
 
     // Add piece to line on board and increment push count
-    pBoard->boardVecs[index].push_back(piece);
+    theBoard->boardVecs[index].push_back(piece);
     count++;
 
     if (count == boardSize - 1)
@@ -381,26 +381,26 @@ void BoardManager::addPieces(Board* pBoard)                            // *Out*
   }
 
   // Add rest of border pieces
-  initCornersSides(pBoard);
+  initCornersSides(theBoard);
 
 } // addPieces()
 
 
-void BoardManager::fixStartPiece(Board* pBoard)                        // *Out*
+void BoardManager::fixStartPiece(Board* theBoard)                        // *Out*
 { // If an official Eternity II solve attempt, make sure the start piece
   // constraint is met by placing the piece with the ID 139 on slot [7][8]
 
   int xIndex = 1;     // X index for slot
   int yIndex = 1;     // Y index for slot
 
-  for (int i = 0; i < pieceVec[INNER].size(); i++)
+  for (int i = 0; i < (int)pieceVec[INNER].size(); i++)
   { // Loop through for every inner piece within the board
 
-    if (pBoard->boardVecs[xIndex][yIndex].pieceID == 139 && xIndex != 7 &&
+    if (theBoard->boardVecs[xIndex][yIndex].pieceID == 139 && xIndex != 7 &&
       yIndex != 8)
     { // If the ID of piece is 139 call subroutine to place piece 139 in slot
       // [7][8] then break out of loop as no further action is needed
-      swapStartPiece(pBoard, xIndex, yIndex);
+      swapStartPiece(theBoard, xIndex, yIndex);
       break;
     }
       
@@ -415,20 +415,20 @@ void BoardManager::fixStartPiece(Board* pBoard)                        // *Out*
 } // fixStartPiece()
 
 
-void BoardManager::swapStartPiece(Board* pBoard,                       // *Out*
+void BoardManager::swapStartPiece(Board* theBoard,                       // *Out*
                                   int xIndex,                          // *In*  
                                   int yIndex)                          // *In*
 { // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
 
   // Store piece that is in the starting slot in temp storage
-  PuzzlePiece temp = pBoard->boardVecs[7][8];
+  PuzzlePiece temp = theBoard->boardVecs[7][8];
 
   // Place starting piece in the starting slot
-  pBoard->boardVecs[7][8] = pBoard->boardVecs[xIndex][yIndex];
+  theBoard->boardVecs[7][8] = theBoard->boardVecs[xIndex][yIndex];
 
   // Place piece back in to the slot that the starting piece was located
-  pBoard->boardVecs[xIndex][yIndex] = temp;
+  theBoard->boardVecs[xIndex][yIndex] = temp;
 
 } // swapStartPiece()
 
@@ -606,26 +606,26 @@ PuzzlePiece BoardManager::genInner(int pattern1,                       // *In*
 } // genInner()
 
 
-void BoardManager::populatePieces(Board* pBoard)                       // *In*
+void BoardManager::populatePieces(Board* theBoard)                       // *In*
 { // Fill the piece vectors with the pieces located within the board given as
   // the parameter
 
   int pieceCount = 1;     // Counts number of pieces for pieceID
 
   // Push all corners to the piece vectors
-  pieceVec[0].push_back(pBoard->boardVecs[0][0]);
+  pieceVec[0].push_back(theBoard->boardVecs[0][0]);
   pieceVec[0][0].pieceID = pieceCount;
   pieceCount++;
 
-  pieceVec[0].push_back(pBoard->boardVecs[boardSize][0]);
+  pieceVec[0].push_back(theBoard->boardVecs[boardSize][0]);
   pieceVec[0][1].pieceID = pieceCount;
   pieceCount++;
 
-  pieceVec[0].push_back(pBoard->boardVecs[0][boardSize]);
+  pieceVec[0].push_back(theBoard->boardVecs[0][boardSize]);
   pieceVec[0][2].pieceID = pieceCount;
   pieceCount++;
 
-  pieceVec[0].push_back(pBoard->boardVecs[boardSize][boardSize]);
+  pieceVec[0].push_back(theBoard->boardVecs[boardSize][boardSize]);
   pieceVec[0][3].pieceID = pieceCount;
   pieceCount++;
 
@@ -633,28 +633,28 @@ void BoardManager::populatePieces(Board* pBoard)                       // *In*
 
   for (int i = 1; i < boardSize; i++)
   { // Push the top edge to the piece vectors
-    pieceVec[1].push_back(pBoard->boardVecs[i][0]);
+    pieceVec[1].push_back(theBoard->boardVecs[i][0]);
     pieceVec[1].back().pieceID = pieceCount;
     pieceCount++;
   }
 
   for (int i = 1; i < boardSize; i++)
   { // Push the left edge to the piece vectors
-    pieceVec[1].push_back(pBoard->boardVecs[0][i]);
+    pieceVec[1].push_back(theBoard->boardVecs[0][i]);
     pieceVec[1].back().pieceID = pieceCount;
     pieceCount++;
   }
 
   for (int i = 1; i < boardSize; i++)
   { // Push the right edge to the piece vectors
-    pieceVec[1].push_back(pBoard->boardVecs[boardSize][i]);
+    pieceVec[1].push_back(theBoard->boardVecs[boardSize][i]);
     pieceVec[1].back().pieceID = pieceCount;
     pieceCount++;
   }
 
   for (int i = 1; i < boardSize; i++)
   { // Push the bottom edge to the piece vectors
-    pieceVec[1].push_back(pBoard->boardVecs[i][boardSize]);
+    pieceVec[1].push_back(theBoard->boardVecs[i][boardSize]);
     pieceVec[1].back().pieceID = pieceCount;
     pieceCount++;
   }
@@ -663,7 +663,7 @@ void BoardManager::populatePieces(Board* pBoard)                       // *In*
   { // X index to push the inner puzzle pieces within the piece vectors
     for (int j = 1; j < boardSize; j++)
     { // Y index to push pieces to vector
-      pieceVec[2].push_back(pBoard->boardVecs[i][j]);
+      pieceVec[2].push_back(theBoard->boardVecs[i][j]);
       pieceVec[2].back().pieceID = pieceCount;
       pieceCount++;
     }

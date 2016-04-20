@@ -19,8 +19,8 @@ class FitnessFunction
 {
 
 private:
-  Board* pBoard;                        // Holds pointer to current board
-  BoardManager* pBoardMan;              // For access to board size
+  Board* theBoard;                        // Holds pointer to current board
+  BoardManager* boardMan;              // For access to board size
 
   // Checks to see if the pattern located on right side of piece1 matches the
   // pattern located on the left of piece2

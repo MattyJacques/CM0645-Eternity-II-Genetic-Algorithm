@@ -76,13 +76,13 @@ private:
 
   // Scans through the candidate board to see if there are any pieces that appear
   // more than once within the candidate, uses vector to store puzzle pieces
-  void getDuplicates(Board* pBoard,                             // *In*
+  void getDuplicates(Board* theBoard,                             // *In*
                      std::vector<PuzzlePiece>* pieces,          // *Out*
                      std::vector<std::vector<int>>* indexes);   // *Out*
 
   // Checks all corners to see if there are any duplicate pieces within the
   // corner slots, if so store the piece and the index of the duplicate slot
-  void checkCorners(Board* pBoard,                              // *In*
+  void checkCorners(Board* theBoard,                              // *In*
                     std::vector<PuzzlePiece>* pieces,           // *Out*
                     std::vector<std::vector<int>>* indexes,     // *Out*
                     int boardSize,                              // *In*
@@ -90,7 +90,7 @@ private:
 
   // Checks all edges to see if there are any duplicate pieces within the
   // edge slots, if so store the piece and the index of the duplicate slot
-  void checkEdges(Board* pBoard,                                // *In*
+  void checkEdges(Board* theBoard,                                // *In*
                   std::vector<PuzzlePiece>* pieces,             // *Out*
                   std::vector<std::vector<int>>* indexes,       // *Out*
                   int boardSize,                                // *In*
@@ -98,7 +98,7 @@ private:
 
   // Checks all inner slots to see if there are any duplicate pieces within the
   // inner slots, if so store the piece and the index of the duplicate slot
-  void checkInners(Board* pBoard,                               // *In*
+  void checkInners(Board* theBoard,                               // *In*
                    std::vector<PuzzlePiece>* pieces,            // *Out*
                    std::vector<std::vector<int>>* indexes,      // *Out*
                    int boardSize,                               // *In*
@@ -107,7 +107,7 @@ private:
   // Uses the vector of pieces along with the vector of slot indexes to place
   // pieces that are needed to to have every unique puzzle piece with in the
   // candidate
-  void fixDuplicates(Board* pBoard,                             // *In-Out*
+  void fixDuplicates(Board* theBoard,                             // *In-Out*
                      std::vector<PuzzlePiece> pieces,           // *In*
                      std::vector<std::vector<int>> indexes);    // *In*
 

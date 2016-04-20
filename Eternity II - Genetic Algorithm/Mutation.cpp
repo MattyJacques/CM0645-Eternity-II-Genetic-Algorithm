@@ -212,29 +212,29 @@ void Mutation::swapPiece(int boardID,          // *In*
   // also given as parameters
 
   // Create pointer to board to work with and initalise to point to board
-  Board* pBoard = &BoardManager::getInstance()->getPop()->at(boardID);
+  Board* theBoard = &BoardManager::getInstance()->getPop()->at(boardID);
 
   // Temp puzzle piece to use during the swap
-  PuzzlePiece temp = pBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
+  PuzzlePiece temp = theBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]];
 
   // Place the second puzzle piece where first puzzle piece was located
-  pBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]] =
-    pBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]];
+  theBoard->boardVecs[pieceIndex1[0]][pieceIndex1[1]] =
+    theBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]];
 
   // Place first puzzle piece back in second puzzle piece slot
-  pBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]] = temp;
+  theBoard->boardVecs[pieceIndex2[0]][pieceIndex2[1]] = temp;
 
   if (temp.type == EDGE || temp.type == CORNER)
   { // Make sure the pieces are roatetd correctly if mutation occured on a 
     // corner or edge piece
 
     // Rotate piece 1
-    BoardManager::getInstance()->fixOrientation(&pBoard->boardVecs[pieceIndex1[0]]
+    BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs[pieceIndex1[0]]
       [pieceIndex1[1]], pieceIndex1[0],
       pieceIndex1[1]);
 
     // Rotate piece 2
-    BoardManager::getInstance()->fixOrientation(&pBoard->boardVecs[pieceIndex2[0]]
+    BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs[pieceIndex2[0]]
       [pieceIndex2[1]], pieceIndex2[0],
       pieceIndex2[1]);
   }

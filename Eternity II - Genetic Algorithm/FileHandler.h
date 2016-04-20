@@ -66,12 +66,12 @@ private:
 
   // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
-  void outputMatches(Board* pBoard,                   // *In*
+  void outputMatches(Board* theBoard,                   // *In*
                      int genCount);                   // *In*
 
   // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution
-  void outputIDs(Board* pBoard,                       // *In*
+  void outputIDs(Board* theBoard,                       // *In*
                  int genCount);                       // *In*
 
   // Append the selection method and crossover method to filename
@@ -105,7 +105,7 @@ public:
 
   // Output the board to a file to show progress or solved board, file name is
   // date, generation and time ran.
-  void outputBoard(Board* pBoard,                     // *In* 
+  void outputBoard(Board* theBoard,                     // *In* 
                    int genCount);                     // *In*
 
   // Calculate the output filename
