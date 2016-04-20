@@ -34,8 +34,8 @@ private:
                      int popSize,                               // *In*
                      int totalFitness);                         // *In*
 
-  // Selects candidates via the roulette wheel method mentioned within the report
-  // in chapter 3
+  // Selects candidates via the roulette wheel method mentioned within the 
+  // report in chapter 3
   void rouletteSelect(Board* parents[2],                        // *Out*
                       int fitness);                             // *In*
 
@@ -59,9 +59,9 @@ private:
                   Board* offspring1,                            // *Out*
                   Board* offspring2);                           // *Out*
 
-  // Takes two candidates, selects a point of the candidate to slice and exchanges
-  // the data after that point with the second parent, explained fully in the
-  // report, chapter 3
+  // Takes two candidates, selects a point of the candidate to slice and 
+  // exchanges the data after that point with the second parent, explained fully
+  // in the report, chapter 3
   void onePoint(Board* parents[2]);                             // *In*
 
   // Takes two candidates, selects two points of the candidate to slice and
@@ -74,15 +74,16 @@ private:
   // to place pieces within the candidate that no longer has them
   void checkDuplication();
 
-  // Scans through the candidate board to see if there are any pieces that appear
-  // more than once within the candidate, uses vector to store puzzle pieces
-  void getDuplicates(Board* theBoard,                             // *In*
+  // Scans through the candidate board to see if there are any pieces that 
+  // appear more than once within the candidate, uses vector to store puzzle 
+  // pieces
+  void getDuplicates(Board* theBoard,                           // *In*
                      std::vector<PuzzlePiece>* pieces,          // *Out*
                      std::vector<std::vector<int>>* indexes);   // *Out*
 
   // Checks all corners to see if there are any duplicate pieces within the
   // corner slots, if so store the piece and the index of the duplicate slot
-  void checkCorners(Board* theBoard,                              // *In*
+  void checkCorners(Board* theBoard,                            // *In*
                     std::vector<PuzzlePiece>* pieces,           // *Out*
                     std::vector<std::vector<int>>* indexes,     // *Out*
                     int boardSize,                              // *In*
@@ -90,7 +91,7 @@ private:
 
   // Checks all edges to see if there are any duplicate pieces within the
   // edge slots, if so store the piece and the index of the duplicate slot
-  void checkEdges(Board* theBoard,                                // *In*
+  void checkEdges(Board* theBoard,                              // *In*
                   std::vector<PuzzlePiece>* pieces,             // *Out*
                   std::vector<std::vector<int>>* indexes,       // *Out*
                   int boardSize,                                // *In*
@@ -98,7 +99,7 @@ private:
 
   // Checks all inner slots to see if there are any duplicate pieces within the
   // inner slots, if so store the piece and the index of the duplicate slot
-  void checkInners(Board* theBoard,                               // *In*
+  void checkInners(Board* theBoard,                             // *In*
                    std::vector<PuzzlePiece>* pieces,            // *Out*
                    std::vector<std::vector<int>>* indexes,      // *Out*
                    int boardSize,                               // *In*
@@ -107,7 +108,7 @@ private:
   // Uses the vector of pieces along with the vector of slot indexes to place
   // pieces that are needed to to have every unique puzzle piece with in the
   // candidate
-  void fixDuplicates(Board* theBoard,                             // *In-Out*
+  void fixDuplicates(Board* theBoard,                           // *In-Out*
                      std::vector<PuzzlePiece> pieces,           // *In*
                      std::vector<std::vector<int>> indexes);    // *In*
 

@@ -75,8 +75,9 @@ Settings FileHandler::readSettingsFile()
   readDataFile(settingData.boardSize, settingData.patternNum);
 
   // Calculate output filename
-  setOutFilename(settingData.boardSize, settingData.patternNum, settingData.selectType,
-                 settingData.crossType, settingData.mutType);
+  setOutFilename(settingData.boardSize, settingData.patternNum, 
+                 settingData.selectType, settingData.crossType, 
+                 settingData.mutType);
 
   return settingData;  // Return parsed data
 
@@ -402,10 +403,11 @@ PieceType FileHandler::checkType(int* parsedData)          // *In*
   // answer
 
   PieceType type = DEFAULT;    // Object to return, holds types of piece
-  int edgeCount = 0;               // Count for how many times edge pattern occurs
+  int edgeCount = 0;           // Count for how many times edge pattern occurs
 
   for (int i = 0; i <= 4; i++)
-  { // Loop for each quadrant to check if the pattern ID matches the edge pattern
+  { // Loop for each quadrant to check if the pattern ID matches the edge 
+    // pattern
 
     if (parsedData[i] == 0)
     { // If the current quadrant has the edge pattern, increment the count
@@ -468,7 +470,7 @@ void FileHandler::setOutFilename(int boardSize,            // *In*
 } // setOutFilename()
 
 
-void FileHandler::outputMatches(Board* theBoard,             // *In*
+void FileHandler::outputMatches(Board* theBoard,           // *In*
                                 int genCount)              // *In*
 { // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
@@ -486,29 +488,29 @@ void FileHandler::outputMatches(Board* theBoard,             // *In*
       // of output.
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, TOP), buff, 
-           10);
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, TOP), 
+              buff, 10);
 
       output[0] += "  ";      // Add whitespace for formatting
       output[0] += buff;      // Add converted pattern ID to top line
       output[0] += "  ";      // Add more whitespace for formatting
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, LEFT), buff,
-           10);
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, LEFT), 
+              buff, 10);
 
       output[1] += buff;     // Add converted pattern ID to the middle line
       output[1] += "   ";    // Add whitespace for formatting
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, RIGHT), buff,
-           10);
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, RIGHT), 
+              buff, 10);
 
       output[1] += buff;     // Add right pattern ID to middle line
 
       // Convert pattern ID to char
-      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, BOTTOM), buff,
-           10);
+      _itoa_s(BoardManager::getInstance()->getPattern(theBoard, i, j, BOTTOM), 
+              buff, 10);
 
       output[2] += "  ";    // Add whitespace for formatting
       output[2] += buff;    // Add bottom pattern ID to bottom line
@@ -527,7 +529,7 @@ void FileHandler::outputMatches(Board* theBoard,             // *In*
 } // outputMatches()
 
 
-void FileHandler::outputIDs(Board* theBoard,                 // *In*
+void FileHandler::outputIDs(Board* theBoard,               // *In*
                             int genCount)                  // *In*
 { // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution

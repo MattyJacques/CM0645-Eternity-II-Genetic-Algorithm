@@ -241,12 +241,12 @@ void Mutation::swapPiece(int boardID,          // *In*
     // corner or edge piece
 
     // Rotate piece 1
-    BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs[pieceIndex1[0]]
-      [pieceIndex1[1]], pieceIndex1[0],
-      pieceIndex1[1]);
+    BoardManager::getInstance()->fixOrien(&theBoard->boardVecs
+                                          [pieceIndex1[0]][pieceIndex1[1]], 
+                                          pieceIndex1[0], pieceIndex1[1]);
 
     // Rotate piece 2
-    BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs[pieceIndex2[0]]
+    BoardManager::getInstance()->fixOrien(&theBoard->boardVecs[pieceIndex2[0]]
       [pieceIndex2[1]], pieceIndex2[0],
       pieceIndex2[1]);
   }

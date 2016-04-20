@@ -172,9 +172,9 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
 } // getPattern()
 
 
-void BoardManager::fixOrientation(PuzzlePiece* piece,                  // *Out*
-                                  int yIndex,                          // *In*
-                                  int xIndex)                          // *In*
+void BoardManager::fixOrien(PuzzlePiece* piece,                        // *Out*
+                            int yIndex,                                // *In*
+                            int xIndex)                                // *In*
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
 
@@ -317,7 +317,7 @@ void BoardManager::initTopEdge(Board* theBoard)                        // *Out*
   for (int i = 0; i <= boardSize - 2; i++)
   { // Add edge pieces to inner 13 vectors (so not left and right most vectors)
     // Rotate as needed
-    fixOrientation(&pieceVec[EDGE][i], i + 1, 0);
+    fixOrien(&pieceVec[EDGE][i], i + 1, 0);
     theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i]);
   }
 
@@ -330,17 +330,17 @@ void BoardManager::initCornersSides(Board* theBoard)                   // *Out*
 
   // Push the first two corner pieces on to the top left and right corners
   // of the board rotating as needed
-  fixOrientation(&pieceVec[CORNER][0], 0, 0);
+  fixOrien(&pieceVec[CORNER][0], 0, 0);
   theBoard->boardVecs[0].push_back(pieceVec[CORNER][0]);
-  fixOrientation(&pieceVec[CORNER][1], boardSize, 0);
+  fixOrien(&pieceVec[CORNER][1], boardSize, 0);
   theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][1]);
 
   for (int i = 0; i < boardSize - 1; i++)
   { // Loops through and push edge pieces on to the left and right edges
     // of the board rotating as needed
-    fixOrientation(&pieceVec[EDGE][i + boardSize - 1], 0, i + 1);
+    fixOrien(&pieceVec[EDGE][i + boardSize - 1], 0, i + 1);
     theBoard->boardVecs[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
-    fixOrientation(&pieceVec[EDGE][i + (boardSize * 2) - 2], boardSize, i + 1);
+    fixOrien(&pieceVec[EDGE][i + (boardSize * 2) - 2], boardSize, i + 1);
     theBoard->boardVecs[boardSize].push_back(pieceVec[EDGE]
       [i + (boardSize * 2) - 2]);
   }
@@ -348,15 +348,16 @@ void BoardManager::initCornersSides(Board* theBoard)                   // *Out*
   for (int i = 0; i <= boardSize - 2; i++)
   { // Loops through and adds an edge piece to each vector for the bottom edge
     // of the board rotating as needed
-    fixOrientation(&pieceVec[EDGE][i + (boardSize * 3) - 3], i + 1, boardSize);
-    theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i + (boardSize * 3) - 3]);
+    fixOrien(&pieceVec[EDGE][i + (boardSize * 3) - 3], i + 1, boardSize);
+    theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE]
+                                         [i + (boardSize * 3) - 3]);
   }
 
   // Push the last two corner pieces on to the bottom left and bottom right
   // corners of the board rotating as needed
-  fixOrientation(&pieceVec[CORNER][2], 0, boardSize);
+  fixOrien(&pieceVec[CORNER][2], 0, boardSize);
   theBoard->boardVecs[0].push_back(pieceVec[CORNER][2]);
-  fixOrientation(&pieceVec[CORNER][3], boardSize, boardSize);
+  fixOrien(&pieceVec[CORNER][3], boardSize, boardSize);
   theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][3]);
 
 } // initCornersSides()
@@ -450,7 +451,8 @@ void BoardManager::rotateEdge(PuzzlePiece* piece,                      // *Out*
     piece->orientation = 2;
   }
   else if (xIndex == boardSize && yIndex >= 1 && yIndex <= boardSize - 1)
-  { // If y is between 1 and boardSize - 1 and x = boardSize set orientation to 3
+  { // If y is between 1 and boardSize - 1 and x = boardSize set orientation to 
+    // 3
     piece->orientation = 3;
   }
   else if (xIndex >= 1 && xIndex <= boardSize - 1 && yIndex == boardSize)

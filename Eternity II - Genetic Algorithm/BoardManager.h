@@ -103,7 +103,7 @@ private:
 
   // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
-  void swapStartPiece(Board* theBoard,                       // *Out*
+  void swapStartPiece(Board* theBoard,                     // *Out*
                       int xIndex,                          // *In*  
                       int yIndex);                         // *In*
 
@@ -139,7 +139,7 @@ private:
 
   // Fill the piece vectors with the pieces located within the board given as
   // the parameter
-  void populatePieces(Board* theBoard);                      // *In*
+  void populatePieces(Board* theBoard);                    // *In*
 
 public:
   // Returns the instance to the class, if none currently exists, creates one
@@ -166,10 +166,10 @@ public:
                       int patNum);                         // *In*
 
   // Initialises the boards vector of vectors with empty vectors
-  void initEmptyBoard(Board* theBoard);                      // *Out*
+  void initEmptyBoard(Board* theBoard);                    // *Out*
 
   // Creates the inital board filled with randomised order of pieces
-  void initFullBoard(Board* theBoard,                        // *Out*
+  void initFullBoard(Board* theBoard,                      // *Out*
                      bool startPiece);                     // *In*
 
   // Returns the ID of the pattern located on the piece with in the index 
@@ -181,9 +181,9 @@ public:
 
   // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
-  void fixOrientation(PuzzlePiece* piece,                  // *Out*
-                      int yIndex,                          // *In*
-                      int xIndex);                         // *In*
+  void fixOrien(PuzzlePiece* piece,                        // *Out*
+                int yIndex,                                // *In*
+                int xIndex);                               // *In*
 
   // Generates a new board with random pieces placing all the pieces within
   // the pieces vectors

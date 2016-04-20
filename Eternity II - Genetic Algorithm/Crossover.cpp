@@ -95,8 +95,8 @@ void Crossover::selectParents(Board* parents[2],                      // *Out*
 
 void Crossover::rouletteSelect(Board* parents[2],                     // *Out* 
                                int totalFitness)                      // *In*
-{ // Selects candidates via the roulette wheel method mentioned within the report
-  // in chapter 3
+{ // Selects candidates via the roulette wheel method mentioned within the 
+  // report in chapter 3
 
   int oldFitness = 0;     // Holds the older combined fitness score
 
@@ -112,10 +112,11 @@ void Crossover::rouletteSelect(Board* parents[2],                     // *Out*
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
   
-  for (unsigned int i = 0; i < BoardManager::getInstance()->getOldPop()->size(); i++)
-  { // Loops through all boards accumulating the fitness scores, if random number
-    // is between total fitness and the previous total fitness, set the ID of
-    // the parent
+  for (unsigned int i = 0; i < BoardManager::getInstance()->getOldPop()->size();
+       i++)
+  { // Loops through all boards accumulating the fitness scores, if random 
+    // number is between total fitness and the previous total fitness, set the 
+    // ID of the parent
 
     // Set the previous fitness and add on the fitness score of the next board
     oldFitness = totalFitness;
@@ -161,7 +162,8 @@ void Crossover::tournamentSelect(Board* parents[2],                   // *Out*
 
       // Test to see if the fitness score of that candidate is highest than the
       // current stored fitness
-      if ((BoardManager::getInstance()->getOldPop()->at(boardID).fitScore) > highfitness)
+      if ((BoardManager::getInstance()->getOldPop()->at(boardID).fitScore) > 
+          highfitness)
       {
         parents[i] = &BoardManager::getInstance()->getOldPop()->at(boardID);
         highfitness = parents[i]->fitScore;
@@ -228,9 +230,9 @@ void Crossover::copyPieces(int numOfPieces,                           // *In*
 
 
 void Crossover::onePoint(Board* parents[2])                           // *In*
-{ // Takes two candidates, selects a point of the candidate to slice and exchanges
-  // the data after that point with the second parent, explained fully in the
-  // report, chapter 3
+{ // Takes two candidates, selects a point of the candidate to slice and 
+  // exchanges the data after that point with the second parent, explained 
+  // fully in the report, chapter 3
 
   Board offspring[2];         // Holds the two new offspring boards
   int index[2] = { 0, 0 };    // Index of the current piece to copy over
@@ -371,9 +373,12 @@ void Crossover::getDuplicates(Board* theBoard,                        // *In*
   int boardSize = BoardManager::getInstance()->getSize();
 
   // Vector to check IDs against
-  std::vector<bool> isFound((*BoardManager::getInstance()->getPieces())[CORNER].size() +
-                             (*BoardManager::getInstance()->getPieces())[EDGE].size() +
-                             (*BoardManager::getInstance()->getPieces())[INNER].size(), 
+  std::vector<bool> isFound((*BoardManager::getInstance()->getPieces())[CORNER].
+                            size() +
+                             (*BoardManager::getInstance()->getPieces())[EDGE].
+                            size() +
+                             (*BoardManager::getInstance()->getPieces())[INNER].
+                            size(), 
                              false);
 
   // Check the corner slots for duplicates
@@ -424,7 +429,8 @@ void Crossover::checkCorners(Board* theBoard,                         // *In*
     indexes->push_back(index);
   }
 
-  // Check the bottom right corner to see if that piece ID has already been found
+  // Check the bottom right corner to see if that piece ID has already been 
+  // found
   if (!isFound->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1))
   {
     isFound->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1) = true;
@@ -558,12 +564,11 @@ void Crossover::fixDuplicates(Board* theBoard,                       // *In-Out*
     
     if (theBoard->boardVecs[indexes[i][0]][indexes[i][1]].type == CORNER ||
         theBoard->boardVecs[indexes[i][0]][indexes[i][1]].type == EDGE)
-    { // If piece is an edge or corner piece, make sure piece is properly rotated
-      BoardManager::getInstance()->fixOrientation(&theBoard->boardVecs
-                                                  [indexes[i][0]]
-                                                  [indexes[i][1]], 
-                                                  indexes[i][0],
-                                                  indexes[i][1]);
+    { // If piece is an edge or corner piece, make sure piece is properly 
+      // rotated
+      BoardManager::getInstance()->fixOrien(&theBoard->boardVecs[indexes[i][0]]
+                                            [indexes[i][1]], indexes[i][0],
+                                            indexes[i][1]);
     }
   }
 

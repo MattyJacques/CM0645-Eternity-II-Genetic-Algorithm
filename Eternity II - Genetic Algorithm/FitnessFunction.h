@@ -62,14 +62,14 @@ private:
   // match with adjacent pieces
   void checkLeftEdge();
 
-  // Checks the slots along the right edge to see if the piece placed within that
-  // slot is of the right piece type and checks if any edges of those pieces
-  // match with adjacent pieces
+  // Checks the slots along the right edge to see if the piece placed within 
+  // that slot is of the right piece type and checks if any edges of those 
+  // pieces match with adjacent pieces
   void checkRightEdge();
 
-  // Checks the slots along the bottom edge to see if the piece placed within that
-  // slot is of the right piece type and checks if any edges of those pieces
-  // match with adjacent pieces
+  // Checks the slots along the bottom edge to see if the piece placed within 
+  // that slot is of the right piece type and checks if any edges of those 
+  // pieces match with adjacent pieces
   void checkBottomEdge();
 
   // Checks the pieces in the inner slots of the board for matching connections
