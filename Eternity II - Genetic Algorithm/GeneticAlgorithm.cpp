@@ -93,10 +93,10 @@ void GeneticAlgorithm::runGA()
     else
     { // If 200 generations have passed without immproved fitness, reset 
       // population and fitness to try again
-      initRandomPopulation();
-      sinceImprove = 200;
-      prevFitness = 0;
-      currFitness = 0;
+      initRandomPopulation();               // Get new population
+      sinceImprove = 200;                   // Reset counter
+      prevFitness = 0;                      // Reset previous fitness
+      currFitness = 0;                      // Reset current fitness
     }
 
     outputFitness();                      // Output the current fitness
@@ -156,13 +156,17 @@ void GeneticAlgorithm::initRandomPopulation()
 
   for (int i = 0; i < popSize; i++)
   { // Create initialise population of boards with randomised boards
-    Board newBoard;
+    Board newBoard;   // Create new board
+
+    // Fill board with random pieces
     BoardManager::getInstance()->initFullBoard(&newBoard, isStartPiece);
+
+    // Set board ID
     newBoard.boardID = (int)BoardManager::getInstance()->getPop()->size() + 1;
+
+    // Push onto population
     BoardManager::getInstance()->getPop()->push_back(newBoard);
   }
-
-  
 
 } // initRandomPopulation()
 
@@ -202,43 +206,43 @@ void GeneticAlgorithm::outputSettings(Settings theSettings)   // *In*
 
   // Print out the enum value as a string for selection
   if (theSettings.selectType == ROULETTE)
-  {
+  { // If roulette, print roulette 
     printf("Selection: Roulette\n");
   }
   else if (theSettings.selectType == TOURNAMENT)
-  {
+  { // If tournament, print tournament 
     printf("Selection: Tournament\n");
   }
 
   // Print out the enum value as a string for crossover
   if (theSettings.crossType == ONEPOINT)
-  {
+  { // If one point, print one point
     printf("Crossover: One-Point\n");
   }
   else if (theSettings.crossType == TWOPOINT)
-  {
+  { // If two point, print two point
     printf("Crossover: Two-Point\n");
   }
 
   // Print out the enum value as a string for mutation
   if (theSettings.mutType == SWAP)
-  {
+  { // If swap, print swap
     printf("Mutation: Swap\n\n");
   }
   else if (theSettings.mutType == ROTATE)
-  {
+  { // If rotate, print rotate 
     printf("Mutation: Rotate\n\n");
   }
   else if (theSettings.mutType == ROTATESWAP)
-  {
+  { // If rotate & swap, print rotate & swap
     printf("Mutation: Rotate & Swap\n\n");
   }
   else if (theSettings.mutType == REGIONROTATE)
-  {
+  { // If region rotate, print region rotate
     printf("Mutation: Region Rotate\n\n");
   }
   else if (theSettings.mutType == REGIONSWAP)
-  {
+  { // If region swap, print region swap
     printf("Mutation: Region Swap\n\n");
   }
 
@@ -266,7 +270,7 @@ void GeneticAlgorithm::outputSolved()
     { // If board fitness is max fitness, call to output the board
       fileHandle.outputBoard(&BoardManager::getInstance()->getPop()->at(i),
                           genCount);
-      break;
+      break;        // Break out of loop when board has been output
     }
   }
 

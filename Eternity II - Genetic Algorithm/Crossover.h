@@ -4,7 +4,7 @@
 // Date         : 21/1/2016
 
 
-#pragma once
+#pragma once                    // Only include once
 
 
 #include <vector>               // Ability to create vector

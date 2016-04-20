@@ -25,8 +25,10 @@ FileHandler::FileHandler()
     for (int i = 0; i < 3; i++)
     { // Create new vector to hold the puzzle piece collection and push onto
       // vector of vectors that holds all pieces
-      std::vector<PuzzlePiece> newBoard;
-      BoardManager::getInstance()->getPieces()->push_back(newBoard);
+      std::vector<PuzzlePiece> newCol;    // Create a new vector for board
+
+      // Push vector on to vector of vectors
+      BoardManager::getInstance()->getPieces()->push_back(newCol);
     }
   }
 
@@ -41,7 +43,7 @@ Settings FileHandler::readSettingsFile()
   // setting the appropriate values that have been read in to the algorithm
 
   Settings settingData;    // Holds all of the loaded settings data
-  int startPiece = -1; // Holds parsed int for start piece constraint
+  int startPiece = -1;     // Holds parsed int for start piece constraint
 
   if (openFile("settings.ini"))
   { // Checks to see if the file is open before proceeding with reading of the
@@ -97,15 +99,15 @@ void FileHandler::readDataFile(int size,                   // *In*
   int parsedData[5] = { 0, 0, 0, 0, 0 };  // Holds parsed data from the line
 
   if (index >= 0)
-  {
+  { // If index was found, open file with filename from vector at index element
     if (openFile(filenames[index].c_str()))
     { // Checks to see if the file is open before proceeding with reading of
       // the file
 
       while (std::getline(theFile, inLine))
       { // While getline actually returns a line of data, proceed with parsing
-        parseData(inLine, parsedData);
-        createPiece(parsedData);
+        parseData(inLine, parsedData);    // Parse piece data
+        createPiece(parsedData);          // Create new piece with data
       }
 
       theFile.close();                             // Close the file after use
@@ -130,7 +132,7 @@ void FileHandler::outputBoard(Board* theBoard,             // *In*
 
     outputMatches(theBoard, genCount);   // Output board with pattern IDs
     outputIDs(theBoard, genCount);       // Output board with piece IDs 
-    theFile.close();                   // Close the file after use
+    theFile.close();                     // Close the file after use
   }
 
 } // outputBoard()
@@ -302,20 +304,18 @@ int FileHandler::getDataFilename(int size,                 // *In*
 { // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
 
-  std::string filename = "Puzzles/BoardSize ";      // Hold file name to open
-  int index = -1;                              // Hold index of filename
+  std::string filename = "Puzzles/BoardSize ";  // Hold file name to open
+  int index = -1;                               // Hold index of filename
   char boardSize[3] = "/0";                     // Hold converted boardSize
   char patternNum[3] = "/0";                    // Hold converted pattern num
 
-  // Convert the pattern num and boardSize
-  _itoa_s(size, boardSize, 10);
-  _itoa_s(pattern, patternNum, 10);
+  _itoa_s(size, boardSize, 10);                 // Convert board size to char[]
+  _itoa_s(pattern, patternNum, 10);             // Convert pattern num to char[]
 
-  // Construct the rest of the file name using the board size and pattern num
-  filename += boardSize;
-  filename += " - Pattern ";
-  filename += patternNum;
-  filename += ".e2";
+  filename += boardSize;                        // Append board size to name
+  filename += " - Pattern ";                    // Append pattern label to name
+  filename += patternNum;                       // Append pattern num to name
+  filename += ".e2";                            // Append file extension
 
   for (int i = 0; i < (int)filenames.size(); i++)
   { // Loop through all filenames, checking if filename needed
@@ -353,15 +353,15 @@ void FileHandler::parseData(std::string line,              // *In*
       data += line[index];    // Add the char to the string to be converted		
       index++;                // Increment char counter for parsing		
     }
-   
-    // If whitepsace was found in line, skip to next char		
+   	
     if (line[index] == ' ')
-    {
+    { // If whitepsace was found in line, skip to next char	
       index++;
     }
 
     // Convert the data to a int and set it to appropriate element		
     parsedData[i] = std::stoi(data);
+
   } // for (int i = 0; i <= 4; i++)		
  
 } // parseData()
@@ -370,28 +370,27 @@ void FileHandler::parseData(std::string line,              // *In*
 void FileHandler::createPiece(int parsedData[5])           // *In*
 { // Creates a new puzzle piece and stores in the puzzle piece vector
 
-  // Set each element of the piece to the parsed section of data
+  // Create a new puzzle piece
   PuzzlePiece newPiece;
 
-  newPiece.pieceID = parsedData[0];
-  newPiece.type = checkType(parsedData);
-  newPiece.segments[TOP] = parsedData[1];
-  newPiece.segments[RIGHT] = parsedData[2];
-  newPiece.segments[BOTTOM] = parsedData[3];
-  newPiece.segments[LEFT] = parsedData[4];
-  newPiece.orientation = 0;
+  newPiece.pieceID = parsedData[0];           // Set piece ID
+  newPiece.type = checkType(parsedData);      // Set piece type
+  newPiece.segments[TOP] = parsedData[1];     // Set top pattern
+  newPiece.segments[RIGHT] = parsedData[2];   // Set right pattern
+  newPiece.segments[BOTTOM] = parsedData[3];  // Set bottom pattern
+  newPiece.segments[LEFT] = parsedData[4];    // Set left pattern
+  newPiece.orientation = 0;                   // Initialise orientation
 
-  // Add piece to appropriate vector within pieces vector
   if (newPiece.type == CORNER)
-  {
+  { // If corner, push to corner vector
     (*BoardManager::getInstance()->getPieces())[CORNER].push_back(newPiece);
   }
   else if (newPiece.type == EDGE)
-  {
+  { // If edge, push to edge vector
     (*BoardManager::getInstance()->getPieces())[EDGE].push_back(newPiece);
   }
   else if (newPiece.type == INNER)
-  {
+  { // If inner, push to inner vector
     (*BoardManager::getInstance()->getPieces())[INNER].push_back(newPiece);
   }
 
@@ -452,15 +451,13 @@ void FileHandler::setOutFilename(int boardSize,            // *In*
    // Set directory and board size label
   outFilename = "Solutions/BoardSize ";
 
-  // Convert board size to char and append to filename
-  _itoa_s(boardSize, intBuff, 10);
-  outFilename += intBuff;
+  _itoa_s(boardSize, intBuff, 10);       // Convert board size to char[]
+  outFilename += intBuff;                // Append board size
 
   outFilename += " Pattern ";            // Append pattern label
 
-  // Convert the pattern number to char and append to filename
-  _itoa_s(patternNum, intBuff, 10);
-  outFilename += intBuff;
+  _itoa_s(patternNum, intBuff, 10);      // Convert pattern num to char[]
+  outFilename += intBuff;                // Append pattern num
 
   appendSelectCross(select, crossover);  // Append select and crossover methods
   appendMutation(mutation);              // Append mutation method
@@ -612,24 +609,22 @@ void FileHandler::makeDataFile(int size,                   // *In*
 { // If no data file was found, generate a new random board and make the data
   // file that corrosponds to that board
 
-  std::string filename = "Puzzles/BoardSize ";    // Hold file name to open
-  char boardSize[3] = "/0";                       // Hold converted boardSize
-  char patternNum[3] = "/0";                      // Hold converted pattern num
+  std::string filename = "Puzzles/BoardSize ";   // Hold file name to open
+  char boardSize[3] = "/0";                      // Hold converted boardSize
+  char patternNum[3] = "/0";                     // Hold converted pattern num
 
+  _itoa_s(size, boardSize, 10);                 // Convert board size to char[]
+  _itoa_s(pattern, patternNum, 10);             // Convert pattern num to char[]
 
-  // Convert the pattern num and boardSize
-  _itoa_s(size, boardSize, 10);
-  _itoa_s(pattern, patternNum, 10);
+  filename += boardSize;                     // Append the board size to name
+  filename += " - Pattern ";                 // Append the pattern labal to name
+  filename += patternNum;                    // Append the pattern num
+  filename += ".e2";                         // Append file extension
 
-  // Construct the rest of the file name using the board size and pattern num
-  filename += boardSize;
-  filename += " - Pattern ";
-  filename += patternNum;
-  filename += ".e2";
-
+  // Generate a new random board
   BoardManager::getInstance()->generateBoard(size, pattern);
 
-  outputDataFile(filename);
+  outputDataFile(filename);                 // Output the board to the data file
 
 } // makeDataFile()
 
@@ -639,58 +634,52 @@ void FileHandler::outputDataFile(std::string filename)     // *In*
   // line
   
   if (openFile(filename.c_str()))
-  {
-    for (int i = 0; i < (int)BoardManager::getInstance()->getPieces()[CORNER].
-         size(); i++)
-    { // Output corners to data file
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].pieceID <<
-        std::endl;
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[0]
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[1]
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[2]
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[0][i].segments[3];
-      theFile << std::endl;
+  { // If file was opened, output data to file
+
+    // Get the address of the piece vectors
+    std::vector<std::vector<PuzzlePiece>>* pieceVecs =
+      BoardManager::getInstance()->getPieces();
+
+    for (int i = 0; i < (int)pieceVecs[CORNER].size(); i++)
+    { // Output the various bits of data of the corner pieces to the file
+
+      theFile << (*pieceVecs)[0][i].pieceID << " ";     // Output piece ID    
+      theFile << (*pieceVecs)[0][i].segments[0] << " "; // Output top pattern
+      theFile << (*pieceVecs)[0][i].segments[1] << " "; // Output right pattern
+      theFile << (*pieceVecs)[0][i].segments[2] << " "; // Output bottom pattern
+      theFile << (*pieceVecs)[0][i].segments[3];        // Output left pattern
+      
+      theFile << std::endl;   // Move to next line in file
     }
 
-    for (int i = 0; i < (int)(*BoardManager::getInstance()->getPieces())[EDGE].
+    for (int i = 0; i < (int)(*pieceVecs)[EDGE].
          size(); i++)
-    { // Output edge pieces to data file
-      theFile << (*BoardManager::getInstance()->getPieces())[1][i].pieceID << 
-        " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[0] 
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[1] 
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[2] 
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[1][i].segments[3];
-      theFile << std::endl;
+    { // Output the various bits of data of the edge pieces to the file
+
+      theFile << (*pieceVecs)[1][i].pieceID << " ";     // Output piece ID    
+      theFile << (*pieceVecs)[1][i].segments[0] << " "; // Output top pattern
+      theFile << (*pieceVecs)[1][i].segments[1] << " "; // Output right pattern
+      theFile << (*pieceVecs)[1][i].segments[2] << " "; // Output bottom pattern
+      theFile << (*pieceVecs)[1][i].segments[3];        // Output left pattern
+
+      theFile << std::endl;  // Move to next line in file
     }
 
     for (int i = 0; i < (int)(*BoardManager::getInstance()->getPieces())[INNER].
          size(); i++)
-    { // Output the inner pieces to data file
-      theFile << (*BoardManager::getInstance()->getPieces())[2][i].pieceID << 
-        " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[0] 
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[1] 
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[2] 
-        << " ";
-      theFile << (*BoardManager::getInstance()->getPieces())[2][i].segments[3];
-      theFile << std::endl;
+    { // Output the various bits of data of the inner pieces to the file
+
+      theFile << (*pieceVecs)[2][i].pieceID << " ";     // Output piece ID    
+      theFile << (*pieceVecs)[2][i].segments[0] << " "; // Output top pattern
+      theFile << (*pieceVecs)[2][i].segments[1] << " "; // Output right pattern
+      theFile << (*pieceVecs)[2][i].segments[2] << " "; // Output bottom pattern
+      theFile << (*pieceVecs)[2][i].segments[3];        // Output left pattern
+
+      theFile << std::endl;  // Move to next line in file
     }
 
-    theFile.close();
-  }
-  else
-  { 
-    char buffer[200];
-    perror(buffer);
-  }
+    theFile.close();         // Close file after use
+
+  } // if (openFile(filename.c_str()))
 
 } // outputDataFile()

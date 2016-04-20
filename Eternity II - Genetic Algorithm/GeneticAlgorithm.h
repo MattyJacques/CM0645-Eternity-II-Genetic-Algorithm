@@ -4,7 +4,7 @@
 // Date         : 9/11/2015
 
 
-#pragma once
+#pragma once                        // Only include once
 
 
 #include "FitnessFunction.h"        // Evalute fitness in GA process

@@ -31,9 +31,8 @@ BoardManager::BoardManager()
 BoardManager* BoardManager::getInstance()
 { // Returns the instance to the class, if none currently exists, creates one
 
-  // If not pInstance, create one
   if (!pInstance)
-  {
+  { // If not pInstance, create one
     pInstance = new BoardManager;
   }
 
@@ -104,8 +103,8 @@ void BoardManager::initEmptyBoard(Board* theBoard)                     // *Out*
   for (int i = 0; i <= boardSize; i++)
   { // Loop through and create vector of pieces for the board and push on to
     // vector of vectors
-    std::vector<PuzzlePiece> newCol;
-    theBoard->boardVecs.push_back(newCol);
+    std::vector<PuzzlePiece> newCol;         // Create new vector for pieces
+    theBoard->boardVecs.push_back(newCol);   // Push onto vector of vectors
   }
 
 } // initEmptyBoard()
@@ -115,26 +114,21 @@ void BoardManager::initFullBoard(Board* theBoard,                      // *Out*
                                  bool startPiece)                      // *In*
 { // Creates the inital board filled with randomised order of pieces
 
-  // Set the ID of the board
-  theBoard->boardID = (int)currBoards->size() + 1;
+  theBoard->boardID = (int)currBoards->size() + 1;  // Set the ID of the board
 
-  // Fill vector of vectors with empty vectors
-  initEmptyBoard(theBoard);
+  initEmptyBoard(theBoard);       // Fill vector of vectors with empty vectors
 
   for (int i = 0; i < 3; i++)
   { // Loop to shuffle all piece types
-
-    // Shuffle order of puzzle pieces
     std::random_shuffle(pieceVec[i].begin(), pieceVec[i].end());
   }
 
   // Add pieces to empty vectors
   addPieces(theBoard);
 
-  // If starting piece constraint is active and piece 139 is not in slot [7][8]
-  // place piece 139 in slot [7][8]
   if (startPiece && theBoard->boardVecs[7][8].pieceID != 139)
-  {
+  { // If starting piece constraint is active and piece 139 is not in slot [7][8]
+    // place piece 139 in slot [7][8]
     fixStartPiece(theBoard);
   }
 } // initFullBoard()
@@ -154,15 +148,20 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
   { // If index is below limit, cycle back around
     switch (index)
     {
-      case -1:
+      case -1:     // Segment is left
         index = 3;
         break;
-      case -2:
+
+      case -2:     // Segment is bottom
         index = 2;
         break;
-      case -3:
+
+      case -3:     // Segment is right
         index = 1;
         break;
+
+      default:
+        // Do nothing
     }
   }
 
@@ -178,12 +177,12 @@ void BoardManager::fixOrien(PuzzlePiece* piece,                        // *Out*
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
 
-  if (piece->type == EDGE)         // If piece is edge, call to rotate edge
-  {
+  if (piece->type == EDGE)         
+  { // If piece is edge, call to rotate edge
     rotateEdge(piece, xIndex, yIndex);
   }
-  else if (piece->type == CORNER)  // If piece is corner, call to rotate corner
-  {
+  else if (piece->type == CORNER)  
+  { // If piece is corner, call to rotate corner
     rotateCorner(piece, xIndex, yIndex);
   }
 
@@ -207,39 +206,38 @@ void BoardManager::generateBoard(int size,                             // *In*
 
   // Generate first piece on top edge, needed as corner piece will not match
   newBoard.boardVecs[1].push_back(genEdge(-1, newBoard.boardVecs[0][0].
-    segments[0], RIGHT));
+                                          segments[0], RIGHT));
 
   for (int i = 1; i < boardSize - 1; i++)
   { // Generate the next piece of the top edge, using the pattern of the piece
     // created before for pattern match
     newBoard.boardVecs[i + 1].push_back(genEdge(-1, newBoard.boardVecs[i][0].
-      segments[3], RIGHT));
+                                                segments[3], RIGHT));
   }
 
   // Generate the top right corner piece
   newBoard.boardVecs[boardSize].push_back(genCorner(-1, newBoard.boardVecs
-    [boardSize - 1][0].
-    segments[3]));
+                                                    [boardSize - 1][0].
+                                                    segments[3]));
 
   for (int i = 0; i < boardSize - 1; i++)
   { // Generate the left edge using the pattern from the piece in the slot
     // above
     newBoard.boardVecs[0].push_back(genEdge(-1, newBoard.boardVecs[0][i].
-      segments[1], LEFT));
+                                            segments[1], LEFT));
   }
 
   // Generate the inner piece in [1][1] for match with edge piece above
   newBoard.boardVecs[1].push_back(genInner(newBoard.boardVecs[1][0].
-    segments[0], newBoard.
-    boardVecs[0][1].segments[0]));
+                                           segments[0], newBoard.
+                                           boardVecs[0][1].segments[0]));
 
   for (int i = 1; i < boardSize - 1; i++)
   { // Generate the inner pieces in col 1, this is so the pieces can
     // match the pattern of the other pieces after correct orientation
     newBoard.boardVecs[1].push_back(genInner(newBoard.boardVecs[1][i].
-      segments[2], newBoard.
-      boardVecs[0][i + 1].
-      segments[0]));
+                                             segments[2], newBoard.
+                                             boardVecs[0][i + 1].segments[0]));
   }
 
   for (int i = 2; i < boardSize; i++)
@@ -249,7 +247,7 @@ void BoardManager::generateBoard(int size,                             // *In*
     newBoard.boardVecs[i].push_back(genInner(newBoard.boardVecs[i][0].
                                              segments[0],
                                              newBoard.boardVecs[i - 1][1].
-      segments[1]));
+                                             segments[1]));
 
   }
 
@@ -258,53 +256,53 @@ void BoardManager::generateBoard(int size,                             // *In*
     for (int i = 2; i < boardSize; i++)
     { // Add a piece to col i, matching pattern of piece above and to the left
       newBoard.boardVecs[i].push_back(genInner(newBoard.boardVecs[i][j - 1].
-        segments[2], newBoard.
-        boardVecs[i - 1][j].
-        segments[1]));
+                                               segments[2], newBoard.
+                                               boardVecs[i - 1][j].
+                                               segments[1]));
     }
   }
 
   // Generate first piece of right edge, matching pattern with top right corner
   newBoard.boardVecs[boardSize].push_back(genEdge(newBoard.
-    boardVecs[boardSize - 1][1].
-    segments[1], newBoard.
-    boardVecs[boardSize][0].
-    segments[0], RIGHT));
+                                                  boardVecs[boardSize - 1][1].
+                                                  segments[1], newBoard.
+                                                  boardVecs[boardSize][0].
+                                                  segments[0], RIGHT));
 
   for (int i = 1; i < boardSize - 1; i++)
   { // Generate the pieces for the right edge, making sure patterns match
     newBoard.boardVecs[boardSize].push_back(genEdge(newBoard.
-      boardVecs[boardSize - 1][i + 1]
-      .segments[1], newBoard.
-      boardVecs[boardSize][i].
-      segments[3], RIGHT));
+                                                    boardVecs[boardSize - 1][i + 1]
+                                                    .segments[1], newBoard.
+                                                    boardVecs[boardSize][i].
+                                                    segments[3], RIGHT));
   }
 
   // Generate the bottom left corner piece, matching the pattern of the piece
   // above
-  newBoard.boardVecs[0].push_back(genCorner(newBoard.
-    boardVecs[0][boardSize - 1].
-    segments[1], -1));
+  newBoard.boardVecs[0].push_back(genCorner(newBoard.boardVecs[0][boardSize - 1]
+                                            .segments[1], -1));
 
   for (int i = 1; i < boardSize; i++)
   { // Generate the bottom edge of the board, making sure the patterns match
     // piece above and piece to the left
-    newBoard.boardVecs[i].push_back(genEdge(newBoard.
-      boardVecs[i][boardSize - 1].
-      segments[2], newBoard.
-      boardVecs[i - 1][boardSize].
-      segments[1], LEFT));
+    newBoard.boardVecs[i].push_back(genEdge(newBoard.   
+                                            boardVecs[i][boardSize - 1].
+                                            segments[2], newBoard.
+                                            boardVecs[i - 1][boardSize].
+                                            segments[1], LEFT));
   }
 
   // Generate the bottom right corner piece, matching the piece to the left and
   // above
   newBoard.boardVecs[boardSize].push_back(genCorner(newBoard.boardVecs
-    [boardSize - 1][boardSize].
-    segments[1], newBoard.
-    boardVecs
-    [boardSize][boardSize - 1].
-    segments[3]));
+                                                    [boardSize - 1][boardSize].
+                                                    segments[1], newBoard.
+                                                    boardVecs
+                                                    [boardSize][boardSize - 1].
+                                                    segments[3]));
 
+  // Population piece vecs with pieces from board
   populatePieces(&newBoard);
 
 } // generateBoard()
@@ -317,8 +315,8 @@ void BoardManager::initTopEdge(Board* theBoard)                        // *Out*
   for (int i = 0; i <= boardSize - 2; i++)
   { // Add edge pieces to inner 13 vectors (so not left and right most vectors)
     // Rotate as needed
-    fixOrien(&pieceVec[EDGE][i], i + 1, 0);
-    theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i]);
+    fixOrien(&pieceVec[EDGE][i], i + 1, 0);                  // Fix orientation
+    theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE][i]); // Store piece
   }
 
 } // initTopEdge()
@@ -328,35 +326,43 @@ void BoardManager::initCornersSides(Board* theBoard)                   // *Out*
 { // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
 
-  // Push the first two corner pieces on to the top left and right corners
-  // of the board rotating as needed
-  fixOrien(&pieceVec[CORNER][0], 0, 0);
-  theBoard->boardVecs[0].push_back(pieceVec[CORNER][0]);
-  fixOrien(&pieceVec[CORNER][1], boardSize, 0);
-  theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][1]);
+  // Fix orientation for top left corner and store in top left corner
+  fixOrien(&pieceVec[CORNER][0], 0, 0);                      // Fix orientation
+  theBoard->boardVecs[0].push_back(pieceVec[CORNER][0]);     // Store piece
+
+  // Fix orientation for top right corner and store on top right corner
+  fixOrien(&pieceVec[CORNER][1], boardSize, 0);              // Fix orientation
+  theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][1]); // Store piece
 
   for (int i = 0; i < boardSize - 1; i++)
   { // Loops through and push edge pieces on to the left and right edges
     // of the board rotating as needed
+
+    // Fix orientation for left edge and store next piece on left edge
     fixOrien(&pieceVec[EDGE][i + boardSize - 1], 0, i + 1);
     theBoard->boardVecs[0].push_back(pieceVec[EDGE][i + boardSize - 1]);
+
+    // Fix orientation for right edge and store next piece on right edge
     fixOrien(&pieceVec[EDGE][i + (boardSize * 2) - 2], boardSize, i + 1);
     theBoard->boardVecs[boardSize].push_back(pieceVec[EDGE]
-      [i + (boardSize * 2) - 2]);
+                                             [i + (boardSize * 2) - 2]);
   }
 
   for (int i = 0; i <= boardSize - 2; i++)
   { // Loops through and adds an edge piece to each vector for the bottom edge
     // of the board rotating as needed
+
+    // Fix orienation for bottom edge and store next piece on bottom edge
     fixOrien(&pieceVec[EDGE][i + (boardSize * 3) - 3], i + 1, boardSize);
     theBoard->boardVecs[i + 1].push_back(pieceVec[EDGE]
                                          [i + (boardSize * 3) - 3]);
   }
 
-  // Push the last two corner pieces on to the bottom left and bottom right
-  // corners of the board rotating as needed
+  // Fix orientation for bottom left corner and store on bottom left corner
   fixOrien(&pieceVec[CORNER][2], 0, boardSize);
   theBoard->boardVecs[0].push_back(pieceVec[CORNER][2]);
+
+  // Fix orientation for bottom right corner and store the next piece
   fixOrien(&pieceVec[CORNER][3], boardSize, boardSize);
   theBoard->boardVecs[boardSize].push_back(pieceVec[CORNER][3]);
 
@@ -376,15 +382,14 @@ void BoardManager::addPieces(Board* theBoard)                          // *Out*
   for (PuzzlePiece piece : pieceVec[INNER])
   { // Loop through the collection of pieces
 
-    // Add piece to line on board and increment push count
-    theBoard->boardVecs[index].push_back(piece);
-    count++;
+    theBoard->boardVecs[index].push_back(piece); // Add piece to line on board
+    count++;                                     // Increment counter
 
     if (count == boardSize - 1)
     { // If reached the end of the line for the board, move onto next line
       // of the board
-      index++;
-      count = 0;
+      index++;                                   // Increment row
+      count = 0;                                 // Reset col
     }
   }
 
@@ -415,8 +420,8 @@ void BoardManager::fixStartPiece(Board* theBoard)                      // *Out*
     if (xIndex == boardSize - 1)
     { // If reached the end of the line for the board, move onto next line
       // of the board
-      yIndex++;
-      xIndex = 0;
+      yIndex++;           // Increment y
+      xIndex = 0;         // reset x
     }
   }
 
@@ -610,7 +615,7 @@ PuzzlePiece BoardManager::genInner(int pattern1,                       // *In*
     GeneticAlgorithm::genRandomNum(1, patternNum, &newPiece.segments[3]);
   }
 
-  return newPiece;
+  return newPiece; // Return the new piece
 
 } // genInner()
 
@@ -621,60 +626,61 @@ void BoardManager::populatePieces(Board* theBoard)                     // *In*
 
   int pieceCount = 1;     // Counts number of pieces for pieceID
 
-  // Push all corners to the piece vectors
-  pieceVec[0].push_back(theBoard->boardVecs[0][0]);
-  pieceVec[0][0].pieceID = pieceCount;
-  pieceCount++;
+  // Push top left corner on to corner piece vector, set ID and increment count
+  pieceVec[0].push_back(theBoard->boardVecs[0][0]); 
+  pieceVec[0][0].pieceID = pieceCount;              // Set piece ID
+  pieceCount++;                                     // Increment piece count
 
-  pieceVec[0].push_back(theBoard->boardVecs[boardSize][0]);
-  pieceVec[0][1].pieceID = pieceCount;
-  pieceCount++;
+  // Push top left corner on to corner piece vector, set ID and increment count
+  pieceVec[0].push_back(theBoard->boardVecs[boardSize][0]); 
+  pieceVec[0][1].pieceID = pieceCount;                      // Set piece ID
+  pieceCount++;                                         // Increment piece count
 
-  pieceVec[0].push_back(theBoard->boardVecs[0][boardSize]);
-  pieceVec[0][2].pieceID = pieceCount;
-  pieceCount++;
+  // Push top left corner on to corner piece vector, set ID and increment count
+  pieceVec[0].push_back(theBoard->boardVecs[0][boardSize]); 
+  pieceVec[0][2].pieceID = pieceCount;                      // Set piece ID
+  pieceCount++;                                         // Increment piece count
 
+  // Push top left corner on to corner piece vector, set ID and increment count
   pieceVec[0].push_back(theBoard->boardVecs[boardSize][boardSize]);
-  pieceVec[0][3].pieceID = pieceCount;
-  pieceCount++;
-
-  // EDIT THIS TO ONE LOOP WHEN TESTED
+  pieceVec[0][3].pieceID = pieceCount;                     // Set piece ID
+  pieceCount++;                                            // Increment count
 
   for (int i = 1; i < boardSize; i++)
-  { // Push the top edge to the piece vectors
+  { // Push edge on to edge piece vector
+    
+    // Push the next top edge piece to the edge piece vectors
     pieceVec[1].push_back(theBoard->boardVecs[i][0]);
-    pieceVec[1].back().pieceID = pieceCount;
-    pieceCount++;
-  }
-
-  for (int i = 1; i < boardSize; i++)
-  { // Push the left edge to the piece vectors
+    pieceVec[1].back().pieceID = pieceCount;          // Set piece ID
+    pieceCount++;                                     // Increment piece count
+  
+    // Push the next left edge piece to the edge piece vectors
     pieceVec[1].push_back(theBoard->boardVecs[0][i]);
-    pieceVec[1].back().pieceID = pieceCount;
-    pieceCount++;
-  }
+    pieceVec[1].back().pieceID = pieceCount;          // Set piece ID
+    pieceCount++;                                     // Increment piece count
 
-  for (int i = 1; i < boardSize; i++)
-  { // Push the right edge to the piece vectors
+
+    // Push the next right edge piece to the edge piece vectors
     pieceVec[1].push_back(theBoard->boardVecs[boardSize][i]);
-    pieceVec[1].back().pieceID = pieceCount;
-    pieceCount++;
-  }
+    pieceVec[1].back().pieceID = pieceCount;          // Set piece ID
+    pieceCount++;                                     // Increment piece count
 
-  for (int i = 1; i < boardSize; i++)
-  { // Push the bottom edge to the piece vectors
+    // Push the next bottom edgepiece to the edge piece vectors
     pieceVec[1].push_back(theBoard->boardVecs[i][boardSize]);
-    pieceVec[1].back().pieceID = pieceCount;
-    pieceCount++;
-  }
+    pieceVec[1].back().pieceID = pieceCount;          // Set piece ID
+    pieceCount++;                                     // Increment piece count
+
+  } // for (int i = 1; i < boardSize; i++)
 
   for (int i = 1; i < boardSize; i++)
   { // X index to push the inner puzzle pieces within the piece vectors
     for (int j = 1; j < boardSize; j++)
     { // Y index to push pieces to vector
+
+      // Push next inner piece onto inner vector
       pieceVec[2].push_back(theBoard->boardVecs[i][j]);
-      pieceVec[2].back().pieceID = pieceCount;
-      pieceCount++;
+      pieceVec[2].back().pieceID = pieceCount;          // Set piece ID
+      pieceCount++;                                     // Increment piece count
     }
   }
 

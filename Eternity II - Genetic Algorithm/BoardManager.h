@@ -4,7 +4,7 @@
 // Date         : 6/12/2015
 
 
-#pragma once
+#pragma once                    // Only include once
 
 
 #include <vector>               // Creating vectors
@@ -87,19 +87,19 @@ private:
 
   // Initialises the top edge (not including corners) of the board read for
   // inner pieces to be inserted
-  void initTopEdge(Board* theBoard);                         // *Out*  
+  void initTopEdge(Board* theBoard);                       // *Out*  
 
   // Initialises the left, right and bottom edges of the board along with
   // the corner slots of the board
-  void initCornersSides(Board* theBoard);                    // *Out*
+  void initCornersSides(Board* theBoard);                  // *Out*
 
   // Adds pieces to the empty boards, top edge first, moving on to inner slots
   // then finally filling in the corners, side edges and bottom edge
-  void addPieces(Board* theBoard);                           // *Out*
+  void addPieces(Board* theBoard);                         // *Out*
 
   // If an official Eternity II solve attempt, make sure the start piece
   // constraint is met by placing the piece with the ID 139 on slot [7][8]
-  void fixStartPiece(Board* theBoard);                       // *Out*
+  void fixStartPiece(Board* theBoard);                     // *Out*
 
   // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
@@ -174,7 +174,7 @@ public:
 
   // Returns the ID of the pattern located on the piece with in the index 
   // provided taking into consideration the orientation of the piece
-  int getPattern(Board* theBoard,                            // *In*
+  int getPattern(Board* theBoard,                          // *In*
                  int xIndex,                               // *In*
                  int yIndex,                               // *In*
                  segLocation segment);                     // *In*

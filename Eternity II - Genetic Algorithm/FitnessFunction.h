@@ -4,7 +4,7 @@
 // Date         : 2/12/2015
 
 
-#pragma once
+#pragma once                    // Only include once
 
 
 #define CORNERMATCH 10          // How many points for corner match
@@ -19,7 +19,7 @@ class FitnessFunction
 {
 
 private:
-  Board* theBoard;                        // Holds pointer to current board
+  Board* theBoard;                      // Holds pointer to current board
   BoardManager* boardMan;              // For access to board size
 
   // Checks to see if the pattern located on right side of piece1 matches the

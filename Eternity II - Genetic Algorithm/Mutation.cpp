@@ -12,7 +12,7 @@
 Mutation::Mutation()
 { // Initialise mutation method
 
-  mutType = SWAP;
+  mutType = SWAP;   // Initialise mutation method
 
 } // Mutation()
 
@@ -43,24 +43,24 @@ void Mutation::doMutation(bool startPiece)     // *In*
     GeneticAlgorithm::genRandomNum(0, (int)BoardManager::getInstance()->
       getPop()->size() - 1, &boardID);
 
-    if (mutType == SWAP)   // If mutation method is swap, do swap
-    {
+    if (mutType == SWAP)   
+    { // If mutation method is swap, do swap
       swap(boardID, startPiece);
     }
     else if (mutType == ROTATE)
-    {
+    { // If mutation rotate method is , do rotate
       rotate(boardID, startPiece);
     }
     else if (mutType == ROTATESWAP)
-    {
+    { // If mutation method is rotate & swap, do rotate & swap
       rotateSwap(boardID, startPiece);
     }
     else if (mutType == REGIONSWAP)
-    {
+    { // If mutation method is region swap, do region swap
       regionSwap(boardID, startPiece);
     }
     else if (mutType == REGIONROTATE)
-    {
+    {  // If mutation method is region rotate, do region rotate
       regionRotate(boardID, startPiece);
     }
     else       
@@ -76,7 +76,7 @@ void Mutation::calcMutRate(double rate,        // *In*
                            int popSize)        // *In*
 { // Calculates how many mutations to implement per generation
 
-  mutNum = (rate * popSize) / 100;
+  mutNum = (rate * popSize) / 100;    // See above
 
 } // calcMutRate()
 
@@ -408,7 +408,8 @@ void Mutation::regionSwap(int boardID,         // *In*
 
   while (regionIndex1[0] == regionIndex2[0] && 
          regionIndex1[1] == regionIndex2[1])
-  { // Generate the top left indexes of two regions
+  { // Generate the top left indexes of two regions, repeat to make sure they
+    // are two different indexes
     getRandPiece(regionIndex1, INNER, startPiece, true);
     getRandPiece(regionIndex2, INNER, startPiece, true);
   }

@@ -4,7 +4,7 @@
 // Date         : 19/11/2015
 
 
-#pragma once
+#pragma once                  // Only include once
 
 
 #include "BoardManager.h"     // For PieceType, piece vector, board definition

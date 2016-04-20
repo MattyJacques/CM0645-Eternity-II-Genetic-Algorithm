@@ -13,9 +13,10 @@
 Crossover::Crossover()
 { // Sets tournament size, initalise methods to default
 
-  tournamentSize = 10;
-  crossType = ONEPOINT;
-  selectType = ROULETTE;
+  tournamentSize = 10;     // Set tournament size to 10
+  crossType = TWOPOINT;    // Set default crossover to two point
+  selectType = TOURNAMENT; // Set default selection to tournament
+  eliteRate = 2;           // Set default elitism rate to 2
 
 } // Crossover()
 
@@ -26,9 +27,9 @@ void Crossover::setMethod(CrossoverType cross,                        // *In*
 { // Sets the crossover and selection type to use for crossover along with
   // the elitism rate
 
-  crossType = cross;
-  selectType = select;
-  eliteRate = elite;
+  crossType = cross;    // Set the crossover method
+  selectType = select;  // Srt the selection method
+  eliteRate = elite;    // Set the elitism rate
 
 } // setMethod()
 
@@ -45,7 +46,7 @@ void Crossover::doCrossover(int popSize)                              // *In*
     // out the total fitness every select
     for (Board i : *BoardManager::getInstance()->getOldPop())
     { // Loops through all boards and total up all fitness scores from boards
-      totalFitness += i.fitScore;
+      totalFitness += i.fitScore;   // Add fitness to total
     }
   }
 
@@ -54,9 +55,8 @@ void Crossover::doCrossover(int popSize)                              // *In*
   { // While the new vector is not filled with the right population size
     // make more candidates
 
-    // Loop to make sure both selected parents are not the same candidate
     do
-    {
+    { // Loop to make sure both selected parents are not the same candidate
       selectParents(parents, popSize, totalFitness);
     } while (parents[0]->boardID == parents[1]->boardID);
 
@@ -76,16 +76,15 @@ void Crossover::selectParents(Board* parents[2],                      // *Out*
   // chosen when the application was started
 
   if (selectType == ROULETTE) 
-  { // If roulette method was chosen, work out the total fitness and do
-    // roulette selection
+  { // If roulette method was chosen, do roulette
     rouletteSelect(parents, totalFitness);
   }
-  else if (selectType == TOURNAMENT) // If tournament method was chosen
-  {
+  else if (selectType == TOURNAMENT) 
+  { // If tournament method was chosen, do tournament
     tournamentSelect(parents, popSize);
   }
-  else // Output error, method not recognised
-  {
+  else 
+  { // Output error, method not recognised
     std::cout << "Selection method not recognised" << std::endl;
   }
 
@@ -112,28 +111,27 @@ void Crossover::rouletteSelect(Board* parents[2],                     // *Out*
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
   
-  for (unsigned int i = 0; i < BoardManager::getInstance()->getOldPop()->size();
+  for (int i = 0; i < (int)BoardManager::getInstance()->getOldPop()->size();
        i++)
   { // Loops through all boards accumulating the fitness scores, if random 
     // number is between total fitness and the previous total fitness, set the 
     // ID of the parent
 
-    // Set the previous fitness and add on the fitness score of the next board
-    oldFitness = totalFitness;
+    oldFitness = totalFitness;    // Store the total fitness
+
+    // Sum current total fitness and fitness of next candidate
     totalFitness += BoardManager::getInstance()->getOldPop()->at(i).fitScore;
 
-    // If section has been found for first parent, set ID
     if (totalFitness >= randomIndex[0] && randomIndex[0] >= oldFitness)
-    {
+    { // If section has been found for first parent, set ID
       parents[0] = &BoardManager::getInstance()->getOldPop()->at(i);
     }
 
-    // If section has been found for first parent, set ID
     if (totalFitness >= randomIndex[1] && randomIndex[1] >= oldFitness)
-    {
+    { // If section has been found for first parent, set ID
       parents[1] = &BoardManager::getInstance()->getOldPop()->at(i);
     }
-  } // for (unsigned int i = 0)
+  } // for i < getOldPop()
 
 } // rouletteSelect()
 
@@ -150,9 +148,8 @@ void Crossover::tournamentSelect(Board* parents[2],                   // *Out*
   for (int i = 0; i < 2; i++)
   { // Loop to find both parents
 
-    // Initialise to -1 ready for next tournament
-    highfitness = -1;
-    boardID = -1;
+    highfitness = -1;    // Set current highest fitness to -1
+    boardID = -1;        // Set current board ID to -1
 
     for (int j = 0; j < tournamentSize; j++)
     { // Test 20 random candidates storing highest fitness and ID
@@ -160,12 +157,15 @@ void Crossover::tournamentSelect(Board* parents[2],                   // *Out*
       // Generate a random boardID then 
       GeneticAlgorithm::genRandomNum(0, popSize - 1, &boardID);
 
-      // Test to see if the fitness score of that candidate is highest than the
-      // current stored fitness
       if ((BoardManager::getInstance()->getOldPop()->at(boardID).fitScore) > 
           highfitness)
-      {
+      { // Test to see if the fitness score of that candidate is highest than the
+        // current stored fitness
+
+        // Store board ID
         parents[i] = &BoardManager::getInstance()->getOldPop()->at(boardID);
+
+        // Store current highest fitness
         highfitness = parents[i]->fitScore;
       }
 
@@ -181,15 +181,15 @@ void Crossover::reproduce(Board* parents[2])                          // *In*
   // the application
 
   if (crossType == ONEPOINT)
-  {
+  { // If crossover is one point, do one point
     onePoint(parents);
   }
   else if (crossType == TWOPOINT)
-  {
+  { // If crossover is two point, do two point
     twoPoint(parents);
   }
   else
-  {
+  { // Output error of crossover not recognised
     std::cout << "Crossover method not recognised" << std::endl;
   }
 
@@ -247,7 +247,7 @@ void Crossover::onePoint(Board* parents[2])                           // *In*
   // Get random crossover point to split the boards
   GeneticAlgorithm::genRandomNum(1, numOfPieces - 1, &crossPoint);
 
-  // Initialise new empty boards
+  // Initialise new empty boards for both offspring
   BoardManager::getInstance()->initEmptyBoard(&offspring[0]);
   BoardManager::getInstance()->initEmptyBoard(&offspring[1]);
 
@@ -289,7 +289,7 @@ void Crossover::twoPoint(Board* parents[2])                           // *In*
   int numOfPieces = (BoardManager::getInstance()->getSize() + 1) *
                     (BoardManager::getInstance()->getSize() + 1);
 
-  // Get random crossover points to split the boards, making sure the second
+  // Get two random crossover points to split the boards, making sure the second
   // generated number is after the first
   GeneticAlgorithm::genRandomNum(1, numOfPieces - 1, &crossPoint[0]);
   GeneticAlgorithm::genRandomNum(crossPoint[0] + 1, numOfPieces, 
@@ -348,20 +348,19 @@ void Crossover::checkDuplication()
   offspring[1] = &BoardManager::getInstance()->getPop()->at(
                     BoardManager::getInstance()->getPop()->size() - 1);
 
-  // Call to find out which pieces are duplicates, storing in the pieces
-  // and index vectors ready for fixing
   for (int i = 0; i < 2; i++)
-  {
+  { // Call to find out which pieces are duplicates, storing in the pieces
+  // and index vectors ready for fixing
     getDuplicates(offspring[i], &pieces[i], &indexes[i]);
   }
 
-  // Calls to repair the boards after duplication was found, giving the pieces
+  for (int i = 0; i < 2; i++)
+  { // Calls to repair the boards after duplication was found, giving the pieces
   // and indexes of the duplicate slots, pieces vector switched to add pieces
   // that were found twice in other offspring
-  for (int i = 0; i < 2; i++)
-  {
     fixDuplicates(offspring[i], pieces[1 - i], indexes[i]);
   }
+
 } // checkDuplication()
 
 
@@ -405,41 +404,39 @@ void Crossover::checkCorners(Board* theBoard,                         // *In*
   // as is the first corner to be checked
   isFound->at(theBoard->boardVecs[0][0].pieceID - 1) = true;
 
-  // Check the top right corner to see if that piece ID has already been found
   if (!isFound->at(theBoard->boardVecs[0][boardSize].pieceID - 1))
-  { 
+  { // Check the top right corner to see if that piece ID has already been found
     isFound->at(theBoard->boardVecs[0][boardSize].pieceID - 1) = true;
   }
   else
   { // Piece already found, add to duplicate pieces vector and index vector
-    pieces->push_back(theBoard->boardVecs[0][boardSize]);
-    std::vector<int> index = { 0, boardSize };
-    indexes->push_back(index);
+    pieces->push_back(theBoard->boardVecs[0][boardSize]); // Store piece
+    std::vector<int> index = { 0, boardSize };            // Create index
+    indexes->push_back(index);                            // Store index
   }
 
-  // Check the bottom left corner to see if that piece ID has already been found
   if (!isFound->at(theBoard->boardVecs[boardSize][0].pieceID - 1))
-  {
+  { // Check the bottom left corner to see if that piece ID has already been 
+    // found
     isFound->at(theBoard->boardVecs[boardSize][0].pieceID - 1) = true;
   }
   else
   { // Piece already found, add to duplicate pieces vector and index vector
-    pieces->push_back(theBoard->boardVecs[boardSize][0]);
-    std::vector<int> index = { boardSize, 0 };
-    indexes->push_back(index);
+    pieces->push_back(theBoard->boardVecs[boardSize][0]); // Store piece
+    std::vector<int> index = { boardSize, 0 };            // Create index
+    indexes->push_back(index);                            // Store idnex
   }
 
-  // Check the bottom right corner to see if that piece ID has already been 
-  // found
   if (!isFound->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1))
-  {
+  { // Check the bottom right corner to see if that piece ID has already been 
+    // found
     isFound->at(theBoard->boardVecs[boardSize][boardSize].pieceID - 1) = true;
   }
   else
   { // Piece already found, add to duplicate pieces vector and index vector
-    pieces->push_back(theBoard->boardVecs[boardSize][boardSize]);
-    std::vector<int> index = { boardSize, boardSize };
-    indexes->push_back(index);
+    pieces->push_back(theBoard->boardVecs[boardSize][boardSize]); // Store piece
+    std::vector<int> index = { boardSize, boardSize };           // Create index
+    indexes->push_back(index);                                    // Store index
   }
 
 } // checkCorners()
@@ -457,52 +454,48 @@ void Crossover::checkEdges(Board* theBoard,                          // *In*
   { // Loop through as many times as there are edge slots on a edge checking
     // for duplicates on one slot of each edge at a time
     
-    // If ID on top edge has not already been found, set to found
     if (!isFound->at(theBoard->boardVecs[0][i].pieceID - 1))
-    {
+    { // If ID on top edge has not already been found, set to found
       isFound->at(theBoard->boardVecs[0][i].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(theBoard->boardVecs[0][i]);
-      std::vector<int> index = { 0, i};
-      indexes->push_back(index);
+      pieces->push_back(theBoard->boardVecs[0][i]);      // Store piece
+      std::vector<int> index = { 0, i};                  // Create index
+      indexes->push_back(index);                         // Store index
     }
 
-    // If ID on left edge has not already been found, set to found
     if (!isFound->at(theBoard->boardVecs[i][0].pieceID - 1))
-    {
+    { // If ID on left edge has not already been found, set to found
       isFound->at(theBoard->boardVecs[i][0].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(theBoard->boardVecs[i][0]);
-      std::vector<int> index = { i, 0 };
-      indexes->push_back(index);
+      pieces->push_back(theBoard->boardVecs[i][0]);      // Store piece
+      std::vector<int> index = { i, 0 };                 // Create index
+      indexes->push_back(index);                         // Store index
     }
 
-    // If ID on right edge has not already been found, set to found
     if (!isFound->at(theBoard->boardVecs[i][boardSize].pieceID - 1))
-    {
+    { // If ID on right edge has not already been found, set to found
       isFound->at(theBoard->boardVecs[i][boardSize].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(theBoard->boardVecs[i][boardSize]);
-      std::vector<int> index = { i, boardSize };
-      indexes->push_back(index);
+      pieces->push_back(theBoard->boardVecs[i][boardSize]); // Store piece
+      std::vector<int> index = { i, boardSize };            // Create index
+      indexes->push_back(index);                            // Store index
     }
 
-    // If ID on bottom edge has not already been found, set to found
     if (!isFound->at(theBoard->boardVecs[boardSize][i].pieceID - 1))
-    {
+    { // If ID on bottom edge has not already been found, set to found
       isFound->at(theBoard->boardVecs[boardSize][i].pieceID - 1) = true;
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(theBoard->boardVecs[boardSize][i]);
-      std::vector<int> index = { boardSize, i };
-      indexes->push_back(index);
+      pieces->push_back(theBoard->boardVecs[boardSize][i]);  // Store piece
+      std::vector<int> index = { boardSize, i };             // Create index
+      indexes->push_back(index);                             // Store index
     }
 
   } // for i < boardSize - 2
@@ -532,9 +525,9 @@ void Crossover::checkInners(Board* theBoard,                         // *In*
     }
     else
     { // Piece already found, add to duplicate pieces vector and index vector
-      pieces->push_back(theBoard->boardVecs[xIndex][yIndex]);
-      std::vector<int> index = { xIndex, yIndex };
-      indexes->push_back(index);
+      pieces->push_back(theBoard->boardVecs[xIndex][yIndex]); // Store piece
+      std::vector<int> index = { xIndex, yIndex };            // Create index
+      indexes->push_back(index);                              // Store index
     }
 
     xIndex++;    // Increment X index to move to the slot on the right
@@ -542,8 +535,8 @@ void Crossover::checkInners(Board* theBoard,                         // *In*
     if (xIndex == BoardManager::getInstance()->getSize())
     { // If we have reached the end of the line of the board, increment
       // to next line
-      xIndex = 1;
-      yIndex++;
+      xIndex = 1;   // Set x back to 1
+      yIndex++;     // Increment y for next row
     }
   }
 
