@@ -355,8 +355,10 @@ void FileHandler::parseData(std::string line,              // *In*
    
     // If whitepsace was found in line, skip to next char		
     if (line[index] == ' ')
+    {
       index++;
-    
+    }
+
     // Convert the data to a int and set it to appropriate element		
     parsedData[i] = std::stoi(data);
   } // for (int i = 0; i <= 4; i++)		
@@ -380,11 +382,17 @@ void FileHandler::createPiece(int parsedData[5])           // *In*
 
   // Add piece to appropriate vector within pieces vector
   if (newPiece.type == CORNER)
+  {
     (*BoardManager::getInstance()->getPieces())[CORNER].push_back(newPiece);
+  }
   else if (newPiece.type == EDGE)
+  {
     (*BoardManager::getInstance()->getPieces())[EDGE].push_back(newPiece);
+  }
   else if (newPiece.type == INNER)
+  {
     (*BoardManager::getInstance()->getPieces())[INNER].push_back(newPiece);
+  }
 
 } // createPiece()
 

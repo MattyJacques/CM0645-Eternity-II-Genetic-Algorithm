@@ -179,11 +179,17 @@ void Crossover::reproduce(Board* parents[2])                          // *In*
   // the application
 
   if (crossType == ONEPOINT)
+  {
     onePoint(parents);
+  }
   else if (crossType == TWOPOINT)
+  {
     twoPoint(parents);
+  }
   else
+  {
     std::cout << "Crossover method not recognised" << std::endl;
+  }
 
 } // reproduce()
 
@@ -343,14 +349,17 @@ void Crossover::checkDuplication()
   // Call to find out which pieces are duplicates, storing in the pieces
   // and index vectors ready for fixing
   for (int i = 0; i < 2; i++)
+  {
     getDuplicates(offspring[i], &pieces[i], &indexes[i]);
+  }
 
   // Calls to repair the boards after duplication was found, giving the pieces
   // and indexes of the duplicate slots, pieces vector switched to add pieces
   // that were found twice in other offspring
   for (int i = 0; i < 2; i++)
+  {
     fixDuplicates(offspring[i], pieces[1 - i], indexes[i]);
-
+  }
 } // checkDuplication()
 
 

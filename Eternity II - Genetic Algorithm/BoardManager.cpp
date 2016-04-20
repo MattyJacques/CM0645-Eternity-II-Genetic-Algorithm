@@ -32,8 +32,10 @@ BoardManager* BoardManager::getInstance()
 { // Returns the instance to the class, if none currently exists, creates one
 
   // If not pInstance, create one
-  if (!pInstance) 
+  if (!pInstance)
+  {
     pInstance = new BoardManager;
+  }
 
   return pInstance;   // Return the instance
 
@@ -132,8 +134,9 @@ void BoardManager::initFullBoard(Board* theBoard,                      // *Out*
   // If starting piece constraint is active and piece 139 is not in slot [7][8]
   // place piece 139 in slot [7][8]
   if (startPiece && theBoard->boardVecs[7][8].pieceID != 139)
+  {
     fixStartPiece(theBoard);
-
+  }
 } // initFullBoard()
 
 
@@ -151,15 +154,15 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
   { // If index is below limit, cycle back around
     switch (index)
     {
-    case -1:
-      index = 3;
-      break;
-    case -2:
-      index = 2;
-      break;
-    case -3:
-      index = 1;
-      break;
+      case -1:
+        index = 3;
+        break;
+      case -2:
+        index = 2;
+        break;
+      case -3:
+        index = 1;
+        break;
     }
   }
 
@@ -176,9 +179,13 @@ void BoardManager::fixOrientation(PuzzlePiece* piece,                  // *Out*
   // so that the edge pattern matches the edge of the board. 
 
   if (piece->type == EDGE)         // If piece is edge, call to rotate edge
+  {
     rotateEdge(piece, xIndex, yIndex);
+  }
   else if (piece->type == CORNER)  // If piece is corner, call to rotate corner
+  {
     rotateCorner(piece, xIndex, yIndex);
+  }
 
 } // fixOrientation()
 

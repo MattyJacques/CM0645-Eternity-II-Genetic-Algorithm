@@ -221,7 +221,8 @@ void FitnessFunction::checkRightEdge()
   // pieces match with adjacent pieces
 
   for (int i = 1; i < boardMan->getSize() - 1; i++)
-  { // Loop right the edge pieces on the right edge of the board checking fitness
+  { // Loop right the edge pieces on the right edge of the board checking 
+    // fitness
 
     if (isMatchSide(boardMan->getSize() - 1, i, boardMan->getSize(), i))
     { // If edge piece matches inner connection to right add score
@@ -253,7 +254,8 @@ void FitnessFunction::checkBottomEdge()
   // pieces match with adjacent pieces
 
   for (int i = 1; i < boardMan->getSize() - 1; i++)
-  {// Loop right the edge pieces on the bottom edge of the board checking fitness
+  { // Loop right the edge pieces on the bottom edge of the board checking 
+    // fitness
 
     if (isMatchSide(i, boardMan->getSize(), i + 1, boardMan->getSize()))
     { // If right pattern matches next piece left add score
@@ -303,14 +305,13 @@ void FitnessFunction::checkInnerPieces()
     } // for int i < boardSize
 
     if (isMatchBottom(boardMan->getSize() - 1, j, boardMan->getSize() - 1,
-      j + 1))
+                      j + 1))
     { // If the last inner in row i piece has a match at bottom, add score
       theBoard->fitScore += INNERMATCH;
       theBoard->matchCount++;
     }
 
-    if (isMatchSide(j, boardMan->getSize() - 1, j + 1,
-      boardMan->getSize() - 1))
+    if (isMatchSide(j, boardMan->getSize() - 1, j + 1, boardMan->getSize() - 1))
     { // If the most bottom inner piece in col i has match at right, add score
       theBoard->fitScore += INNERMATCH;
       theBoard->matchCount++;

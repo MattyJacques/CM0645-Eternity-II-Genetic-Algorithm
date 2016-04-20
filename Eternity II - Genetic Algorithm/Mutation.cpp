@@ -44,17 +44,29 @@ void Mutation::doMutation(bool startPiece)     // *In*
       getPop()->size() - 1, &boardID);
 
     if (mutType == SWAP)   // If mutation method is swap, do swap
+    {
       swap(boardID, startPiece);
+    }
     else if (mutType == ROTATE)
+    {
       rotate(boardID, startPiece);
+    }
     else if (mutType == ROTATESWAP)
+    {
       rotateSwap(boardID, startPiece);
+    }
     else if (mutType == REGIONSWAP)
+    {
       regionSwap(boardID, startPiece);
+    }
     else if (mutType == REGIONROTATE)
+    {
       regionRotate(boardID, startPiece);
-    else                  // Mutation method not recognised, output error
+    }
+    else       
+    { // Mutation method not recognised, output error
       std::cout << "Mutation method not recognised" << std::endl;
+    }
   }
 
 } // doMutation()
