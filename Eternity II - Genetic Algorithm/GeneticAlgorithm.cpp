@@ -79,12 +79,6 @@ void GeneticAlgorithm::setup(bool* isSuccess)           // *Out*
       (boardSize * boardSize))
   { // Calculate how many pieces are in piece vector and how many it takes to
     // fill a board, if not correct, output error and quit
-    int x = ((*BoardManager::getInstance()->getPieces())[0].size() +
-      (*BoardManager::getInstance()->getPieces())[1].size() +
-             (*BoardManager::getInstance()->getPieces())[2].size());
-
-    int y = (boardSize * boardSize);
-
     OutputError();        // Output error
     *isSuccess = false;   // Set sucess to false to quit
   }
