@@ -44,7 +44,8 @@ void GeneticAlgorithm::setup(bool* isSuccess)           // *Out*
     theMutation.setup(mutMethod, mutRate, popSize);
 
     // Output all settings to user
-    //outputSettings(theSettings);
+    outputSettings(boardSize, patternNum, popSize, selectMethod,
+                   crossMethod, mutMethod, mutRate, eliteRate);
 
     // Calculate the maximum fitness of a 100% solved candidate
     calcMaxFitness(boardSize);
@@ -62,6 +63,10 @@ void GeneticAlgorithm::setup(bool* isSuccess)           // *Out*
 
     popSize = 1000;                // Set default population size
     isStartPiece = true;           // Set default start constraint to active
+    boardSize = 16;                // Set default for piece count check
+
+    // Ouput the settings using all the defaults
+    outputSettings(16, 22, 1000, 1, 1, 2, 25, 2);
 
     // Calculate the maximum fitness of a 100% solved candidate
     calcMaxFitness(boardSize);
@@ -74,6 +79,12 @@ void GeneticAlgorithm::setup(bool* isSuccess)           // *Out*
       (boardSize * boardSize))
   { // Calculate how many pieces are in piece vector and how many it takes to
     // fill a board, if not correct, output error and quit
+    int x = ((*BoardManager::getInstance()->getPieces())[0].size() +
+      (*BoardManager::getInstance()->getPieces())[1].size() +
+             (*BoardManager::getInstance()->getPieces())[2].size());
+
+    int y = (boardSize * boardSize);
+
     OutputError();        // Output error
     *isSuccess = false;   // Set sucess to false to quit
   }
@@ -88,7 +99,10 @@ void GeneticAlgorithm::CheckIfDefault(bool* isContinue) // *Out*
 
   char answer = '\0';                     // Holds user answer to continue
 
+  // Prompt user of corrupt settings
   std::cout << "Corrupt settings.ini, use with default values?" << std::endl;
+  
+  // Ask if defaults are to be used
   std::cout << "y/n" << std::endl;
 
   while (answer != 'y' && answer != 'n')
@@ -272,60 +286,66 @@ void GeneticAlgorithm::doFitness()
 } // doFitness()
 
 
-//void GeneticAlgorithm::outputSettings(Settings theSettings)   // *In* 
-//{ // Outputs all of the loaded settings so the user can see what methods are
-//  // used for solving attempt
-//
-//  // Print out the data on the board along with the population size, mutation
-//  // rate and elitism rate
-//  printf("Board Size: %i\nNumber of Patterns: %i\nPopulation Size: %i\n"
-//         "Mutation Rate: %.2f%%\nElitism Rate: %i\n", theSettings.boardSize, 
-//         theSettings.patternNum, theSettings.popSize, theSettings.mutRate, 
-//         theSettings.eliteRate);
-//
-//  // Print out the enum value as a string for selection
-//  if (theSettings.selectType == ROULETTE)
-//  { // If roulette, print roulette 
-//    printf("Selection: Roulette\n");
-//  }
-//  else if (theSettings.selectType == TOURNAMENT)
-//  { // If tournament, print tournament 
-//    printf("Selection: Tournament\n");
-//  }
-//
-//  // Print out the enum value as a string for crossover
-//  if (theSettings.crossType == ONEPOINT)
-//  { // If one point, print one point
-//    printf("Crossover: One-Point\n");
-//  }
-//  else if (theSettings.crossType == TWOPOINT)
-//  { // If two point, print two point
-//    printf("Crossover: Two-Point\n");
-//  }
-//
-//  // Print out the enum value as a string for mutation
-//  if (theSettings.mutType == SWAP)
-//  { // If swap, print swap
-//    printf("Mutation: Swap\n\n");
-//  }
-//  else if (theSettings.mutType == ROTATE)
-//  { // If rotate, print rotate 
-//    printf("Mutation: Rotate\n\n");
-//  }
-//  else if (theSettings.mutType == ROTATESWAP)
-//  { // If rotate & swap, print rotate & swap
-//    printf("Mutation: Rotate & Swap\n\n");
-//  }
-//  else if (theSettings.mutType == REGIONROTATE)
-//  { // If region rotate, print region rotate
-//    printf("Mutation: Region Rotate\n\n");
-//  }
-//  else if (theSettings.mutType == REGIONSWAP)
-//  { // If region swap, print region swap
-//    printf("Mutation: Region Swap\n\n");
-//  }
-//
-//} // outputSettings()
+void GeneticAlgorithm::outputSettings(int boardSize,           // *In*
+                                      int patternNum,          // *In*
+                                      int popSize,             // *In*
+                                      int selectMethod,        // *In*
+                                      int crossMethod,         // *In*
+                                      int mutMethod,           // *In*
+                                      double mutRate,          // *In*
+                                      int eliteRate)           // *In* 
+{ // Outputs all of the loaded settings so the user can see what methods are
+  // used for solving attempt
+
+  // Print out the data on the board along with the population size, mutation
+  // rate and elitism rate
+  printf("Board Size: %i\nNumber of Patterns: %i\nPopulation Size: %i\n"
+         "Mutation Rate: %.2f%%\nElitism Rate: %i\n", boardSize, patternNum, 
+         popSize, mutRate, eliteRate);
+
+  // Print out the enum value as a string for selection
+  if (selectMethod == 0)
+  { // If 0, print roulette 
+    printf("Selection: Roulette\n");
+  }
+  else if (selectMethod == 1)
+  { // If 1, print tournament 
+    printf("Selection: Tournament\n");
+  }
+
+  // Print out the enum value as a string for crossover
+  if (crossMethod == 0)
+  { // If 0, print one point
+    printf("Crossover: One-Point\n");
+  }
+  else if (crossMethod == 1)
+  { // If 1, print two point
+    printf("Crossover: Two-Point\n");
+  }
+
+  // Print out the enum value as a string for mutation
+  if (mutMethod == 0)
+  { // If 0, print swap
+    printf("Mutation: Swap\n\n");
+  }
+  else if (mutMethod == 1)
+  { // If 1, print rotate 
+    printf("Mutation: Rotate\n\n");
+  }
+  else if (mutMethod == 2)
+  { // If 2, print rotate & swap
+    printf("Mutation: Rotate & Swap\n\n");
+  }
+  else if (mutMethod == 3)
+  { // If 3, print region swap
+    printf("Mutation: Region Swap\n\n");
+  }
+  else if (mutMethod == 4)
+  { // If 4, print region rotate
+    printf("Mutation: Region Rotate\n\n");
+  }
+
+} // outputSettings()
 
 
 void GeneticAlgorithm::outputFitness()
