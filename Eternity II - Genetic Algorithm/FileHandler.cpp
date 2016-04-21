@@ -190,6 +190,7 @@ void FileHandler::readDataFile(int size,                         // *In*
 
   if (index >= 0)
   { // If index was found, open file with filename from vector at index element
+
     if (openFile(filenames[index].c_str()))
     { // Checks to see if the file is open before proceeding with reading of
       // the file
