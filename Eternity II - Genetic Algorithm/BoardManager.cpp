@@ -11,7 +11,7 @@
 
 
 // Initialise to null
-BoardManager* BoardManager::instance = nullptr;
+BoardManager* BoardManager::pInstance = nullptr;
 
 
 BoardManager::BoardManager()
@@ -35,12 +35,12 @@ BoardManager::BoardManager()
 BoardManager* BoardManager::getInstance()
 { // Returns the instance to the class, if none currently exists, creates one
 
-  if (!instance)
+  if (!pInstance)
   { // If not pInstance, create one
-    instance = new BoardManager;
+    pInstance = new BoardManager;
   }
 
-  return instance;   // Return the instance
+  return pInstance;   // Return the instance
 
 } // getInstance()
 
@@ -144,17 +144,18 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
 
 
 void BoardManager::fixOrien(PuzzlePiece* piece,                        // *Out*
-                            int index[2],                                // *In*
+                            int yIndex,                                // *In*
+                            int xIndex)                                // *In*
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
 
   if (piece->type == EDGE)         
   { // If piece is edge, call to rotate edge
-    rotateEdge(piece, index[0], index[1]);
+    rotateEdge(piece, xIndex, yIndex);
   }
   else if (piece->type == CORNER)  
   { // If piece is corner, call to rotate corner
-    rotateCorner(piece, index[0], index[1]);
+    rotateCorner(piece, xIndex, yIndex);
   }
 
 } // fixOrientation()
@@ -344,7 +345,8 @@ void BoardManager::addPieces(Board* theBoard)                          // *Out*
 { // Adds pieces to the empty boards, top edge first, moving on to inner slots
   // then finally filling in the corners, side edges and bottom edge
 
-  int index[2] = { 0, 1 };        // Index of current vector to place piece in
+  int index = 1;         // Index of current vector to place piece in
+  int count = 0;         // Count how many pieces places to increment index
 
   // Add edge pieces to vectors that will contain inner pieces
   initTopEdge(theBoard);
@@ -352,14 +354,14 @@ void BoardManager::addPieces(Board* theBoard)                          // *Out*
   for (PuzzlePiece piece : pieceVec[INNER])
   { // Loop through the collection of pieces
 
-    theBoard->boardVecs[index[1]].push_back(piece); // Add piece to board
-    index[0]++;                                     // Increment counter
+    theBoard->boardVecs[index].push_back(piece); // Add piece to line on board
+    count++;                                     // Increment counter
 
-    if (index[0] == boardSize - 1)
+    if (count == boardSize - 1)
     { // If reached the end of the line for the board, move onto next line
       // of the board
-      index[1]++;                                   // Increment row
-      index[0] = 0;                                 // Reset col
+      index++;                                   // Increment row
+      count = 0;                                 // Reset col
     }
   }
 
@@ -373,24 +375,25 @@ void BoardManager::fixStartPiece(Board* theBoard)                      // *Out*
 { // If an official Eternity II solve attempt, make sure the start piece
   // constraint is met by placing the piece with the ID 139 on slot [7][8]
 
-  int index[2] = { 1, 1 };     // Index for slot
+  int xIndex = 1;     // X index for slot
+  int yIndex = 1;     // Y index for slot
 
   for (int i = 0; i < (int)pieceVec[INNER].size(); i++)
   { // Loop through for every inner piece within the board
 
-    if (theBoard->boardVecs[index[0]][index[1]].pieceID == 139 && index[0] != 7 &&
-        index[1] != 8)
+    if (theBoard->boardVecs[xIndex][yIndex].pieceID == 139 && xIndex != 7 &&
+        yIndex != 8)
     { // If the ID of piece is 139 call subroutine to place piece 139 in slot
       // [7][8] then break out of loop as no further action is needed
-      swapStartPiece(theBoard, index);
+      swapStartPiece(theBoard, xIndex, yIndex);
       break;
     }
       
-    if (index[0] == boardSize - 1)
+    if (xIndex == boardSize - 1)
     { // If reached the end of the line for the board, move onto next line
       // of the board
-      index[1]++;           // Increment y
-      index[0] = 0;         // reset x
+      yIndex++;           // Increment y
+      xIndex = 0;         // reset x
     }
   }
 
@@ -398,7 +401,8 @@ void BoardManager::fixStartPiece(Board* theBoard)                      // *Out*
 
 
 void BoardManager::swapStartPiece(Board* theBoard,                     // *Out*
-                                  int index[2],                        // *In*  
+                                  int xIndex,                          // *In*  
+                                  int yIndex)                          // *In*
 { // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
 
@@ -406,33 +410,34 @@ void BoardManager::swapStartPiece(Board* theBoard,                     // *Out*
   PuzzlePiece swapTemp = theBoard->boardVecs[7][8];
 
   // Place starting piece in the starting slot
-  theBoard->boardVecs[7][8] = theBoard->boardVecs[index[0]][index[1]];
+  theBoard->boardVecs[7][8] = theBoard->boardVecs[xIndex][yIndex];
 
   // Place piece back in to the slot that the starting piece was located
-  theBoard->boardVecs[index[0]][index[1]] = swapTemp;
+  theBoard->boardVecs[xIndex][yIndex] = swapTemp;
 
 } // swapStartPiece()
 
 
 void BoardManager::rotateEdge(PuzzlePiece* piece,                      // *Out*  
-                              int index[2],                            // *In*
+                              int xIndex,                              // *In*
+                              int yIndex)                              // *In*
 { // Rotates an edge piece so the edge pattern matches the edge of the board
 
-  if (index[0] >= 1 && index[0] <= boardSize - 1 && index[1] == 0)
+  if (xIndex >= 1 && xIndex <= boardSize - 1 && yIndex == 0)
   { // If y = 0 and x is between 1 and boardSize - 1 set orientation to 2
     piece->orientation = 2;
   }
-  else if (index[0] == boardSize && index[1] >= 1 && index[1] <= boardSize - 1)
+  else if (xIndex == boardSize && yIndex >= 1 && yIndex <= boardSize - 1)
   { // If y is between 1 and boardSize - 1 and x = boardSize set orientation to 
     // 3
     piece->orientation = 3;
   }
-  else if (index[0] >= 1 && index[0] <= boardSize - 1 && index[1] == boardSize)
+  else if (xIndex >= 1 && xIndex <= boardSize - 1 && yIndex == boardSize)
   { // If y = boardSize and x is between 1 and boardSize - 1, set orientation to
     // 0
     piece->orientation = 0;
   }
-  else if (index[0] == 0 && index[1] >= 1 && index[1] <= boardSize - 1)
+  else if (xIndex == 0 && yIndex >= 1 && yIndex <= boardSize - 1)
   { // If y is between 1 and boardSize - 1 and x = 0, set orientation to 1
     piece->orientation = 1;
   }
@@ -441,22 +446,23 @@ void BoardManager::rotateEdge(PuzzlePiece* piece,                      // *Out*
 
 
 void BoardManager::rotateCorner(PuzzlePiece* piece,                    // *Out*
-                                int index[2],                          // *In*
+                                int xIndex,                            // *In*
+                                int yIndex)                            // *In*
 { // Rotates an corner piece so the corner pattern matches the edge of the board
 
-  if (index[0] == 0 && index[1] == 0)
+  if (xIndex == 0 && yIndex == 0)
   { // If y = 0 and x = 0 set mode to top left corner
     piece->orientation = 1;
   }
-  else if (index[0] == boardSize && index[1] == 0)
+  else if (xIndex == boardSize && yIndex == 0)
   { // If y = 0 and x = boardSize set mode to top right corner
     piece->orientation = 2;
   }
-  else if (index[0] == 0 && index[1] == boardSize)
+  else if (xIndex == 0 && yIndex == boardSize)
   { // If y = boardSize and x = 0 set mode to bottom left corner
     piece->orientation = 0;
   }
-  else if (index[0] == boardSize && index[1] == boardSize)
+  else if (xIndex == boardSize && yIndex == boardSize)
   { // If y = boardSize and x = boardSize set mode to bottom right corner
     piece->orientation = 3;
   }
@@ -658,7 +664,7 @@ BoardManager::~BoardManager()
 
   currBoards = nullptr;     // Delete current generation
   prevBoards = nullptr;     // Delete previous generation
-  delete instance;         // Delete instance
-  instance = nullptr;      // Null instance
+  delete pInstance;         // Delete instance
+  pInstance = nullptr;      // Null instance
 
 } // ~BoardManager()

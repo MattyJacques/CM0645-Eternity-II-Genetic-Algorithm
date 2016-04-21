@@ -52,14 +52,7 @@ private:
 
   // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
-  void outputSettings(int boardSize,           // *In*
-                      int patternNum,          // *In*
-                      int popSize,             // *In*
-                      int selectMethod,        // *In*
-                      int crossMethod,         // *In*
-                      int mutMethod,           // *In*
-                      double mutRate,          // *In*
-                      int eliteRate);          // *In*
+ // void outputSettings(Settings theSettings);   // *In*
 
   // Calls to ouput the current fitness to the file for record of performance
   void outputFitness();

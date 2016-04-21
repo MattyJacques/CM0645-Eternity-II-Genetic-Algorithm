@@ -71,7 +71,7 @@ class BoardManager
 private:
   int patternNum;                     // Amount of patterns within board
   int boardSize;                      // Holds the size of the board
-  static BoardManager* instance;      // Current instance of class
+  static BoardManager* pInstance;     // Current instance of class
 
   // Collection of all pieces to be used split into corner, edge and inner types
   std::vector<std::vector<PuzzlePiece>> pieceVec;
@@ -104,7 +104,8 @@ private:
   // Swap the piece with the given index with the piece in the starting piece
   // slot according to the Eternity II rule book. (Slot [7][8])
   void swapStartPiece(Board* theBoard,                     // *Out*
-                      int index[2]);                          // *In*  
+                      int xIndex,                          // *In*  
+                      int yIndex);                         // *In*
 
   // Rotates an edge piece so the edge pattern matches the edge of the board
   void rotateEdge(PuzzlePiece* piece,                      // *Out*  
