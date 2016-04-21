@@ -39,6 +39,7 @@ void Crossover::doCrossover(int popSize)                              // *In*
   // methods
 
   int totalFitness = 0;      // Holds the combined fitness of all boards
+  int popCount = 0;          // Holds how many offspring have been created
   Board* parents[2];         // Two boards that have been selected as parents
 
   if (selectType == ROULETTE)
@@ -50,8 +51,7 @@ void Crossover::doCrossover(int popSize)                              // *In*
     }
   }
 
-  while ((int)BoardManager::getInstance()->getPop()->size() < popSize -
-         (eliteRate * 2) - 1)
+  while (popCount < popSize -(eliteRate * 2) - 1)
   { // While the new vector is not filled with the right population size
     // make more candidates
 
@@ -62,6 +62,8 @@ void Crossover::doCrossover(int popSize)                              // *In*
 
     reproduce(parents);  // Breed the parents together
     checkDuplication();  // Check for any duplicate pieces
+
+    popCount += 2;       // Increment offspring count by 2
   }
 
   doElitism(); // Transfer the elites over to new generation
