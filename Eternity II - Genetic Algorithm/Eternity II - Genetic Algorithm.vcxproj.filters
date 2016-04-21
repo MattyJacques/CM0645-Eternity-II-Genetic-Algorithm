@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resource Files\Puzzles">
-      <UniqueIdentifier>{bbe09e5f-56b3-403c-b8d2-c0f82253cc1f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneticAlgorithm.cpp">
@@ -63,24 +60,6 @@
   <ItemGroup>
     <None Include="settings.ini">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Puzzles\BoardSize 4 - Pattern 2.e2">
-      <Filter>Resource Files\Puzzles</Filter>
-    </None>
-    <None Include="Puzzles\BoardSize 8 - Pattern 4.e2">
-      <Filter>Resource Files\Puzzles</Filter>
-    </None>
-    <None Include="Puzzles\BoardSize 8 - Pattern 8.e2">
-      <Filter>Resource Files\Puzzles</Filter>
-    </None>
-    <None Include="Puzzles\BoardSize 8 - Pattern 16.e2">
-      <Filter>Resource Files\Puzzles</Filter>
-    </None>
-    <None Include="Puzzles\BoardSize 10 - Pattern 16.e2">
-      <Filter>Resource Files\Puzzles</Filter>
-    </None>
-    <None Include="Puzzles\BoardSize 16 - Pattern 22.e2">
-      <Filter>Resource Files\Puzzles</Filter>
     </None>
   </ItemGroup>
 </Project>

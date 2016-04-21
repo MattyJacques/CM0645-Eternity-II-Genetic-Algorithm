@@ -5,7 +5,6 @@
 
 
 #include "GeneticAlgorithm.h"     // To create and call the GA
-#include "FileHandler.h"          // To read in settings
 
 
 void main()
@@ -14,9 +13,8 @@ void main()
   // algorithm loop
 
   GeneticAlgorithm theGA;                       // Create algorithm object
-  FileHandler fileHandle;                       // Create file reader object
 
-  theGA.setup(fileHandle.readSettingsFile());   // Read algorithms settings
+  theGA.setup();                                // Read algorithms settings
   theGA.runGA();                                // Run the algorithm
 
 } // main()

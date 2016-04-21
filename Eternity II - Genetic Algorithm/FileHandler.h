@@ -29,16 +29,24 @@ private:
   // if the user wants to use one of them
   void scanFileDirectory();
  
-  // Parse int from next line of file placing value in int passed as parameter
-  void parseInt(int* setting);                        // *Out*
+  // Parse int from next line of file placing value in int passed as parameter,
+  // checking label to make sure it is the right setting
+  void parseInt(int* setting,                         // *Out*
+                std::string label);                   // *In*
 
   // Parse double from next line of file placing value in double passed as
-  // parameter
-  void parseDouble(double* setting);                  // *Out*
+  // parameter, checking the labal to make sure it is the right setting
+  void parseDouble(double* setting,                   // *Out*
+                   std::string label);                // *In* 
 
-  // Parses the methods of selection, crossover and mutation from the int in
-  // file into the enum values
-  void parseMethods(Settings* settingData);           // *Out*
+  // Parses the methods of selection, crossover and mutation from the int into 
+  // the enum values
+  void parseMethods(int inSelect,                     // *In*
+                    int inCross,                      // *In*
+                    int inMutate,                     // *In*
+                    SelectionType* selectType,        // *Out*
+                    CrossoverType* crossType,         // *Out*
+                    MutateType* mutType);             // *Out*       
 
   // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
@@ -90,13 +98,33 @@ private:
   // line
   void outputDataFile(std::string filename);          // *In*
 
+  // Checks all of the input that has been read in make sure they are valid
+  // inputs
+  bool CheckInput(int inSize,                         // *In*         
+                  int inPattern,                      // *In*
+                  int inPopSize,                      // *In*
+                  int inSelect,                       // *In*
+                  int inCross,                        // *In*
+                  int inMutMethod,                    // *In*
+                  double inMutRate,                   // *In*
+                  int inElite,                        // *In*
+                  int startPiece);                    // *In*
+
 public:
   // Calls to scan the directory for piece data files
   FileHandler();
 
   // Reads the settings file named "settings.ini" in the root directory, 
   // setting the appropriate values that have been read in to the algorithm
-  Settings readSettingsFile();
+  void readSettingsFile(int* boardSize,               // *Out*
+                        int* patternNum,              // *Out*
+                        int* popSize,                 // *Out*
+                        SelectionType* selectMethod,  // *Out*
+                        CrossoverType* crossMethod,   // *Out*
+                        MutateType* mutMethod,        // *Out*
+                        double* mutRate,              // *Out*
+                        int* eliteRate,               // *Out*
+                        bool* isStartPiece);          // *Out*
 
   // Reads the piece file with the file name that matches the information passed
   // as parameter storing piece info in the piece collection vector

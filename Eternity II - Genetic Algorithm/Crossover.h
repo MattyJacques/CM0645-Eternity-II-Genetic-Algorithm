@@ -11,10 +11,10 @@
 
 
 // Readability for methods of crossover
-enum CrossoverType { ONEPOINT, TWOPOINT };
+enum CrossoverType { ONEPOINT, TWOPOINT, CROSSDEFAULT };
 
 // Readability for methods of selection
-enum SelectionType { ROULETTE, TOURNAMENT };
+enum SelectionType { ROULETTE, TOURNAMENT, SELECTDEFAULT};
 
 struct Board;              // Usage of board types
 struct PuzzlePiece;        // Usage of puzzle piece types
@@ -36,8 +36,9 @@ private:
 
   // Selects candidates via the roulette wheel method mentioned within the 
   // report in chapter 3
-  void rouletteSelect(Board* parents[2],                        // *Out*
-                      int fitness);                             // *In*
+  void rouletteSelect(Board* parents[2],                       // *Out* 
+                      int totalFitness,                         // *In*
+                      int popSize);                             // *In*                            // *In*
 
   // Selects candidates via the tournament selection method mentioned within the
   // report in chapter 3. Does not remove candidate from selection

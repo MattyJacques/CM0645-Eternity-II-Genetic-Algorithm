@@ -11,7 +11,8 @@
 
 
 // Holds all of the different mutation methods that can be used
-enum MutateType { SWAP, ROTATE, ROTATESWAP, REGIONSWAP, REGIONROTATE};
+enum MutateType { SWAP, ROTATE, ROTATESWAP, REGIONSWAP, REGIONROTATE, 
+                  MUTDEFAULT};
 
 
 class Mutation

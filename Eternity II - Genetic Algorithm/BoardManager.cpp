@@ -144,7 +144,7 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
   // Get the index of the segment taking into account orientation
   int index = (segment - theBoard->boardVecs[xIndex][yIndex].orientation);
 
-  if (index < 0)
+  if (index < 0 && index > -4)
   { // If index is below limit, cycle back around
     switch (index)
     {
@@ -160,8 +160,8 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
         index = 1;
         break;
 
-      default:
-        // Do nothing
+      default:     // Do nothing
+        index = index;
     }
   }
 

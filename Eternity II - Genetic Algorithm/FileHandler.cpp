@@ -38,56 +38,141 @@ FileHandler::FileHandler()
 } // FileReader()
 
 
-Settings FileHandler::readSettingsFile()
+void FileHandler::readSettingsFile(int* boardSize,               // *Out*
+                                   int* patternNum,              // *Out*
+                                   int* popSize,                 // *Out*
+                                   SelectionType* selectMethod,  // *Out*
+                                   CrossoverType* crossMethod,   // *Out*
+                                   MutateType* mutMethod,        // *Out*
+                                   double* mutRate,              // *Out*
+                                   int* eliteRate,               // *Out*
+                                   bool* isStartPiece)           // *Out*
 { // Reads the settings file named "settings.ini" in the root directory, 
   // setting the appropriate values that have been read in to the algorithm
 
-  Settings settingData;    // Holds all of the loaded settings data
-  int startPiece = -1;     // Holds parsed int for start piece constraint
+  int inSize = -1;          // Holds input board size   
+  int inPattern = -1;       // Holds input pattern num
+  int inPopSize = -1;       // Holds input population size
+  int inSelect = -1;        // Holds input input select
+  int inCross = -1;         // Holds input crossover method
+  int inMutMethod = -1;     // Holds input mutation method
+  double inMutRate = -1;    // Holds input mutation rate
+  int inElite = -1;         // Holds input elitism rate
+  int startPiece = -1;      // Holds parsed int for start piece constraint
 
   if (openFile("settings.ini"))
   { // Checks to see if the file is open before proceeding with reading of the
     // file
 
-    parseInt(&settingData.boardSize);        // Parse the board size
-    parseInt(&settingData.patternNum);       // Parse the number of patterns
-    parseInt(&settingData.popSize);          // Parse the population size
+    parseInt(&inSize, "BoardSize:");           // Parse the board size
+    parseInt(&inPattern, "NumberOfPatterns:"); // Parse the number of patterns
+    parseInt(&inPopSize, "PopulationSize:");   // Parse the population size   
+    parseInt(&inSelect, "SelectionMethod:");   // Parse selection method
+    parseInt(&inCross, "CrossoverMethod:");    // Parse crossover method
+    parseInt(&inMutMethod, "MutationMethod:"); // Parse mutation method
+    parseDouble(&inMutRate, "MutationRate:");  // Parse the mutation rate
+    parseInt(&inElite, "EliteRate:");          // Parse the elitism rate
+    parseInt(&startPiece, "StartConstraint:"); // Parse start constraint active
 
-    // Parse the selection, crossover and mutation methods into the appropriate
-    // enums
-    parseMethods(&settingData);
+    if (CheckInput(inSize, inPattern, inPopSize, inSelect, inCross, inMutMethod,
+                   inMutRate, inElite, startPiece))
+    { // Check to see if the input that has been read in is valid. If the input
+      // is valid, set the data members of the GA to the input
 
-    parseDouble(&settingData.mutRate);       // Parse the mutation rate
-    parseInt(&settingData.eliteRate);        // Parse the elitism rate
-    parseInt(&startPiece);               // Parse if start constraint is active
+      *boardSize = inSize;               // Set the board size
+      *patternNum = inPattern;           // Set the number of patterns
+      *popSize = inPopSize;              // Set the population size
 
-    if (startPiece == 1)
-    { // If value from file equals 1, set start piece constraint to true
-      settingData.startCons = true;
+      // Parse the input ints into the enums of the selection, crossover and 
+      // mutation methods
+      parseMethods(inSelect, inCross, inMutMethod, selectMethod, crossMethod,
+                   mutMethod);
+
+      *mutRate = inMutRate;              // Set the mutation rate
+      *eliteRate = inElite;              // Set the elitism rate
+      *isStartPiece = (startPiece == 1); // Set if start piece is active
     }
-    else if (startPiece == 0)
-    { // If value from file equals 0, set start piece constraint to false
-      settingData.startCons = false;
+    else
+    {
+      int x = 1;
     }
 
     theFile.close();                     // Close file after use
   }
 
   // Read in puzzle pieces
-  readDataFile(settingData.boardSize, settingData.patternNum);
+  readDataFile(inSize, inPattern);
 
   // Calculate output filename
-  setOutFilename(settingData.boardSize, settingData.patternNum, 
-                 settingData.selectType, settingData.crossType, 
-                 settingData.mutType);
-
-  return settingData;  // Return parsed data
+  setOutFilename(inSize, inPattern, inSelect, inCross, inMutMethod);
 
 } // readSettingsFile()
 
 
-void FileHandler::readDataFile(int size,                   // *In*
-                               int pattern)                // *In*
+bool FileHandler::CheckInput(int inSize,                         // *In*         
+                             int inPattern,                      // *In*
+                             int inPopSize,                      // *In*
+                             int inSelect,                       // *In*
+                             int inCross,                        // *In*
+                             int inMutMethod,                    // *In*
+                             double inMutRate,                   // *In*
+                             int inElite,                        // *In*
+                             int startPiece)                     // *In*
+{ // Checks all of the input that has been read in make sure they are valid
+  // inputs
+
+  bool result = true;         // Result of input check, changed to false if fail
+
+  if (inSize < 3)
+  { // If the board size is less than 3, set to failed input
+    result = false;
+  }
+  else if (inPattern < 1)
+  { // If the number of patterns is less than 1, set to failed input
+    result = false;
+  }
+  else if (inPopSize < 1 || inPopSize < inElite + 1)
+  { // If the population size is less than one or less than the elite rate + 1,
+    // set to failed input
+    result = false;
+  }
+  else if (inSelect < 0 || inSelect > 1)
+  { // If the selection method is less than 0 or greater than 1, set to failed 
+    // input
+    result = false;
+  }
+  else if (inCross < 0 || inCross > 1)
+  { // If the crossover method is less than 0 or greater than 1, set to failed 
+    // input
+    result = false;
+  }
+  else if (inMutMethod < 0 || inMutMethod > 4)
+  { // If the mutation method is less than 0 or greather than 4, set to failed 
+    // input
+    result = false;
+  }
+  else if (inMutRate < 0)
+  { // If the mutation rate is less than 0, set to failed input
+    result = false;
+  }
+  else if (inElite < 0 || inElite > inPopSize - 1)
+  { // If the elitism rate is less than 0 or greater than the population size -
+    // 1, set to failed input
+    result = false;
+  }
+  else if (startPiece != 0 || startPiece != 1 && inSize == 16)
+  { // If the start piece constraint is not set to 0 or 1 and greater or equal
+    // 16, set to failed input
+    result = false;
+  }
+
+  return result;        // Return the result
+
+} // CheckInput()
+
+
+void FileHandler::readDataFile(int size,                         // *In*
+                               int pattern)                      // *In*
 { // Reads the piece file with the file name that matches the information
   // passed as parameter storing piece info in the piece collection vector
 
@@ -122,8 +207,8 @@ void FileHandler::readDataFile(int size,                   // *In*
 } // readDataFile()
 
 
-void FileHandler::outputBoard(Board* theBoard,             // *In*
-                              int genCount)                // *In*
+void FileHandler::outputBoard(Board* theBoard,                   // *In*
+                              int genCount)                      // *In*
 { // Output the board to a file to show progress or solved board, file name is
   // date generation and time ran.
 
@@ -138,7 +223,7 @@ void FileHandler::outputBoard(Board* theBoard,             // *In*
 } // outputBoard()
 
 
-void FileHandler::outputFitness(int fitness)               // *In*
+void FileHandler::outputFitness(int fitness)                     // *In*
 { // Appends the fitness to file for tracking of algorithm performance
 
   if (openFile(outFilename.c_str()))
@@ -154,7 +239,7 @@ void FileHandler::outputFitness(int fitness)               // *In*
 } // outputFitness()
 
 
-bool FileHandler::openFile(const char* fileName)           // *In*
+bool FileHandler::openFile(const char* fileName)                 // *In*
 { // Opens the file using the filename provided return whether successful
   
   // Open the file with in out and append flags
@@ -207,100 +292,119 @@ void FileHandler::scanFileDirectory()
 } // scanFileDirectory()
 
 
-void FileHandler::parseInt(int* setting)                   // *Out*
-{ // Parse int from next line of file placing in int passed as parameter
+void FileHandler::parseInt(int* setting,                         // *Out*
+                           std::string label)                    // *In*
+{ // Parse int from next line of file placing value in int passed as parameter,
+  // checking label to make sure it is the right setting
 
   std::string inLine = "/0";         // Stores current line to be parsed
-  char label[25] = "/0";             // Stores label of the line from file
+  char inLabel[25] = "/0";           // Stores label of the line from file
+  int inputInt = -1;                    // Stores the int that has been read
 
   while (std::getline(theFile, inLine))
   { // Read in the next line
     if (!inLine.empty() && inLine[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
-      // label storing junk label from file
-      sscanf_s(inLine.c_str(), "%s %i", label, 25, setting);  // Parse value
-      break;                                               // Break out of loop
+      // label checking if label is correct
+
+      // Parse int and label into inputInt and inLabel
+      sscanf_s(inLine.c_str(), "%s %i", inLabel, 25, &inputInt);
+
+      if (inLabel == label)
+      { // If the labels match, set the setting to the input
+        *setting = inputInt;
+      }
+
+      break; // Break out of loop
     }
   }
 
 } // parseInt()
 
 
-void FileHandler::parseDouble(double* setting)             // *Out*
+void FileHandler::parseDouble(double* setting,                   // *Out*
+                              std::string label)                 // *In*
 { // Parse double from next line of file placing value in double passed as
-  // parameter
+  // parameter, checking the labal to make sure it is the right setting
 
   std::string inLine = "/0";         // Stores current line to be parsed
-  char label[25] = "/0";             // Stores label of the line from file
+  char inLabel[25] = "/0";           // Stores label of the line from file
+  double inputDouble = -1;           // Stores the double that has been read
 
   while (std::getline(theFile, inLine))
   { // Read in the next line
     if (!inLine.empty() && inLine[0] != '*')
     { // If line is not empty or comment line, parse the data in to data var
-      // label storing junk label from file
-      sscanf_s(inLine.c_str(), "%s %lf", label, 25, setting); // Parse value
-      break;                                               // Break out of loop
+      // label checking if label is correct
+
+      // Parse double and label into inputDoublew and inLabal
+      sscanf_s(inLine.c_str(), "%s %lf", inLabel, 25, &inputDouble);
+
+      if (inLabel == label)
+      { // If the labels match, set the setting to the input
+        *setting = inputDouble;
+      }
+
+      break; // Break out of loop
     }
   }
 
 } // parseDouble()
 
 
-void FileHandler::parseMethods(Settings* setData)          // *Out*
-{ // Parses the methods of selection, crossover and mutation from the int in
-  // file into the enum values
+void FileHandler::parseMethods(int inSelect,                     // *In*
+                               int inCross,                      // *In*
+                               int inMutate,                     // *In*
+                               SelectionType* selectType,        // *Out*
+                               CrossoverType* crossType,         // *Out*
+                               MutateType* mutType)              // *Out*
+{ // Parses the methods of selection, crossover and mutation from the int into 
+  // the enum values
 
-  int setting = -1;          // Holds value read from file
-  parseInt(&setting);        // Read in selection method
-
-  if (setting == 0)
-  { // If int is 0, set select method to roulette
-    setData->selectType = ROULETTE;
+  if (inSelect == 0)
+  { // If select method is 0, set select method to roulette
+    *selectType = ROULETTE;
   }
-  else if (setting == 1)
-  { // If int is 1, set select method to tournament
-    setData->selectType = TOURNAMENT;
-  }
-
-  parseInt(&setting);        // Read in crossover method
-
-  if (setting == 0)
-  { // If int is 0, set crossover method to one-point
-    setData->crossType = ONEPOINT;
-  }
-  else if (setting == 1)
-  { // If int is 1, set crossover method to two-point
-    setData->crossType = TWOPOINT;
+  else if (inSelect == 1)
+  { // If select method is 1, set select method to tournament
+    *selectType = TOURNAMENT;
   }
 
-  parseInt(&setting);        // Read in mutation method
+  if (inCross == 0)
+  { // If crossover method is 0, set crossover method to one-point
+    *crossType = ONEPOINT;
+  }
+  else if (inCross == 1)
+  { // If crossover method is 1, set crossover method to two-point
+    *crossType = TWOPOINT;
+  }
 
-  if (setting == 0)
-  { // If int is 0, set mutation method to swap
-    setData->mutType = SWAP;
+  if (inMutate == 0)
+  { // If mutation method is 0, set mutation method to swap
+    *mutType = SWAP;
   }
-  else if (setting == 1)
-  { // If int is 0, set mutation method to rotate
-    setData->mutType = ROTATE;
+  else if (inMutate == 1)
+  { // If mutation method is 0, set mutation method to rotate
+    *mutType = ROTATE;
   }
-  else if (setting == 2)
-  { // If int is 0, set mutation method to rotate & swap
-    setData->mutType = ROTATESWAP;
+  else if (inMutate == 2)
+  { // If mutation method is 0, set mutation method to rotate & swap
+    *mutType = ROTATESWAP;
   }
-  else if (setting == 3)
-  { // If int is 0, set mutation method to region swap
-    setData->mutType = REGIONSWAP;
+  else if (inMutate == 3)
+  { // If mutation method is 0, set mutation method to region swap
+    *mutType = REGIONSWAP;
   }
-  else if (setting == 4)
-  { // If int is 0, set mutation method to region rotate
-    setData->mutType = REGIONSWAP;
+  else if (inMutate == 4)
+  { // If mutation method is 0, set mutation method to region rotate
+    *mutType = REGIONSWAP;
   }
 
 } // parseMethods()
 
 
-int FileHandler::getDataFilename(int size,                 // *In*
-                                 int pattern)              // *In*
+int FileHandler::getDataFilename(int size,                       // *In*
+                                 int pattern)                    // *In*
 { // Find the correct filename from the vector of puzzle file names found
   // during the directory scan
 
@@ -331,8 +435,8 @@ int FileHandler::getDataFilename(int size,                 // *In*
 } // getDataFilename()
 
 
-void FileHandler::parseData(std::string line,              // *In*
-                            int parsedData[5])             // *Out*
+void FileHandler::parseData(std::string line,                    // *In*
+                            int parsedData[5])                   // *Out*
 { // Takes string of data and parses into the array of integers to use to create		
   // the puzzle piece		
     
@@ -367,7 +471,7 @@ void FileHandler::parseData(std::string line,              // *In*
 } // parseData()
 
 
-void FileHandler::createPiece(int parsedData[5])           // *In*
+void FileHandler::createPiece(int parsedData[5])                 // *In*
 { // Creates a new puzzle piece and stores in the puzzle piece vector
 
   // Create a new puzzle piece
@@ -397,7 +501,7 @@ void FileHandler::createPiece(int parsedData[5])           // *In*
 } // createPiece()
 
 
-PieceType FileHandler::checkType(int* parsedData)          // *In*
+PieceType FileHandler::checkType(int* parsedData)                // *In*
 { // Checks to see what type of piece is currently being read, returning the
   // answer
 
@@ -439,11 +543,11 @@ PieceType FileHandler::checkType(int* parsedData)          // *In*
 } // checkType()
 
 
-void FileHandler::setOutFilename(int boardSize,            // *In*
-                                 int patternNum,           // *In*
-                                 int select,               // *In*
-                                 int crossover,            // *In*
-                                 int mutation)             // *In*
+void FileHandler::setOutFilename(int boardSize,                  // *In*
+                                 int patternNum,                 // *In*
+                                 int select,                     // *In*
+                                 int crossover,                  // *In*
+                                 int mutation)                   // *In*
 { // Calculate the output filename
 
   char intBuff[10] = "/0";               // Holds result of itoa
@@ -467,8 +571,8 @@ void FileHandler::setOutFilename(int boardSize,            // *In*
 } // setOutFilename()
 
 
-void FileHandler::outputMatches(Board* theBoard,           // *In*
-                                int genCount)              // *In*
+void FileHandler::outputMatches(Board* theBoard,                 // *In*
+                                int genCount)                    // *In*
 { // Outputs the board to file using the pattern IDs so user can see the
   // matches for themselves
 
@@ -526,8 +630,8 @@ void FileHandler::outputMatches(Board* theBoard,           // *In*
 } // outputMatches()
 
 
-void FileHandler::outputIDs(Board* theBoard,               // *In*
-                            int genCount)                  // *In*
+void FileHandler::outputIDs(Board* theBoard,                     // *In*
+                            int genCount)                        // *In*
 { // Output the board to file using the piece IDs and orientations so the user
   // can see which piece does where with the current solution
 
@@ -552,8 +656,8 @@ void FileHandler::outputIDs(Board* theBoard,               // *In*
 } // outputIDs()
 
 
-void FileHandler::appendSelectCross(int select,            // *In*
-                                    int crossover)         // *In*
+void FileHandler::appendSelectCross(int select,                  // *In*
+                                    int crossover)               // *In*
 { // Append the selection method and crossover method to filename
 
   if (select == 0)
@@ -577,7 +681,7 @@ void FileHandler::appendSelectCross(int select,            // *In*
 } // appendSelectCross()
 
 
-void FileHandler::appendMutation(int mutation)             // *In*
+void FileHandler::appendMutation(int mutation)                   // *In*
 { // Append the mutation method to filename
 
   if (mutation == 0)
@@ -604,8 +708,8 @@ void FileHandler::appendMutation(int mutation)             // *In*
 } // appendMutation()
 
 
-void FileHandler::makeDataFile(int size,                   // *In* 
-                               int pattern)                // *In*
+void FileHandler::makeDataFile(int size,                         // *In* 
+                               int pattern)                      // *In*
 { // If no data file was found, generate a new random board and make the data
   // file that corrosponds to that board
 
@@ -629,7 +733,7 @@ void FileHandler::makeDataFile(int size,                   // *In*
 } // makeDataFile()
 
 
-void FileHandler::outputDataFile(std::string filename)     // *In*
+void FileHandler::outputDataFile(std::string filename)           // *In*
 { // Creates the data file by outputting the pieces to the file one piece per
   // line
   

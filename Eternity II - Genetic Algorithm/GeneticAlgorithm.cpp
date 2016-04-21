@@ -10,37 +10,43 @@
 #include <iostream>            // Console output
 
 
-void GeneticAlgorithm::setup(Settings theSettings)            // *In*
+void GeneticAlgorithm::setup() 
 { // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
 
+  FileHandler inputFile;                         // File handler to do input
+  int boardSize = -1;                            // Holds input board size   
+  int patternNum = -1;                           // Holds input pattern num
+  SelectionType selectMethod = SELECTDEFAULT;    // Holds input input select
+  CrossoverType crossMethod = CROSSDEFAULT;      // Holds input crossover method
+  MutateType mutMethod = MUTDEFAULT;             // Holds input mutation method
+  double mutRate = -1;                           // Holds input mutation rate
+  int eliteRate = -1;                            // Holds input elitism rate
+
+  inputFile.readSettingsFile(&boardSize, &patternNum, &popSize, &selectMethod,
+                             &crossMethod, &mutMethod, &mutRate, &eliteRate,
+                             &isStartPiece);
+
   // Set up the crossover object using the input methods
-  theCrossover.setMethod(theSettings.crossType, theSettings.selectType, 
-                         theSettings.eliteRate);
+  theCrossover.setMethod(crossMethod, selectMethod, eliteRate);
 
   // Set up the mutation method using the input methods
-  theMutation.setup(theSettings.mutType, theSettings.mutRate, 
-                    theSettings.popSize);
+  theMutation.setup(mutMethod, mutRate, popSize);
 
-  popSize = theSettings.popSize; // Set the population for each generation
   maxFitness = 0;                // Initialise maximum fitness of 100% candidate
   currFitness = 0;               // Init maximum fitness GA has reached
   genCount = 0;                  // Init generation count
   maxMatches = 0;                // Init maximum matches in candidate
 
-  // Set if the start piece constraint is active
-  isStartPiece = theSettings.startCons;
-
   // Output all settings to user
-  outputSettings(theSettings);
+  //outputSettings(theSettings);
 
   // Calculate the maximum fitness of a 100% solved candidate
-  calcMaxFitness(theSettings.boardSize);
+  calcMaxFitness(boardSize);
 
   // Initialise the board manager with the board size and number of patterns
-  BoardManager::getInstance()->initialiseData(theSettings.boardSize, 
-                                              theSettings.patternNum);
+  BoardManager::getInstance()->initialiseData(boardSize, patternNum);
 
 } // setup()
 

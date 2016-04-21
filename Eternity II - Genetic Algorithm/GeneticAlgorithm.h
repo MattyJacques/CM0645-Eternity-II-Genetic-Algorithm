@@ -72,7 +72,7 @@ public:
   // Constructor that sets the elite, crossover and mutation rates, along with
   // the size of the population for each generation. Also handles crossover and
   // mutation methods
-  void setup(Settings theSettings);            // *In*
+  void setup(); 
 
   // Main function of the GA that continually runs
   void runGA();

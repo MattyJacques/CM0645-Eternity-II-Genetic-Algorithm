@@ -77,7 +77,7 @@ void Crossover::selectParents(Board* parents[2],                      // *Out*
 
   if (selectType == ROULETTE) 
   { // If roulette method was chosen, do roulette
-    rouletteSelect(parents, totalFitness);
+    rouletteSelect(parents, totalFitness, popSize);
   }
   else if (selectType == TOURNAMENT) 
   { // If tournament method was chosen, do tournament
@@ -93,7 +93,8 @@ void Crossover::selectParents(Board* parents[2],                      // *Out*
 
 
 void Crossover::rouletteSelect(Board* parents[2],                     // *Out* 
-                               int totalFitness)                      // *In*
+                               int totalFitness,                      // *In*
+                               int popSize)                           // *In*
 { // Selects candidates via the roulette wheel method mentioned within the 
   // report in chapter 3
 
@@ -111,8 +112,7 @@ void Crossover::rouletteSelect(Board* parents[2],                     // *Out*
 
   totalFitness = 0;   // Set to 0 to accumulate total fitness again
   
-  for (int i = 0; i < (int)BoardManager::getInstance()->getOldPop()->size();
-       i++)
+  for (int i = 0; i < popSize; i++)
   { // Loops through all boards accumulating the fitness scores, if random 
     // number is between total fitness and the previous total fitness, set the 
     // ID of the parent
