@@ -45,38 +45,6 @@ BoardManager* BoardManager::getInstance()
 } // getInstance()
 
 
-int BoardManager::getSize()
-{ // Returns the board size
-
-  return boardSize; // Return the size of the board
-
-} // getSize()
-
-
-std::vector<std::vector<PuzzlePiece>>* BoardManager::getPieces()
-{ // Returns the vector of vectors containing the puzzle pieces
-
-  return &pieceVec;
-
-} // getPieces()
-
-
-std::shared_ptr<std::vector<Board>> BoardManager::getPop()
-{ // Returns a pointer to the vector that holds the current population
-
-  return currBoards;
-
-} // getPop()
-
-
-std::shared_ptr<std::vector<Board>> BoardManager::getOldPop()
-{ // Returns a pointer to the vector that holds the previous population
-
-  return prevBoards;
-
-} // getOldPop()
-
-
 void BoardManager::switchPop()
 { // Switch the current population to the old population and create a new
   // shared vector for the new population
