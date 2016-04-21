@@ -8,6 +8,7 @@
 #include "FileHandler.h"       // File input and output
 #include <algorithm>           // Sorting
 #include <iostream>            // Console output
+#include <limits>              // Ignore all chars on input
 
 
 void GeneticAlgorithm::setup(bool* isSuccess)           // *Out*
@@ -67,6 +68,16 @@ void GeneticAlgorithm::setup(bool* isSuccess)           // *Out*
     }
   } // if (inputSuccess == true)
 
+  if (((*BoardManager::getInstance()->getPieces())[0].size() +
+      (*BoardManager::getInstance()->getPieces())[1].size() +
+      (*BoardManager::getInstance()->getPieces())[2].size()) !=
+      (boardSize * boardSize))
+  { // Calculate how many pieces are in piece vector and how many it takes to
+    // fill a board, if not correct, output error and quit
+    OutputError();        // Output error
+    *isSuccess = false;   // Set sucess to false to quit
+  }
+
 } // setup()
 
 
@@ -91,6 +102,22 @@ void GeneticAlgorithm::CheckIfDefault(bool* isContinue) // *Out*
   }
 
 } // // CheckIfDefault()
+
+
+void GeneticAlgorithm::OutputError()
+{ // Outputs an error to user that the application can not recover from such
+  // as a corrupted data file
+
+  // Inform user of the error
+  std::cout << "Data file does not contain enough pieces. Exiting" << std::endl;
+
+  // Prompt user to press enter to quit
+  std::cout << "Press enter to quit" << std::endl;
+
+  // Read input, ignoring all chars apart from enter
+  std::cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
+
+} // OutputError()
 
 
 void GeneticAlgorithm::runGA()

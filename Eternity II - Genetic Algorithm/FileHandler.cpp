@@ -165,7 +165,7 @@ bool FileHandler::CheckInput(int inSize,                         // *In*
     // 1, set to failed input
     result = false;
   }
-  else if (startPiece != 0 || startPiece != 1 && inSize == 16)
+  else if (startPiece != 0 && startPiece != 1 && inSize == 16)
   { // If the start piece constraint is not set to 0 or 1 and greater or equal
     // 16, set to failed input
     result = false;

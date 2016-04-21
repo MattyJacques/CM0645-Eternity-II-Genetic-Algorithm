@@ -32,6 +32,10 @@ private:
   // experiments)
   void CheckIfDefault(bool* isContinue);       // *Out*
 
+  // Outputs an error to user that the application can not recover from which is
+  // a data file existing without enough pieces
+  void OutputError();
+
   // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
   // along with calculating how many matches are in a 100% board
