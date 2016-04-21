@@ -13,8 +13,13 @@ void main()
   // algorithm loop
 
   GeneticAlgorithm theGA;                       // Create algorithm object
+  bool isSuccess = true;                        // Algorithm can solve
 
-  theGA.setup();                                // Read algorithms settings
-  theGA.runGA();                                // Run the algorithm
+  theGA.setup(&isSuccess);                      // Read algorithms settings
+
+  if (isSuccess == true)
+  { // If everything loaded fine or user wants to use defaults, run algorithm
+    theGA.runGA();                                
+  }
 
 } // main()

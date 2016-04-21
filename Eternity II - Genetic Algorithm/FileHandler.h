@@ -124,7 +124,8 @@ public:
                         MutateType* mutMethod,        // *Out*
                         double* mutRate,              // *Out*
                         int* eliteRate,               // *Out*
-                        bool* isStartPiece);          // *Out*
+                        bool* isStartPiece,           // *Out*
+                        bool* isSuccess);             // *Out*
 
   // Reads the piece file with the file name that matches the information passed
   // as parameter storing piece info in the piece collection vector

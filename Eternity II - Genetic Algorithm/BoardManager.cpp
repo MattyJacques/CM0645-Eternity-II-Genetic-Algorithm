@@ -21,6 +21,10 @@ BoardManager::BoardManager()
 
   // Set current population pointer to new board vector
   currBoards = std::make_shared<std::vector<Board>>(newPop);
+  
+  prevBoards = nullptr;    // Init previous generation to null
+  boardSize = 15;          // Set default board size to Eternity II size 
+  patternNum = 22;         // Set default number of patterns to Eternity II
 
   // Seed rand with time for random number generation
   srand((unsigned int)time(NULL));

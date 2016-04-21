@@ -13,6 +13,7 @@ Mutation::Mutation()
 { // Initialise mutation method
 
   mutType = SWAP;   // Initialise mutation method
+  mutNum = 25;      // Initialise number of mutation per gen
 
 } // Mutation()
 

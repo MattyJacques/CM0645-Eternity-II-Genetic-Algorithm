@@ -46,7 +46,8 @@ void FileHandler::readSettingsFile(int* boardSize,               // *Out*
                                    MutateType* mutMethod,        // *Out*
                                    double* mutRate,              // *Out*
                                    int* eliteRate,               // *Out*
-                                   bool* isStartPiece)           // *Out*
+                                   bool* isStartPiece,           // *Out*
+                                   bool* isSuccess)              // *Out*
 { // Reads the settings file named "settings.ini" in the root directory, 
   // setting the appropriate values that have been read in to the algorithm
 
@@ -74,30 +75,34 @@ void FileHandler::readSettingsFile(int* boardSize,               // *Out*
     parseInt(&inElite, "EliteRate:");          // Parse the elitism rate
     parseInt(&startPiece, "StartConstraint:"); // Parse start constraint active
 
-    if (CheckInput(inSize, inPattern, inPopSize, inSelect, inCross, inMutMethod,
-                   inMutRate, inElite, startPiece))
-    { // Check to see if the input that has been read in is valid. If the input
-      // is valid, set the data members of the GA to the input
-
-      *boardSize = inSize;               // Set the board size
-      *patternNum = inPattern;           // Set the number of patterns
-      *popSize = inPopSize;              // Set the population size
-
-      // Parse the input ints into the enums of the selection, crossover and 
-      // mutation methods
-      parseMethods(inSelect, inCross, inMutMethod, selectMethod, crossMethod,
-                   mutMethod);
-
-      *mutRate = inMutRate;              // Set the mutation rate
-      *eliteRate = inElite;              // Set the elitism rate
-      *isStartPiece = (startPiece == 1); // Set if start piece is active
-    }
-    else
-    {
-      int x = 1;
-    }
-
     theFile.close();                     // Close file after use
+  } // if (openFile("settings.ini"))
+
+  if (CheckInput(inSize, inPattern, inPopSize, inSelect, inCross, inMutMethod,
+                 inMutRate, inElite, startPiece))
+  { // Check to see if the input that has been read in is valid. If the input
+    // is valid, set the data members of the GA to the input
+
+    *boardSize = inSize;               // Set the board size
+    *patternNum = inPattern;           // Set the number of patterns
+    *popSize = inPopSize;              // Set the population size
+
+    // Parse the input ints into the enums of the selection, crossover and 
+    // mutation methods
+    parseMethods(inSelect, inCross, inMutMethod, selectMethod, crossMethod,
+                 mutMethod);
+
+    *mutRate = inMutRate;              // Set the mutation rate
+    *eliteRate = inElite;              // Set the elitism rate
+    *isStartPiece = (startPiece == 1); // Set if start piece is active
+  }
+  else
+  { // If input is not valid, set success to false and set settings to 
+    // Eternirty II size and number of patterns
+
+    *isSuccess = false;  // Set input success to false
+    inSize = 16;         // Set board size to Eternity II
+    inPattern = 22;      // Set number of patterns to Eternity II
   }
 
   // Read in puzzle pieces

@@ -12,23 +12,6 @@
 #include "Mutation.h"               // Mutation of candidates
 
 
-struct Settings
-{ // Holds data loaded from the settings file to be used to set up the
-  // algorithm.
-
-  int boardSize;               // Size of the board
-  int patternNum;              // Number of patterns in board
-  int popSize;                 // How many candidates in generation
-  int eliteRate;               // How many candidates to save per generation
-  SelectionType selectType;    // Which selection method to use
-  CrossoverType crossType;     // Which crossover method to use
-  MutateType mutType;          // Which mutation method to use
-  double mutRate;              // Rate of mutation to apply
-  bool startCons;              // Whether the start constraint is active
-
-}; // Settings
-
-
 class GeneticAlgorithm
 {
 
@@ -43,6 +26,11 @@ private:
   Crossover theCrossover;               // Object to handle crossover
   Mutation theMutation;                 // Object to handle mutation
   FitnessFunction theFitness;           // Object ot handle calculating fitness
+
+  // Output to the user that there was an issue with the settings file and if
+  // the application should continue with default settings (best of from 
+  // experiments)
+  void CheckIfDefault(bool* isContinue);       // *Out*
 
   // Takes in the size of board and calculates what the fitness of a 100%
   // solved candidate would be so the algorithm can quit when goal is achieved
@@ -60,7 +48,7 @@ private:
 
   // Outputs all of the loaded settings so the user can see what methods are
   // used for solving attempt
-  void outputSettings(Settings theSettings);   // *In*
+ // void outputSettings(Settings theSettings);   // *In*
 
   // Calls to ouput the current fitness to the file for record of performance
   void outputFitness();
@@ -69,10 +57,10 @@ private:
   void outputSolved();
 
 public:
-  // Constructor that sets the elite, crossover and mutation rates, along with
-  // the size of the population for each generation. Also handles crossover and
-  // mutation methods
-  void setup(); 
+  // Setup the algorithm with the elite, crossover and mutation rates, along 
+  // with the size of the population for each generation. Also handles crossover 
+  // and mutation methods, isSuccess returns false to exit application
+  void setup(bool* isSuccess);                 // *Out*
 
   // Main function of the GA that continually runs
   void runGA();
