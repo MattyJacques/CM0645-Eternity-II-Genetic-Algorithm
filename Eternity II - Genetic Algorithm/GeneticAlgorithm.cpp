@@ -143,7 +143,7 @@ void GeneticAlgorithm::runGA()
     { // If fitness has improved, reset the stuck counter and set new high
       // score for fitness
       prevFitness = currFitness;
-      sinceImprove = 200;
+      sinceImprove = 20;
     }
     else
     { // If fitness has no improved, decrememnt to stuck counter
@@ -193,6 +193,7 @@ void GeneticAlgorithm::runGA()
   outputSolved();                         // Output the solved board
 
 } // runGA()
+
 
 void GeneticAlgorithm::genRandomNum(int min,            // *In*
                                     int max,            // *In*

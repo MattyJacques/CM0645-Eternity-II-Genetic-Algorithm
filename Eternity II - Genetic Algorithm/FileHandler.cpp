@@ -750,7 +750,7 @@ void FileHandler::outputDataFile(std::string filename)           // *In*
     std::vector<std::vector<PuzzlePiece>>* pieceVecs =
       BoardManager::getInstance()->getPieces();
 
-    for (int i = 0; i < (int)pieceVecs[CORNER].size(); i++)
+    for (int i = 0; i <= (int)pieceVecs[CORNER].size(); i++)
     { // Output the various bits of data of the corner pieces to the file
 
       theFile << (*pieceVecs)[0][i].pieceID << " ";     // Output piece ID    
@@ -791,5 +791,6 @@ void FileHandler::outputDataFile(std::string filename)           // *In*
     theFile.close();         // Close file after use
 
   } // if (openFile(filename.c_str()))
+
 
 } // outputDataFile()

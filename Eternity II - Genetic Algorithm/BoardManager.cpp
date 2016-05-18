@@ -144,8 +144,8 @@ int BoardManager::getPattern(Board* theBoard,                          // *In*
 
 
 void BoardManager::fixOrien(PuzzlePiece* piece,                        // *Out*
-                            int yIndex,                                // *In*
-                            int xIndex)                                // *In*
+                            int xIndex,                                // *In*
+                            int yIndex)                                // *In*
 { // Rotates the piece to match the edge of the board by setting the orientation
   // so that the edge pattern matches the edge of the board. 
 
