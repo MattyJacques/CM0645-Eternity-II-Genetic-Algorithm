@@ -143,7 +143,7 @@ void GeneticAlgorithm::runGA()
     { // If fitness has improved, reset the stuck counter and set new high
       // score for fitness
       prevFitness = currFitness;
-      sinceImprove = 20;
+      sinceImprove = 200;
     }
     else
     { // If fitness has no improved, decrememnt to stuck counter
@@ -237,6 +237,9 @@ void GeneticAlgorithm::initRandomPopulation()
 
   // Create a new vector for new population
   std::vector<Board> newPop;
+
+  // Make sure the population is empty in case of scramble repair
+  BoardManager::getInstance()->getPop()->clear();
 
   // Set the current population pointer to new population vector
   BoardManager::getInstance()->getPop() =
