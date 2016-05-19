@@ -229,14 +229,15 @@ void FileHandler::outputBoard(Board* theBoard,                   // *In*
 } // outputBoard()
 
 
-void FileHandler::outputFitness(int fitness)                     // *In*
+void FileHandler::outputFitness(int genCount,                    // *In*
+                                int fitness)                     // *In*
 { // Appends the fitness to file for tracking of algorithm performance
 
   if (openFile(outFilename.c_str()))
   { // If output file opened successfully output the fitness
 
     // Convert the fitness integer and output the line to the file
-    theFile << fitness << std::endl;
+    theFile << "Generation " << genCount << ": " << fitness << std::endl;
 
     // Close file after use
     theFile.close();

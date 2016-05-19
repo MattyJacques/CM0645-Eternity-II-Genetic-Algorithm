@@ -138,7 +138,8 @@ public:
                    int genCount);                     // *In*
 
   // Calculate the output filename
-  void outputFitness(int fitness);                    // *In*
+  void outputFitness(int genCount,                    // *In*
+                     int fitness);                    // *In*
 
 }; // FileHandler
 

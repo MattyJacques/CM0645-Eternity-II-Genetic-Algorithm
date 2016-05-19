@@ -162,10 +162,16 @@ void GeneticAlgorithm::runGA()
     // Calculate the percentage of matches complete
     float matchPercent = ((float)currMatches / maxMatches) * 100.0f;
 
-    // Output the generation summary to console
-    printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n",
-           genCount, currFitness, maxFitness, fitPercent, currMatches,
-           maxMatches, matchPercent);
+    if (genCount % 100 == 0)
+    { // Output the generation summary to console and file every 100 generations
+
+      // Output to console
+      printf("Generation %d: Fitness %d/%d %.2f%%, Match Count %d/%d %.2f%%\n",
+             genCount, currFitness, maxFitness, fitPercent, currMatches,
+             maxMatches, matchPercent);
+
+      outputFitness();                      // Output to file
+    }
 
     if (sinceImprove > 0)
     { // If fitness improvement has been made in past 200 generations, keep
@@ -185,8 +191,6 @@ void GeneticAlgorithm::runGA()
       prevFitness = 0;                      // Reset previous fitness
       currFitness = 0;                      // Reset current fitness
     }
-
-    outputFitness();                      // Output the current fitness
 
   } // while (currFitness != maxFitness)
 
@@ -349,8 +353,8 @@ void GeneticAlgorithm::outputSettings(int boardSize,           // *In*
 void GeneticAlgorithm::outputFitness()
 { // Calls to ouput the current fitness to the file for record of performance
 
-  FileHandler fileHandle;                     // Create object for output
-  fileHandle.outputFitness(currFitness);      // Call to output the fitness
+  FileHandler fileHandle;                          // Create object for output
+  fileHandle.outputFitness(genCount, currFitness); // Call to output the fitness
 
 } // outputFitness()
 
